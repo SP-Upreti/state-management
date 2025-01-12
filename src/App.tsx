@@ -1,11 +1,10 @@
 import './App.css'
-import Counter from './components/counter'
 
 function App() {
 
   return (
     <>
-      <Counter />
+      <h2 className="text-2xl">Hello World</h2>
     </>
   )
 }
