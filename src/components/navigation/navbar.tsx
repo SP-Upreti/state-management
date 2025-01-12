@@ -69,7 +69,7 @@ export default function Navbar() {
         { title: "All Categories", path: "/" },
     ]
     return (
-        <nav className="bg-white border-b">
+        <nav className="bg-white border-b sticky top-0 z-10">
             <div className="flex items-center space-x-8 py-3 px-4 max-w-screen-xl mx-auto md:px-8">
                 <div className="flex-none lg:flex-initial">
                     <a href="/">
