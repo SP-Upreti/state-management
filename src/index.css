@@ -1,0 +1,17 @@
+/* Customize the bullets */
+.swiper-pagination-bullet {
+    width: 12px;
+    height: 12px;
+    background-color: #d1d1d1;
+    margin: 0 5px;
+    opacity: 1;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+/* Style the active bullet */
+.swiper-pagination-bullet-active {
+    background-color: #ff5722;
+    transform: scale(1.3);
+    box-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
+}

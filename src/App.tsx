@@ -1,10 +1,15 @@
 import './App.css'
+import Navbar from './components/navigation/navbar'
+import Products from './components/products/products'
+import HeroSection from './components/sections/heroSection'
 
 function App() {
 
   return (
     <>
-      <h2 className="text-2xl">Hello World</h2>
+      <Navbar />
+      <HeroSection />
+      <Products />
     </>
   )
 }
