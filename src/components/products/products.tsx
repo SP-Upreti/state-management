@@ -18,7 +18,7 @@ export default function Products() {
         <section className="py-12">
             <div className="max-w-screen-xl mx-auto px-4 md:px-8">
                 <div className=" flex justify-between items-center gap-4 flex-wrap">
-                    <h3 className="text-gray-800 text-3xl font-semibold sm:text-4xl">
+                    <h3 className="text-gray-800 text-2xl font-semibold sm:text-4xl">
                         Our Popular Products
                     </h3>
                     <button>

@@ -6,14 +6,14 @@ export default function HeroSection() {
                     <h1 className="text-white font-bold text-4xl xl:text-5xl">
                         Your <span className="text-indigo-400">One-Stop Shop</span> for Everything You Need
                     </h1>
-                    <p className="text-gray-300 max-w-xl leading-relaxed sm:mx-auto lg:ml-0">
+                    <p className="text-gray-300 max-w-xl leading-relaxed hidden sm:block sm:mx-auto lg:ml-0">
                         Shop the latest products at unbeatable prices. Fast shipping, secure checkout, and exclusive deals you won't find anywhere else!
                     </p>
-                    <div className="pt-10 items-center justify-center space-y-3 sm:space-x-6 sm:space-y-0 sm:flex lg:justify-start">
-                        <a href="/" className="px-7 py-3 w-full bg-white text-gray-800 text-center rounded-md shadow-md block sm:w-auto">
+                    <div className="pt-10  space-x-4 sm:space-x-6 sm:space-y-0 flex lg:justify-start  items-center justify-center">
+                        <a href="/" className="sm:px-7 py-3 w-full bg-white text-gray-800 text-center rounded-md shadow-md block sm:w-auto">
                             Shop Now
                         </a>
-                        <a href="/" className="px-7 py-3 w-full bg-gray-700 text-gray-200 text-center rounded-md block sm:w-auto">
+                        <a href="/" className="sm:px-7 py-3 w-full bg-gray-700 text-gray-200 text-center rounded-md block sm:w-auto">
                             View Offers
                         </a>
                     </div>
