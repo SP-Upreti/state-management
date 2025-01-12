@@ -8,7 +8,7 @@ export default function Image({ src, title }: { src: string, title: string }) {
     }
     return (
         <>
-            <img className={`object-cover ${finished ? "block" : "none"} mx-auto`} src={src} alt={title} onLoad={handleLoad} />            {
+            <img className={`w-full h-full object-contain object-center shadow-md   ${finished ? "block" : "none"} mx-auto`} src={src} alt={title} onLoad={handleLoad} />            {
                 finished ? "" : (
                     <div className="h-full w-full flex justify-center items-center">
                         <div
