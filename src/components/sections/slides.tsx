@@ -5,7 +5,7 @@ import 'swiper/swiper-bundle.css';
 
 export default function Slides() {
     return (
-        <div className="max-w-[500px] ">
+        <div className="max-w-[500px] flex justify-center items-center">
             <Swiper
                 // install Swiper modules
                 modules={[A11y, Autoplay, Pagination]}
@@ -18,7 +18,7 @@ export default function Slides() {
                 }}
             >
                 <SwiperSlide>
-                    <img src='/slides/slide0.png' alt='feature 1' className='h-[400px]' />
+                    <img src='/slides/slide0.png' alt='feature 1' className='h-[250px] sm:h-[400px]' />
                 </SwiperSlide>
                 <SwiperSlide>
                     <img src='/slides/slide1.png' alt='feature 2' className='h-[400px]' />

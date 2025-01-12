@@ -14,9 +14,6 @@ export default function Products() {
         dispactch(fetchProducts());
     })
 
-    console.log(products);
-
-
     return (
         <section className="py-12">
             <div className="max-w-screen-xl mx-auto px-4 md:px-8">
