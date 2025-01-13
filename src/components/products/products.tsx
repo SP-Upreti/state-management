@@ -22,7 +22,7 @@ export default function Products() {
                         Our Popular Products
                     </h3>
                     <button>
-                        <select name="" id="" className="border min-w-[100px] py-1 rounded-md px-2">
+                        <select name="" id="" className="border min-w-[100px] py-1 rounded-md px-2 focus:outline-2 focus:outline-indigo-500">
                             <option value="">All Products</option>
                             <option value="">Fashion</option>
                             <option value="">Grocery</option>

@@ -77,9 +77,9 @@ export default function Categories() {
                     <ul className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
                         {
                             team.map((item, idx) => (
-                                <li key={idx} className="border  overflow-hidden">
+                                <li key={idx} className="border  overflow-hidden group cursor-pointer">
                                     <h4 className="text-2xl px-4 text-center p-4 text-gray-700 font-semibold">{item.name}</h4>
-                                    <div className="w-full h-60 sm:h-52 md:h-56">
+                                    <div className="w-full h-60 sm:h-52 md:h-56 group-hover:scale-110 transition-all">
                                         {/* <img
                                             src={item.avatar}
                                             className="w-full h-full object-contain object-center shadow-md "
