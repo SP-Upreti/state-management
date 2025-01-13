@@ -1,7 +1,19 @@
+// import { useDispatch, useSelector } from "react-redux"
 import Image from "../utils/Image"
+// import { AppDispatch, RootState } from "../../store/store"
+// import { useEffect } from "react";
+// import { getAllCategories } from "../../store/categories/allCategories";
 
 export default function Categories() {
 
+    // const Categories = useSelector((state: RootState) => state.categories.categories);
+    // const dispatch = useDispatch<AppDispatch>();
+
+    // useEffect(() => {
+    //     dispatch(getAllCategories())
+    // })
+
+    // console.log("categories", Categories)
     const team = [
         {
             avatar: "https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/thumbnail.png",
@@ -80,11 +92,6 @@ export default function Categories() {
                                 <li key={idx} className="border  overflow-hidden group cursor-pointer">
                                     <h4 className="text-2xl px-4 text-center p-4 text-gray-700 font-semibold">{item.name}</h4>
                                     <div className="w-full h-60 sm:h-52 md:h-56 group-hover:scale-110 transition-all">
-                                        {/* <img
-                                            src={item.avatar}
-                                            className="w-full h-full object-contain object-center shadow-md "
-                                            alt=""
-                                        /> */}
                                         <Image src={item.avatar} title={item.title} />
                                     </div>
                                 </li>

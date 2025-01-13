@@ -126,7 +126,7 @@ export default function Footer() {
                                         <li key={idx}>
                                             <a
                                                 href={el.href}
-                                                className="hover:text-gray-800 duration-150"
+                                                className="hover:text-gray-800 duration-150 capitalize"
 
                                             >
                                                 {el.name}

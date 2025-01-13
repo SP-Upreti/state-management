@@ -1,6 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-const url = "https://dummyjson.com/products";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // ✅ Define the Product type
 interface Product {
@@ -17,18 +15,24 @@ interface Product {
 // ✅ Define the state type
 interface CounterState {
     value: Product[];
+    total: number,
+    current: number,
+    loading: boolean
 }
 
 // ✅ Initial state
 const initialState: CounterState = {
-    value: []
+    value: [],
+    total: 0,
+    current: 1,
+    loading: false
 };
 
 // ✅ Create an async thunk to fetch products
-export const fetchProducts = createAsyncThunk("counter/fetchProducts", async () => {
-    const response = await fetch(url);
+export const fetchProducts = createAsyncThunk("counter/fetchProducts", async ({ skip, limit }: { skip: number, limit: number }) => {
+    const response = await fetch(`https://dummyjson.com/products?limit=${limit}&skip=${skip}`);
     const data = await response.json();
-    return data.products; // Assuming the API returns { products: [] }
+    return data; // Assuming the API returns { products: [] }
 });
 
 // ✅ Create a slice
@@ -37,18 +41,30 @@ const counterSlice = createSlice({
     initialState,
     reducers: {
         // ✅ Reducer to manually set products
-        setProducts: (state, action: PayloadAction<Product[]>) => {
-            state.value = action.payload;
+        incrementPage: (state) => {
+            if (state.current <= state.total) {
+                state.current += 1;
+            }
+        },
+        decrementPage: (state) => {
+            if (state.current != 1) {
+                state.current -= 1;
+            }
         }
     },
     // ✅ Handle async thunk in extraReducers
     extraReducers: (builder) => {
+        builder.addCase(fetchProducts.pending, (state) => {
+            state.loading = true
+        });
         builder.addCase(fetchProducts.fulfilled, (state, action) => {
-            state.value = action.payload;
+            state.loading = false
+            state.value = action.payload.products;
+            state.total = Math.ceil(action.payload.total);
         });
     }
 });
 
 // ✅ Export actions and reducer
-export const { setProducts } = counterSlice.actions;
+export const { incrementPage, decrementPage } = counterSlice.actions;
 export default counterSlice.reducer;
