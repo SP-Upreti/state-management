@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function HeroSection() {
     return (
         <div className="bg-gray-900">
@@ -10,9 +12,9 @@ export default function HeroSection() {
                         Shop the latest products at unbeatable prices. Fast shipping, secure checkout, and exclusive deals you won't find anywhere else!
                     </p>
                     <div className="pt-10  space-x-4 sm:space-x-6 sm:space-y-0 flex lg:justify-start  items-center justify-center">
-                        <a href="/" className="sm:px-7 py-3 w-full bg-white text-gray-800 text-center rounded-md shadow-md block sm:w-auto">
+                        <Link to="/products" className="sm:px-7 py-3 w-full bg-white text-gray-800 text-center rounded-md shadow-md block sm:w-auto">
                             Shop Now
-                        </a>
+                        </Link>
                         <a href="/" className="sm:px-7 py-3 w-full bg-gray-700 text-gray-200 text-center rounded-md block sm:w-auto">
                             View Offers
                         </a>

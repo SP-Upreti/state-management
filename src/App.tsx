@@ -1,19 +1,17 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
-import Footer from './components/footer/footer'
-import Navbar from './components/navigation/navbar'
-import Categories from './components/products/categories'
-import Products from './components/products/products'
-import HeroSection from './components/sections/heroSection'
+import Home from './pages/home'
+import Products from './pages/products'
 
 function App() {
-
   return (
     <>
-      <Navbar />
-      <HeroSection />
-      <Products />
-      <Categories />
-      <Footer />
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/products' element={<Products />} />
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }

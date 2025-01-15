@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react"
+import { Link } from "react-router-dom"
 
 interface PropsTypes {
     class: string
@@ -72,14 +73,14 @@ export default function Navbar() {
         <nav className="bg-white border-b sticky top-0 z-10">
             <div className="flex items-center space-x-8 py-3 px-4 max-w-screen-xl mx-auto md:px-8">
                 <div className="flex-none lg:flex-initial">
-                    <a href="/">
+                    <Link to="/">
                         <img
                             src="/logo.svg"
                             width={120}
                             height={50}
                             alt="Ecommerce Logo"
                         />
-                    </a>
+                    </Link>
                 </div>
                 <div className="flex-1 flex items-center justify-between">
                     <div className={`bg-white absolute z-20 w-full top-16 left-0 p-4 border-b lg:static lg:block lg:border-none ${menuState ? '' : 'hidden'}`}>
