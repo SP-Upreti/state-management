@@ -9,8 +9,8 @@ import { decrementPage, fetchProducts, incrementPage } from "../store/products/p
 
 export default function Products() {
     const products = useSelector((state: RootState) => state.products.value);
-    const current = useSelector((state:RootState)=>state.products.current)
-    const total = useSelector((state:RootState)=>state.products.total)
+    const current = useSelector((state: RootState) => state.products.current)
+    const total = useSelector((state: RootState) => state.products.total)
     const dispatch = useDispatch<AppDispatch>();
     const [increment, setIncrement] = useState(10)
 
@@ -21,7 +21,7 @@ export default function Products() {
         <>
             <Navbar />
             <Filtre >
-                <div className="grid grid-cols-4 gap-1" id="productList">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1" id="productList">
                     {products.map((prod, key) => {
                         return (
                             <DefaultCard key={key} images={prod.images} title={prod.title} discountPercentage={prod.discountPercentage} />

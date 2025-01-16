@@ -72,7 +72,7 @@ export default function Filtre({ children }: { children: ReactNode }) {
                     <path d="M0 1H1216" stroke="#E5E7EB" />
                 </svg> */}
                 <div className="grid grid-cols-12 relative">
-                    <div className="sticky top-24 h-fit col-span-12 md:col-span-2 w-full max-md:max-w-md max-md:mx-auto">
+                    <div className="hidden md:block sticky top-24 h-fit col-span-12 md:col-span-2 w-full max-md:max-w-md max-md:mx-auto">
                         <div className="box rounded-xl border border-gray-300 bg-white px-6 py-4 w-full md:max-w-sm">
                             <h6 className="font-medium text-base leading-7 text-black mb-2">Price Range</h6>
                             <div className="flex items-center mb-5 gap-1">
