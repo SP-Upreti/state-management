@@ -64,10 +64,10 @@ export default function Navbar() {
 
     // Replace / path with your path
     const navigation = [
-        { title: "Fashion", path: "/" },
-        { title: "Grocery", path: "/" },
-        { title: "Accessories", path: "/" },
-        { title: "All Categories", path: "/" },
+        { title: "Fashion", path: "/products" },
+        { title: "Grocery", path: "/products" },
+        { title: "Accessories", path: "/products" },
+        { title: "All Categories", path: "/products" },
     ]
     return (
         <nav className="bg-white border-b sticky top-0 z-10" style={{ height: menuState ? "100dvh" : "" }}>

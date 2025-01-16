@@ -72,7 +72,7 @@ export default function Filtre({ children }: { children: ReactNode }) {
                     <path d="M0 1H1216" stroke="#E5E7EB" />
                 </svg> */}
                 <div className="grid grid-cols-12 relative">
-                    <div className="sticky top-24 h-fit col-span-12 md:col-span-3 w-full max-md:max-w-md max-md:mx-auto">
+                    <div className="sticky top-24 h-fit col-span-12 md:col-span-2 w-full max-md:max-w-md max-md:mx-auto">
                         <div className="box rounded-xl border border-gray-300 bg-white px-6 py-4 w-full md:max-w-sm">
                             <h6 className="font-medium text-base leading-7 text-black mb-2">Price Range</h6>
                             <div className="flex items-center mb-5 gap-1">
@@ -85,7 +85,7 @@ export default function Filtre({ children }: { children: ReactNode }) {
                                         <option value="option 3">option 3</option>
                                         <option value="option 4">option 4</option>
                                     </select>
-                                    <svg className="absolute top-1/2 -translate-y-1/2 right-4 z-50" width="16" height="16"
+                                    <svg className="absolute top-1/2 -translate-y-1/2 right-1 z-50" width="16" height="16"
                                         viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M12.0002 5.99845L8.00008 9.99862L3.99756 5.99609" stroke="#111827"
                                             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
@@ -101,7 +101,7 @@ export default function Filtre({ children }: { children: ReactNode }) {
                                         <option value="option 3">option 3</option>
                                         <option value="option 4">option 4</option>
                                     </select>
-                                    <svg className="absolute top-1/2 -translate-y-1/2 right-4 z-50" width="16" height="16"
+                                    <svg className="absolute top-1/2 -translate-y-1/2 right-1 z-50" width="16" height="16"
                                         viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M12.0002 5.99845L8.00008 9.99862L3.99756 5.99609" stroke="#111827"
                                             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
@@ -189,7 +189,7 @@ export default function Filtre({ children }: { children: ReactNode }) {
                             </div>
                         </div>
                     </div>
-                    <div className="col-span-12 md:col-span-9">
+                    <div className="col-span-12 md:col-span-10 px-4">
                         {children}
                     </div>
                 </div>
