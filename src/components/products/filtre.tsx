@@ -4,7 +4,7 @@ export default function Filtre({ children }: { children: ReactNode }) {
     const [rangeValue, setRangeValue] = useState<number>(3);
     return (
         <section className="py-4 relative">
-            <div className="w-full max-w-7xl mx-auto px-4 md:px-8">
+            <div className="w-full max-w-7xl mx-auto  md:px-8">
                 {/* <div className="flex flex-col lg:flex-row lg:items-center max-lg:gap-4 justify-between w-full">
                     <ul className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-12">
                         <li className="flex items-center cursor-pointer outline-none group">
