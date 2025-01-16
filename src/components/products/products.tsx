@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { decrementPage, fetchProducts, incrementPage } from "../../store/products/productSlice";
 import Image from "../utils/Image";
 
-export default function Products({ imgSize }: { imgSize: string }) {
+export default function Products() {
     const dispatch = useDispatch<AppDispatch>();
     const products = useSelector((state: RootState) => state.products.value);
     const total = useSelector((state: RootState) => state.products.total);
@@ -35,7 +35,7 @@ export default function Products({ imgSize }: { imgSize: string }) {
                         {loading ? (
                             Array.from({ length: 8 }).map((_, key) => (
                                 <div key={key} className="flex flex-col bg-neutral-300 w-full animate-pulse rounded-xl p-4 gap-4">
-                                    <div className={`bg-neutral-400/50 w-full  animate-pulse rounded-md h-52 ${imgSize}`}></div>
+                                    <div className="bg-neutral-400/50 w-full  animate-pulse rounded-md h-60"></div>
                                     <div className="flex flex-col gap-2">
                                         <div className="bg-neutral-400/50 w-full h-4 animate-pulse rounded-md"></div>
                                         <div className="bg-neutral-400/50 w-4/5 h-4 animate-pulse rounded-md"></div>
@@ -47,7 +47,7 @@ export default function Products({ imgSize }: { imgSize: string }) {
                         ) : (
                             products.slice(0, 8).map((data, key) => (
                                 <li key={key} className="relative flex flex-col overflow-hidden rounded-lg border bg-white shadow-md">
-                                    <a className={`relative mx-3 mt-3 flex h-52 overflow-hidden rounded-xl ${imgSize}`} href="#">
+                                    <a className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl" href="#">
                                         <Image src={data.images[0]} title={data.title} />
                                         <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-sm font-medium text-white">
                                             {data.discountPercentage}% OFF

@@ -6,7 +6,9 @@ export default function Products() {
     return (
         <>
             <Navbar />
-            <Filtre />
+            <Filtre >
+                <h2>Hello products</h2>
+            </Filtre>
             <Footer />
         </>
     )
