@@ -27,32 +27,33 @@ export default function Products() {
                             <DefaultCard key={key} images={prod.images} title={prod.title} discountPercentage={prod.discountPercentage} />
                         )
                     })}
-                    <div className="mx-auto mt-12 text-gray-600 col-span-4">
-                        <div className="flex items-center justify-between text-sm font-medium">
-                            <button
-                                disabled={current === 1}
-                                onClick={() => {
-                                    dispatch(decrementPage());
-                                    setIncrement((prev) => prev - 10);
-                                }}
-                                className="px-4 py-2 border rounded-lg duration-150 disabled:bg-white hover:bg-gray-50"
-                            >
-                                Previous
-                            </button>
-                            <div>
-                                Page {current} of {Math.ceil(total / 10)}
-                            </div>
-                            <button
-                                disabled={current === Math.ceil(total / 10)}
-                                onClick={() => {
-                                    dispatch(incrementPage());
-                                    setIncrement((prev) => prev + 10);
-                                }}
-                                className="px-4 py-2 border rounded-lg duration-150 disabled:hover:bg-white hover:bg-gray-50"
-                            >
-                                Next
-                            </button>
+
+                </div>
+                <div className="mx-auto mt-12 text-gray-600 col-span-4">
+                    <div className="flex items-center justify-between text-sm font-medium">
+                        <button
+                            disabled={current === 1}
+                            onClick={() => {
+                                dispatch(decrementPage());
+                                setIncrement((prev) => prev - 10);
+                            }}
+                            className="px-4 py-2 border rounded-lg duration-150 disabled:bg-white hover:bg-gray-50"
+                        >
+                            Previous
+                        </button>
+                        <div>
+                            Page {current} of {Math.ceil(total / 10)}
                         </div>
+                        <button
+                            disabled={current === Math.ceil(total / 10)}
+                            onClick={() => {
+                                dispatch(incrementPage());
+                                setIncrement((prev) => prev + 10);
+                            }}
+                            className="px-4 py-2 border rounded-lg duration-150 disabled:hover:bg-white hover:bg-gray-50"
+                        >
+                            Next
+                        </button>
                     </div>
                 </div>
             </Filtre>
