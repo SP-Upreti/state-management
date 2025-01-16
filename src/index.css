@@ -1,17 +1,49 @@
-/* Customize the bullets */
-.swiper-pagination-bullet {
-    width: 12px;
-    height: 12px;
-    background-color: #d1d1d1;
-    margin: 0 5px;
-    opacity: 1;
-    border-radius: 50%;
-    transition: all 0.3s ease;
+/* From Uiverse.io by satisshTechie */
+.PB-range-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 5px;
+    background: #aaa;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
 }
 
-/* Style the active bullet */
-.swiper-pagination-bullet-active {
-    background-color: #ff5722;
-    transform: scale(1.3);
-    box-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
+.PB-range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: blue;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.PB-range-slider::-webkit-slider-thumb:hover {
+    box-shadow: 0px 0px 0px 8px rgba(0, 0, 0, 0.16);
+    transition: 0.3s ease-in-out;
+}
+
+.PB-range-slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: blue !important;
+    cursor: pointer;
+}
+
+.PB-range-slider-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    border-radius: 6px;
+}
+
+.PB-range-slidervalue {
+    font-weight: 600;
 }
