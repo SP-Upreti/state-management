@@ -72,13 +72,13 @@ export default function Filtre({ children }: { children: ReactNode }) {
                     <path d="M0 1H1216" stroke="#E5E7EB" />
                 </svg> */}
                 <div className="grid grid-cols-12 relative">
-                    <div className="hidden md:block sticky top-24 h-fit col-span-12 md:col-span-2 w-full max-md:max-w-md max-md:mx-auto">
-                        <div className="box rounded-xl border border-gray-300 bg-white px-6 py-4 w-full md:max-w-sm">
+                    <div className="hidden md:block  h-fit col-span-12 md:col-span-2 w-full max-md:max-w-md max-md:mx-auto">
+                        <div className="box rounded-xl border border-gray-300 bg-white px-4 py-4 w-full md:max-w-sm">
                             <h6 className="font-medium text-base leading-7 text-black mb-2">Price Range</h6>
                             <div className="flex items-center mb-5 gap-1">
                                 <div className="relative w-full">
                                     <select id="FROM"
-                                        className="h-8 border border-gray-300 text-gray-900 text-xs font-medium rounded-lg block w-full py-1 px-4 appearance-none relative focus:outline-none bg-white">
+                                        className="h-8 border border-gray-300 text-gray-900 text-xs font-medium rounded-lg block w-full py-1 px-2  appearance-none relative focus:outline-none bg-white">
                                         <option selected>Min</option>
                                         <option value="option 1">option 1</option>
                                         <option value="option 2">option 2</option>
@@ -91,10 +91,9 @@ export default function Filtre({ children }: { children: ReactNode }) {
                                             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                 </div>
-                                <p className="px-1 font-normal text-sm leading-6 text-gray-600">to</p>
                                 <div className="relative w-full">
                                     <select id="FROM"
-                                        className="h-8 border border-gray-300 text-gray-900 text-xs font-medium rounded-lg block w-full py-1 px-4 appearance-none relative focus:outline-none bg-white">
+                                        className="h-8 border border-gray-300 text-gray-900 text-xs font-medium rounded-lg block w-full py-1 px-2 appearance-none relative focus:outline-none bg-white">
                                         <option selected>Max</option>
                                         <option value="option 1">option 1</option>
                                         <option value="option 2">option 2</option>

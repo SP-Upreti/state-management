@@ -1,5 +1,8 @@
-import { useState, useRef, useEffect } from "react"
-import { Link } from "react-router-dom"
+import { useState, useRef, useEffect, FormEvent } from "react"
+import { useDispatch } from "react-redux"
+import { Link, useNavigate } from "react-router-dom"
+import { searchProduct } from "../../store/products/searchProducts"
+import { AppDispatch } from "../../store/store"
 
 interface PropsTypes {
     class: string
@@ -60,7 +63,15 @@ const ProfileDropDown = (props: PropsTypes) => {
 
 export default function Navbar() {
 
-    const [menuState, setMenuState] = useState(false)
+    const [menuState, setMenuState] = useState(false);
+    const [search, setSearch] = useState("");
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate()
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+        dispatch(searchProduct({ query: search }));
+        navigate("/products")
+    }
 
     // Replace / path with your path
     const navigation = [
@@ -100,7 +111,7 @@ export default function Navbar() {
                         />
                     </div>
                     <div className="flex-1 flex items-center justify-end space-x-2 sm:space-x-6">
-                        <form className="flex items-center space-x-2 border rounded-md p-2">
+                        <form onSubmit={handleSubmit} className="flex items-center space-x-2 border rounded-md p-2">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-none text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
@@ -108,6 +119,8 @@ export default function Navbar() {
                                 className="w-full outline-none appearance-none placeholder-gray-500 text-gray-500 sm:w-80"
                                 type="text"
                                 name="value"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
                                 placeholder="Search"
                             />
                         </form>

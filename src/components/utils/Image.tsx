@@ -8,7 +8,7 @@ export default function Image({ src, title }: { src: string, title: string }) {
     }
     return (
         <>
-            <img className={` relativew-full h-full object-contain object-center    
+            <img className={` relative w-full h-full object-contain object-center    
             ${finished ? "block" : "hidden"} mx-auto
             `} src={src} alt={title}
                 onLoad={handleLoad}

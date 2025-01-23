@@ -29,15 +29,15 @@ const initialState: CounterState = {
 };
 
 // ✅ Create an async thunk to fetch products
-export const fetchProducts = createAsyncThunk("counter/fetchProducts", async ({ skip, limit }: { skip: number, limit: number }) => {
-    const response = await fetch(`https://dummyjson.com/products?limit=${limit}&skip=${skip}`);
+export const searchProduct = createAsyncThunk("counter/searchProduct", async ({ query }: { query: string, }) => {
+    const response = await fetch(`https://dummyjson.com/products/search?q=${query}`);
     const data = await response.json();
     return data; // Assuming the API returns { products: [] }
 });
 
 
 // ✅ Create a slice
-const counterSlice = createSlice({
+const searchSlice = createSlice({
     name: "products",
     initialState,
     reducers: {
@@ -55,10 +55,10 @@ const counterSlice = createSlice({
     },
     // ✅ Handle async thunk in extraReducers
     extraReducers: (builder) => {
-        builder.addCase(fetchProducts.pending, (state) => {
+        builder.addCase(searchProduct.pending, (state) => {
             state.loading = true
         });
-        builder.addCase(fetchProducts.fulfilled, (state, action) => {
+        builder.addCase(searchProduct.fulfilled, (state, action) => {
             state.loading = false
             state.value = action.payload.products;
             state.total = Math.ceil(action.payload.total);
@@ -67,5 +67,5 @@ const counterSlice = createSlice({
 });
 
 // ✅ Export actions and reducer
-export const { incrementPage, decrementPage } = counterSlice.actions;
-export default counterSlice.reducer;
+export const { incrementPage, decrementPage } = searchSlice.actions;
+export default searchSlice.reducer;
