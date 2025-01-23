@@ -7,7 +7,6 @@ import { DefaultCard } from "../components/utils/productCard";
 import { useEffect, useState } from "react";
 import { decrementPage, fetchProducts, incrementPage } from "../store/products/productSlice";
 import { HashLink } from 'react-router-hash-link';
-import { Link } from "react-router-dom";
 export default function Products() {
     const products = useSelector((state: RootState) => state.products.value);
     const current = useSelector((state: RootState) => state.products.current)
