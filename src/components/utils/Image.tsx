@@ -7,8 +7,8 @@ export default function Image({ src, title }: { src: string, title: string }) {
         setFinished(true)
     }
     return (
-        <>
-            <img className={` relative w-full h-full object-contain object-center    
+        <div className="relative">
+            <img className={`  w-full h-full object-contain object-center    
             ${finished ? "block" : "hidden"} mx-auto
             `} src={src} alt={title}
                 onLoad={handleLoad}
@@ -22,6 +22,6 @@ export default function Image({ src, title }: { src: string, title: string }) {
                 )
             }
 
-        </>
+        </div>
     )
 }

@@ -4,7 +4,7 @@ export default function Details() {
     return (
         <section className="max-w-7xl mx-auto lg:grid grid-cols-2 gap-8 p-4 lg:p-6 ">
             <div className="">
-                <div className="">
+                <div className="min-h-[200px]">
                     <Image title="product image" src="https://img.freepik.com/free-vector/realistic-can-podium-bottle-natural-ice-green-tea_1268-15509.jpg?t=st=1737615345~exp=1737618945~hmac=ef1eed848cfed00139730770c9f164576b2bac3ea28105dd92a8ce279fac386f&w=1060" />
                 </div>
                 <div className="grid gap-4 overflow-auto my-4 grid-cols-5">
