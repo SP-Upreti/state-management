@@ -1,18 +1,23 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import Categories from "../../components/products/categories";
 
-interface Categories {
-    categories: string[]
+interface Category {
+    slug: string;
+    name: string;
+    url: string;
 }
 
-const initialState: Categories = {
+interface CategoriesState {
+    categories: Category[]
+}
+
+const initialState: CategoriesState = {
     categories: []
 }
 
 export const getAllCategories = createAsyncThunk("allCategories/getAllCategories", async () => {
     const response = await fetch('https://dummyjson.com/products/categories');
     const data = await response.json();
-    return data as string[]
+    return data as Category[]
 })
 
 const allCategoriesSlice = createSlice({
@@ -20,7 +25,7 @@ const allCategoriesSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(getAllCategories.fulfilled, (state, action: PayloadAction<string[]>) => {
+        builder.addCase(getAllCategories.fulfilled, (state, action: PayloadAction<Category[]>) => {
             state.categories = action.payload
         })
     }

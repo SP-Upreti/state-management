@@ -3,7 +3,7 @@ import { AppDispatch } from "../../store/store";
 import { RootState } from "../../store/store";
 import { useEffect, useState } from "react";
 import { decrementPage, fetchProducts, incrementPage } from "../../store/products/productSlice";
-import Image from "../utils/Image";
+import ProductCard from "../utils/productCard";
 
 export default function Products() {
     const dispatch = useDispatch<AppDispatch>();
@@ -46,25 +46,19 @@ export default function Products() {
                             ))
                         ) : (
                             products.slice(0, 8).map((data, key) => (
-                                <li key={key} className="relative flex flex-col overflow-hidden rounded-lg border bg-white shadow-md">
-                                    <a className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl" href="#">
-                                        <Image src={data.images[0]} title={data.title} />
-                                        <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-sm font-medium text-white">
-                                            {data.discountPercentage}% OFF
-                                        </span>
-                                    </a>
-                                    <div className="mt-4 px-5">
-                                        <h5 className="text-xl tracking-tight text-slate-900">
-                                            {data.title.length > 20 ? data.title.substring(0, 20) + "..." : data.title}
-                                        </h5>
-                                        <div className="mt-2 mb-5 flex items-center justify-between">
-                                            <p>
-                                                <span className="text-3xl font-bold text-slate-900">$449</span>
-                                                <span className="text-sm text-slate-900 line-through">$699</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </li>
+                                <ProductCard
+                                    key={key}
+                                    id={data.id}
+                                    images={data.images}
+                                    discountPercentage={data.discountPercentage}
+                                    title={data.title}
+                                    price={data.price}
+                                    thumbnail={data.thumbnail}
+                                    brand={data.brand}
+                                    category={data.category}
+                                    rating={data.rating}
+                                    stock={data.stock}
+                                />
                             ))
                         )}
                     </ul>

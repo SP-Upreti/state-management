@@ -10,7 +10,7 @@ import { decrementPage, fetchProducts, incrementPage } from "../store/products/p
 import { HashLink } from 'react-router-hash-link';
 
 
-  
+
 
 export default function Products() {
     const products = useSelector((state: RootState) => state.products.value);
@@ -44,7 +44,19 @@ export default function Products() {
                                         </div>
                                     ))
                                 ) : (<HashLink to={'/products/details#'}>
-                                    <DefaultCard key={key} images={prod.images} title={prod.title} discountPercentage={prod.discountPercentage} />
+                                    <DefaultCard
+                                        key={key}
+                                        id={prod.id}
+                                        images={prod.images}
+                                        title={prod.title}
+                                        discountPercentage={prod.discountPercentage}
+                                        price={prod.price}
+                                        thumbnail={prod.thumbnail}
+                                        brand={prod.brand}
+                                        category={prod.category}
+                                        rating={prod.rating}
+                                        stock={prod.stock}
+                                    />
                                 </HashLink>)
                                 }
                             </>

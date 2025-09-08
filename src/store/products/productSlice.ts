@@ -9,6 +9,10 @@ interface Product {
     category: string;
     images: string[];
     discountPercentage: number;
+    thumbnail: string;
+    brand: string;
+    rating: number;
+    stock: number;
     // Add other properties from the API response as needed
 }
 
