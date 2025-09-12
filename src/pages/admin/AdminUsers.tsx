@@ -1,30 +1,55 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store/store';
-import { fetchUsers, deleteUser, updateUserRole, setCurrentPage } from '../../store/admin/adminSlice';
+import { useState } from 'react';
+import { useUsers, useUpdateUserRole, useToggleUserStatus, useDeleteUser } from '../../hooks/admin';
 
 const AdminUsers = () => {
-    const dispatch = useDispatch<AppDispatch>();
-    const { users, loading, currentPage, totalPages } = useSelector((state: RootState) => state.admin);
+    const [currentPage, setCurrentPage] = useState(1);
     const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
     const [filterRole, setFilterRole] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
 
-    useEffect(() => {
-        dispatch(fetchUsers({ limit: 30, skip: (currentPage - 1) * 30 }));
-    }, [dispatch, currentPage]);
+    const limit = 10;
+    const { data, isLoading, error } = useUsers({
+        page: currentPage,
+        limit,
+        search: searchTerm || undefined,
+        role: filterRole || undefined,
+    });
+
+    const updateRoleMutation = useUpdateUserRole();
+    const toggleStatusMutation = useToggleUserStatus();
+    const deleteUserMutation = useDeleteUser();
+
+    const users = data?.data?.users || [];
+    const totalPages = data?.pagination?.pages || 1;
 
     const handleDelete = async (userId: number) => {
         if (window.confirm('Are you sure you want to delete this user?')) {
-            await dispatch(deleteUser(userId));
+            try {
+                await deleteUserMutation.mutateAsync(userId);
+            } catch (error) {
+                console.error('Failed to delete user:', error);
+            }
         }
     };
 
-    const handleRoleChange = async (userId: number, newRole: string) => {
-        await dispatch(updateUserRole({ userId, role: newRole }));
+    const handleRoleChange = async (userId: number, newRole: 'user' | 'admin') => {
+        try {
+            await updateRoleMutation.mutateAsync({ userId, role: newRole });
+        } catch (error) {
+            console.error('Failed to update user role:', error);
+        }
+    };
+
+    const handleToggleStatus = async (userId: number) => {
+        try {
+            await toggleStatusMutation.mutateAsync(userId);
+        } catch (error) {
+            console.error('Failed to toggle user status:', error);
+        }
     };
 
     const handlePageChange = (page: number) => {
-        dispatch(setCurrentPage(page));
+        setCurrentPage(page);
     };
 
     const handleSelectUser = (userId: number) => {
@@ -43,14 +68,21 @@ const AdminUsers = () => {
         }
     };
 
-    const filteredUsers = filterRole
-        ? users.filter(user => user.role === filterRole)
-        : users;
-
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="flex items-center justify-center h-64">
                 <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <div className="text-center">
+                    <div className="text-red-600 text-lg font-semibold mb-2">Error loading users</div>
+                    <div className="text-gray-600">Please try refreshing the page</div>
+                </div>
             </div>
         );
     }
@@ -65,7 +97,14 @@ const AdminUsers = () => {
                         Manage your platform users and their permissions.
                     </p>
                 </div>
-                <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+                <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none flex space-x-4">
+                    <input
+                        type="text"
+                        placeholder="Search users..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    />
                     <select
                         value={filterRole}
                         onChange={(e) => setFilterRole(e.target.value)}
@@ -74,7 +113,6 @@ const AdminUsers = () => {
                         <option value="">All Roles</option>
                         <option value="admin">Admin</option>
                         <option value="user">User</option>
-                        <option value="moderator">Moderator</option>
                     </select>
                 </div>
             </div>
@@ -100,6 +138,7 @@ const AdminUsers = () => {
                                         setSelectedUsers([]);
                                     }}
                                     className="text-red-600 hover:text-red-900 text-sm font-medium"
+                                    disabled={deleteUserMutation.isPending}
                                 >
                                     Delete Selected
                                 </button>
@@ -109,7 +148,7 @@ const AdminUsers = () => {
                 </div>
 
                 <ul className="divide-y divide-gray-200">
-                    {filteredUsers.map((user) => (
+                    {users.map((user) => (
                         <li key={user.id} className="px-6 py-4">
                             <div className="flex items-center">
                                 <input
@@ -121,11 +160,11 @@ const AdminUsers = () => {
                                 <div className="ml-4 flex items-center justify-between w-full">
                                     <div className="flex items-center">
                                         <div className="flex-shrink-0 h-12 w-12">
-                                            <img
-                                                className="h-12 w-12 rounded-full object-cover"
-                                                src={user.image}
-                                                alt={`${user.firstName} ${user.lastName}`}
-                                            />
+                                            <div className="h-12 w-12 rounded-full bg-gray-300 flex items-center justify-center">
+                                                <span className="text-gray-600 font-medium">
+                                                    {user.firstName?.[0]}{user.lastName?.[0]}
+                                                </span>
+                                            </div>
                                         </div>
                                         <div className="ml-4">
                                             <h3 className="text-lg font-medium text-gray-900">
@@ -136,8 +175,15 @@ const AdminUsers = () => {
                                             </p>
                                             <div className="flex items-center space-x-4 text-sm text-gray-500 mt-1">
                                                 <span>@{user.username}</span>
-                                                <span>{user.phone}</span>
-                                                <span>{user.address.city}, {user.address.state}</span>
+                                                <span className={`px-2 py-1 rounded-full text-xs ${user.isActive
+                                                        ? 'bg-green-100 text-green-800'
+                                                        : 'bg-red-100 text-red-800'
+                                                    }`}>
+                                                    {user.isActive ? 'Active' : 'Inactive'}
+                                                </span>
+                                                {user.stats && (
+                                                    <span>Orders: {user.stats.totalOrders}</span>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -145,27 +191,26 @@ const AdminUsers = () => {
                                         <div className="text-right">
                                             <select
                                                 value={user.role || 'user'}
-                                                onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                                                onChange={(e) => handleRoleChange(user.id, e.target.value as 'user' | 'admin')}
                                                 className="text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                disabled={updateRoleMutation.isPending}
                                             >
                                                 <option value="user">User</option>
                                                 <option value="admin">Admin</option>
-                                                <option value="moderator">Moderator</option>
                                             </select>
                                         </div>
                                         <div className="flex space-x-2">
                                             <button
-                                                onClick={() => {
-                                                    // Navigate to user details
-                                                    console.log('View user:', user.id);
-                                                }}
+                                                onClick={() => handleToggleStatus(user.id)}
                                                 className="text-indigo-600 hover:text-indigo-900 text-sm font-medium"
+                                                disabled={toggleStatusMutation.isPending}
                                             >
-                                                View
+                                                {user.isActive ? 'Deactivate' : 'Activate'}
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(user.id)}
                                                 className="text-red-600 hover:text-red-900 text-sm font-medium"
+                                                disabled={deleteUserMutation.isPending}
                                             >
                                                 Delete
                                             </button>
@@ -177,7 +222,7 @@ const AdminUsers = () => {
                     ))}
                 </ul>
 
-                {filteredUsers.length === 0 && !loading && (
+                {users.length === 0 && !isLoading && (
                     <div className="text-center py-12">
                         <svg
                             className="mx-auto h-12 w-12 text-gray-400"
@@ -242,8 +287,8 @@ const AdminUsers = () => {
                                             key={pageNum}
                                             onClick={() => handlePageChange(pageNum)}
                                             className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${currentPage === pageNum
-                                                    ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
-                                                    : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                                                ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                                                : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
                                                 }`}
                                         >
                                             {pageNum}

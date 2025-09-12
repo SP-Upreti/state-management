@@ -1,24 +1,23 @@
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store/store';
-import { getAllCategories } from '../../store/categories/allCategories';
-import { fetchProductsByCategory } from '../../store/admin/adminProductSlice';
 
 const AdminCategories = () => {
-    const dispatch = useDispatch<AppDispatch>();
-    const { categories } = useSelector((state: RootState) => state.categories);
-    const { products, loading } = useSelector((state: RootState) => state.adminProducts);
+    // TODO: Replace with actual category data from backend
+    const categories: any[] = [];
+    const products: any[] = [];
+    const loading = false;
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [newCategory, setNewCategory] = useState('');
     const [showAddForm, setShowAddForm] = useState(false);
 
     useEffect(() => {
-        dispatch(getAllCategories());
-    }, [dispatch]);
+        // TODO: Fetch categories from backend
+        console.log("AdminCategories component loaded");
+    }, []);
 
     const handleCategorySelect = async (categorySlug: string) => {
         setSelectedCategory(categorySlug);
-        await dispatch(fetchProductsByCategory(categorySlug));
+        // TODO: Fetch products by category from backend
+        console.log("Selected category:", categorySlug);
     };
 
     const handleAddCategory = (e: React.FormEvent) => {

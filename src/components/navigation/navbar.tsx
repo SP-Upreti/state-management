@@ -1,9 +1,6 @@
 import { useState, useRef, useEffect, FormEvent } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
-import { searchProduct } from "../../store/products/searchProducts"
-import { AppDispatch, RootState } from "../../store/store"
-import { toggleCart } from "../../store/cart/cartSlice"
+import { useAppContext } from "../../contexts/AppContext"
 import CartSidebar from "../cart/CartSidebar"
 
 interface PropsTypes {
@@ -14,15 +11,22 @@ interface PropsTypes {
 const ProfileDropDown = (props: PropsTypes) => {
 
     const [state, setState] = useState(false)
+    const { auth } = useAppContext()
     const profileRef = useRef<HTMLButtonElement>(null)
 
     const navigation = [
         { title: "Dashboard", path: "/" },
         { title: "Admin Panel", path: "/admin" },
         { title: "Settings", path: "/" },
-        { title: "Log out", path: "/" },
+        { title: "Log out", path: "/", action: 'logout' },
     ]
 
+    const handleNavClick = (item: any) => {
+        if (item.action === 'logout') {
+            auth.logout();
+        }
+        setState(false);
+    }
 
     useEffect(() => {
         const handleDropDown = (e: MouseEvent) => {
@@ -40,22 +44,31 @@ const ProfileDropDown = (props: PropsTypes) => {
                     onClick={() => setState(!state)}
                 >
                     <img
-                        src="https://randomuser.me/api/portraits/men/46.jpg"
+                        src={auth.user?.image || "https://randomuser.me/api/portraits/men/46.jpg"}
                         className="w-full h-full rounded-full"
+                        alt="Profile"
                     />
                 </button>
                 <div className="lg:hidden">
-                    <span className="block">Micheal John</span>
-                    <span className="block text-sm text-gray-500">john@gmail.com</span>
+                    <span className="block">
+                        {auth.user ? `${auth.user.firstName} ${auth.user.lastName}` : 'Guest'}
+                    </span>
+                    <span className="block text-sm text-gray-500">
+                        {auth.user?.email || 'Not logged in'}
+                    </span>
                 </div>
             </div>
             <ul className={`bg-white top-12 right-0 mt-5 space-y-5 lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-0 ${state ? '' : 'lg:hidden'}`}>
                 {
                     navigation.map((item, idx) => (
                         <li key={idx}>
-                            <a className="block text-gray-600 lg:hover:bg-gray-50 lg:p-2.5" href={item.path}>
+                            <Link
+                                to={item.path}
+                                className="block text-gray-600 lg:hover:bg-gray-50 lg:p-2.5"
+                                onClick={() => handleNavClick(item)}
+                            >
                                 {item.title}
-                            </a>
+                            </Link>
                         </li>
                     ))
                 }
@@ -67,19 +80,22 @@ const ProfileDropDown = (props: PropsTypes) => {
 export default function Navbar() {
 
     const [menuState, setMenuState] = useState(false);
+    const [cartOpen, setCartOpen] = useState(false);
     const [search, setSearch] = useState("");
-    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const { totalQuantity } = useSelector((state: RootState) => state.cart);
+    const { cart, auth } = useAppContext();
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        dispatch(searchProduct({ query: search }));
-        navigate("/products")
+        if (search.trim()) {
+            navigate(`/products?search=${encodeURIComponent(search.trim())}`);
+        } else {
+            navigate("/products");
+        }
     }
 
     const handleCartToggle = () => {
-        dispatch(toggleCart());
+        setCartOpen(!cartOpen);
     }
 
     // Replace / path with your path
@@ -88,8 +104,13 @@ export default function Navbar() {
         { title: "Grocery", path: "/products" },
         { title: "Accessories", path: "/products" },
         { title: "All Categories", path: "/products" },
-        { title: "Admin", path: "/admin" },
     ]
+
+    // Only show admin link for admin users
+    if (auth.user?.role === 'admin') {
+        navigation.push({ title: "Admin", path: "/admin" });
+    }
+
     return (
         <>
             <nav className="bg-white border-b sticky top-0 z-10" style={{ height: menuState ? "100dvh" : "" }}>
@@ -110,9 +131,9 @@ export default function Navbar() {
                                 {
                                     navigation.map((item, idx) => (
                                         <li key={idx} className="text-gray-600 hover:text-gray-900">
-                                            <a href={item.path}>
+                                            <Link to={item.path}>
                                                 {item.title}
-                                            </a>
+                                            </Link>
                                         </li>
                                     ))
                                 }
@@ -132,7 +153,7 @@ export default function Navbar() {
                                     name="value"
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
-                                    placeholder="Search"
+                                    placeholder="Search products..."
                                 />
                             </form>
 
@@ -144,16 +165,33 @@ export default function Navbar() {
                                 <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5L2 21m5-8v8m0-8h10m-9 8h9" />
                                 </svg>
-                                {totalQuantity > 0 && (
+                                {cart.totals.totalQuantity > 0 && (
                                     <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                                        {totalQuantity}
+                                        {cart.totals.totalQuantity > 99 ? '99+' : cart.totals.totalQuantity}
                                     </span>
                                 )}
                             </button>
 
-                            <ProfileDropDown
-                                class="hidden lg:block"
-                            />
+                            {/* Auth Section */}
+                            {auth.isAuthenticated ? (
+                                <ProfileDropDown class="hidden lg:block" />
+                            ) : (
+                                <div className="hidden lg:flex items-center space-x-2">
+                                    <Link
+                                        to="/login"
+                                        className="text-gray-600 hover:text-gray-900 px-3 py-2"
+                                    >
+                                        Login
+                                    </Link>
+                                    <Link
+                                        to="/register"
+                                        className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+                                    >
+                                        Sign Up
+                                    </Link>
+                                </div>
+                            )}
+
                             <button
                                 className="outline-none text-gray-400 block lg:hidden"
                                 onClick={() => setMenuState(!menuState)}
@@ -174,7 +212,7 @@ export default function Navbar() {
                     </div>
                 </div>
             </nav>
-            <CartSidebar />
+            <CartSidebar isOpen={cartOpen} onClose={() => setCartOpen(false)} />
         </>
     )
 }

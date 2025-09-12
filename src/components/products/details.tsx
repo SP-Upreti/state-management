@@ -1,8 +1,5 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { AppDispatch } from '../../store/store';
-import { addToCart } from '../../store/cart/cartSlice';
 import Image from "../utils/Image"
 
 interface DetailsProps {
@@ -10,7 +7,6 @@ interface DetailsProps {
 }
 
 export default function Details({ product }: DetailsProps) {
-    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const [quantity, setQuantity] = useState(1);
 
@@ -39,10 +35,8 @@ export default function Details({ product }: DetailsProps) {
     };
 
     const handleAddToCart = () => {
-        for (let i = 0; i < quantity; i++) {
-            dispatch(addToCart(currentProduct));
-        }
-        // Show success message or notification here
+        // TODO: Implement cart functionality when cart system is available
+        console.log(`Adding ${quantity} item(s) to cart:`, currentProduct);
         alert(`Added ${quantity} item(s) to cart!`);
     };
 

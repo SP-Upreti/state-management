@@ -1,24 +1,24 @@
 import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store/store';
-import { fetchProductById, deleteProduct } from '../../store/admin/adminProductSlice';
 
 const AdminProductDetails = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const dispatch = useDispatch<AppDispatch>();
-    const { currentProduct, loading } = useSelector((state: RootState) => state.adminProducts);
+    // TODO: Replace with actual product data from backend
+    const currentProduct: any = null;
+    const loading = false;
 
     useEffect(() => {
         if (id) {
-            dispatch(fetchProductById(parseInt(id)));
+            // TODO: Fetch product by ID from backend
+            console.log("Fetching product with ID:", id);
         }
-    }, [dispatch, id]);
+    }, [id]);
 
     const handleDelete = async () => {
         if (currentProduct && window.confirm('Are you sure you want to delete this product?')) {
-            await dispatch(deleteProduct(currentProduct.id));
+            // TODO: Implement delete functionality
+            console.log("Delete product:", currentProduct.id);
             navigate('/admin/products');
         }
     };
@@ -86,7 +86,7 @@ const AdminProductDetails = () => {
                         <div>
                             <h4 className="text-sm font-medium text-gray-900 mb-3">Product Images</h4>
                             <div className="grid grid-cols-2 gap-4">
-                                {currentProduct.images.map((image, index) => (
+                                {currentProduct.images.map((image: string, index: number) => (
                                     <img
                                         key={index}
                                         src={image}
@@ -133,8 +133,8 @@ const AdminProductDetails = () => {
                                     <dt className="text-sm font-medium text-gray-500">Stock</dt>
                                     <dd className="mt-1 text-sm text-gray-900">
                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${currentProduct.stock > 10 ? 'bg-green-100 text-green-800' :
-                                                currentProduct.stock > 0 ? 'bg-yellow-100 text-yellow-800' :
-                                                    'bg-red-100 text-red-800'
+                                            currentProduct.stock > 0 ? 'bg-yellow-100 text-yellow-800' :
+                                                'bg-red-100 text-red-800'
                                             }`}>
                                             {currentProduct.stock} units
                                         </span>
@@ -168,7 +168,7 @@ const AdminProductDetails = () => {
                                     <dt className="text-sm font-medium text-gray-500">Tags</dt>
                                     <dd className="mt-1">
                                         <div className="flex flex-wrap gap-2">
-                                            {currentProduct.tags.map((tag, index) => (
+                                            {currentProduct.tags.map((tag: string, index: number) => (
                                                 <span
                                                     key={index}
                                                     className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
@@ -236,7 +236,7 @@ const AdminProductDetails = () => {
                     </div>
                     <div className="border-t border-gray-200">
                         <ul className="divide-y divide-gray-200">
-                            {currentProduct.reviews.slice(0, 5).map((review, index) => (
+                            {currentProduct.reviews.slice(0, 5).map((review: { reviewerName: string; date: string; rating: number; comment: string }, index: number) => (
                                 <li key={index} className="px-4 py-4 sm:px-6">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center">

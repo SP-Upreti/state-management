@@ -1,8 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store/store';
-import { addProduct, updateProduct } from '../../store/admin/adminProductSlice';
-import { getAllCategories } from '../../store/categories/allCategories';
 
 interface ProductFormModalProps {
     isOpen: boolean;
@@ -11,9 +7,10 @@ interface ProductFormModalProps {
 }
 
 const ProductFormModal = ({ isOpen, onClose, product }: ProductFormModalProps) => {
-    const dispatch = useDispatch<AppDispatch>();
-    const { categories } = useSelector((state: RootState) => state.categories);
-    const { loading, error } = useSelector((state: RootState) => state.adminProducts);
+    // TODO: Replace with actual data from backend
+    const categories: any[] = [];
+    const loading = false;
+    const error = null;
 
     const [formData, setFormData] = useState({
         title: '',
@@ -29,8 +26,9 @@ const ProductFormModal = ({ isOpen, onClose, product }: ProductFormModalProps) =
     const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
 
     useEffect(() => {
-        dispatch(getAllCategories());
-    }, [dispatch]);
+        // TODO: Fetch categories when modal opens
+        console.log("ProductFormModal opened");
+    }, []);
 
     useEffect(() => {
         if (product) {
@@ -94,9 +92,11 @@ const ProductFormModal = ({ isOpen, onClose, product }: ProductFormModalProps) =
 
         try {
             if (product) {
-                await dispatch(updateProduct({ id: product.id, productData: formData })).unwrap();
+                // TODO: Implement update product functionality
+                console.log("Update product:", formData);
             } else {
-                await dispatch(addProduct(formData)).unwrap();
+                // TODO: Implement add product functionality
+                console.log("Add product:", formData);
             }
             onClose();
             // Reset form after successful submission

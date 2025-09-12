@@ -1,38 +1,70 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store/store';
-import { fetchOrders, setCurrentPage } from '../../store/admin/adminSlice';
+import { useState } from 'react';
+import { useOrders, useUpdateOrderStatus } from '../../hooks/admin';
 
 const AdminOrders = () => {
-    const dispatch = useDispatch<AppDispatch>();
-    const { orders, loading, currentPage, totalPages } = useSelector((state: RootState) => state.admin);
+    const [currentPage, setCurrentPage] = useState(1);
     const [selectedOrder, setSelectedOrder] = useState<any>(null);
     const [statusFilter, setStatusFilter] = useState('');
 
-    useEffect(() => {
-        dispatch(fetchOrders({ limit: 30, skip: (currentPage - 1) * 30 }));
-    }, [dispatch, currentPage]);
+    const limit = 15;
+    const { data, isLoading, error } = useOrders({
+        page: currentPage,
+        limit,
+        status: statusFilter || undefined,
+    });
+
+    const updateStatusMutation = useUpdateOrderStatus();
+
+    const orders = data?.data?.orders || [];
+    const totalPages = data?.pagination?.pages || 1;
 
     const handlePageChange = (page: number) => {
-        dispatch(setCurrentPage(page));
+        setCurrentPage(page);
     };
 
-    const getStatusColor = (total: number) => {
-        if (total > 2000) return 'bg-green-100 text-green-800';
-        if (total > 1000) return 'bg-yellow-100 text-yellow-800';
-        return 'bg-red-100 text-red-800';
+    const handleStatusUpdate = async (orderId: number, newStatus: string) => {
+        try {
+            await updateStatusMutation.mutateAsync({ id: orderId, status: newStatus });
+        } catch (error) {
+            console.error('Failed to update order status:', error);
+        }
     };
 
-    const getStatusText = (total: number) => {
-        if (total > 2000) return 'High Value';
-        if (total > 1000) return 'Medium Value';
-        return 'Low Value';
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case 'pending': return 'bg-yellow-100 text-yellow-800';
+            case 'confirmed': return 'bg-blue-100 text-blue-800';
+            case 'shipped': return 'bg-purple-100 text-purple-800';
+            case 'delivered': return 'bg-green-100 text-green-800';
+            case 'cancelled': return 'bg-red-100 text-red-800';
+            default: return 'bg-gray-100 text-gray-800';
+        }
     };
 
-    if (loading) {
+    const getPaymentStatusColor = (paymentStatus: string) => {
+        switch (paymentStatus) {
+            case 'paid': return 'bg-green-100 text-green-800';
+            case 'pending': return 'bg-yellow-100 text-yellow-800';
+            case 'failed': return 'bg-red-100 text-red-800';
+            default: return 'bg-gray-100 text-gray-800';
+        }
+    };
+
+    if (isLoading) {
         return (
             <div className="flex items-center justify-center h-64">
                 <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <div className="text-center">
+                    <div className="text-red-600 text-lg font-semibold mb-2">Error loading orders</div>
+                    <div className="text-gray-600">Please try refreshing the page</div>
+                </div>
             </div>
         );
     }
@@ -54,9 +86,11 @@ const AdminOrders = () => {
                         className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                         <option value="">All Orders</option>
-                        <option value="high">High Value ($2000+)</option>
-                        <option value="medium">Medium Value ($1000-$2000)</option>
-                        <option value="low">Low Value (&lt;$1000)</option>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
                     </select>
                 </div>
             </div>
@@ -73,19 +107,23 @@ const AdminOrders = () => {
                                             <h3 className="text-lg font-medium text-gray-900">
                                                 Order #{order.id}
                                             </h3>
-                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(order.discountedTotal)}`}>
-                                                {getStatusText(order.discountedTotal)}
+                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                                                {order.status}
+                                            </span>
+                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPaymentStatusColor(order.paymentStatus)}`}>
+                                                {order.paymentStatus}
                                             </span>
                                         </div>
                                         <p className="text-sm text-gray-500 mt-1">
-                                            Customer ID: {order.userId} • {order.totalProducts} items • {order.totalQuantity} total quantity
+                                            {order.user ? `${order.user.firstName} ${order.user.lastName} (${order.user.email})` : `User ID: ${order.userId}`}
                                         </p>
                                         <div className="mt-2 flex items-center space-x-4 text-sm text-gray-500">
-                                            <span>Original: ${order.total.toFixed(2)}</span>
+                                            <span>Amount: ${order.totalAmount.toFixed(2)}</span>
                                             <span>Final: ${order.discountedTotal.toFixed(2)}</span>
                                             <span className="text-green-600">
-                                                Saved: ${(order.total - order.discountedTotal).toFixed(2)}
+                                                Saved: ${(order.totalAmount - order.discountedTotal).toFixed(2)}
                                             </span>
+                                            <span>Items: {order.items?.length || 0}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -95,24 +133,28 @@ const AdminOrders = () => {
                                             ${order.discountedTotal.toFixed(2)}
                                         </div>
                                         <div className="text-sm text-gray-500">
-                                            {order.totalProducts} {order.totalProducts === 1 ? 'item' : 'items'}
+                                            {new Date(order.createdAt).toLocaleDateString()}
                                         </div>
                                     </div>
-                                    <div className="flex space-x-2">
+                                    <div className="flex flex-col space-y-1">
                                         <button
                                             onClick={() => setSelectedOrder(order)}
                                             className="text-indigo-600 hover:text-indigo-900 text-sm font-medium"
                                         >
                                             View Details
                                         </button>
-                                        <button
-                                            onClick={() => {
-                                                console.log('Process order:', order.id);
-                                            }}
-                                            className="text-green-600 hover:text-green-900 text-sm font-medium"
+                                        <select
+                                            value={order.status}
+                                            onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
+                                            className="text-xs border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500"
+                                            disabled={updateStatusMutation.isPending}
                                         >
-                                            Process
-                                        </button>
+                                            <option value="pending">Pending</option>
+                                            <option value="confirmed">Confirmed</option>
+                                            <option value="shipped">Shipped</option>
+                                            <option value="delivered">Delivered</option>
+                                            <option value="cancelled">Cancelled</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -120,7 +162,7 @@ const AdminOrders = () => {
                     ))}
                 </ul>
 
-                {orders.length === 0 && !loading && (
+                {orders.length === 0 && !isLoading && (
                     <div className="text-center py-12">
                         <svg
                             className="mx-auto h-12 w-12 text-gray-400"
@@ -185,8 +227,8 @@ const AdminOrders = () => {
                                             key={pageNum}
                                             onClick={() => handlePageChange(pageNum)}
                                             className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${currentPage === pageNum
-                                                    ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
-                                                    : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                                                ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                                                : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
                                                 }`}
                                         >
                                             {pageNum}
@@ -225,55 +267,74 @@ const AdminOrders = () => {
                                         <div className="space-y-4">
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div>
-                                                    <p className="text-sm font-medium text-gray-500">Customer ID</p>
-                                                    <p className="text-lg text-gray-900">{selectedOrder.userId}</p>
+                                                    <p className="text-sm font-medium text-gray-500">Customer</p>
+                                                    <p className="text-lg text-gray-900">
+                                                        {selectedOrder.user
+                                                            ? `${selectedOrder.user.firstName} ${selectedOrder.user.lastName}`
+                                                            : `User ID: ${selectedOrder.userId}`
+                                                        }
+                                                    </p>
+                                                    {selectedOrder.user && (
+                                                        <p className="text-sm text-gray-500">{selectedOrder.user.email}</p>
+                                                    )}
                                                 </div>
                                                 <div>
                                                     <p className="text-sm font-medium text-gray-500">Total Amount</p>
                                                     <p className="text-lg text-gray-900">${selectedOrder.discountedTotal.toFixed(2)}</p>
+                                                    <p className="text-sm text-gray-500">Original: ${selectedOrder.totalAmount.toFixed(2)}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm font-medium text-gray-500">Total Items</p>
-                                                    <p className="text-lg text-gray-900">{selectedOrder.totalProducts}</p>
+                                                    <p className="text-sm font-medium text-gray-500">Status</p>
+                                                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(selectedOrder.status)}`}>
+                                                        {selectedOrder.status}
+                                                    </span>
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm font-medium text-gray-500">Total Quantity</p>
-                                                    <p className="text-lg text-gray-900">{selectedOrder.totalQuantity}</p>
+                                                    <p className="text-sm font-medium text-gray-500">Payment Status</p>
+                                                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getPaymentStatusColor(selectedOrder.paymentStatus)}`}>
+                                                        {selectedOrder.paymentStatus}
+                                                    </span>
                                                 </div>
                                             </div>
 
-                                            <div>
-                                                <h4 className="text-md font-medium text-gray-900 mb-3">Order Items</h4>
-                                                <div className="border rounded-lg overflow-hidden">
-                                                    <ul className="divide-y divide-gray-200">
-                                                        {selectedOrder.products.map((product: any) => (
-                                                            <li key={product.id} className="p-4 flex items-center space-x-4">
-                                                                <img
-                                                                    src={product.thumbnail}
-                                                                    alt={product.title}
-                                                                    className="h-12 w-12 rounded-md object-cover"
-                                                                />
-                                                                <div className="flex-1">
-                                                                    <h5 className="text-sm font-medium text-gray-900">{product.title}</h5>
-                                                                    <p className="text-sm text-gray-500">
-                                                                        Qty: {product.quantity} × ${product.price.toFixed(2)}
-                                                                    </p>
-                                                                </div>
-                                                                <div className="text-right">
-                                                                    <p className="text-sm font-medium text-gray-900">
-                                                                        ${product.discountedTotal.toFixed(2)}
-                                                                    </p>
-                                                                    {product.discountPercentage > 0 && (
-                                                                        <p className="text-xs text-green-600">
-                                                                            {product.discountPercentage}% off
-                                                                        </p>
-                                                                    )}
-                                                                </div>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
+                                            {selectedOrder.shippingAddress && (
+                                                <div>
+                                                    <p className="text-sm font-medium text-gray-500">Shipping Address</p>
+                                                    <p className="text-gray-900">{selectedOrder.shippingAddress}</p>
                                                 </div>
-                                            </div>
+                                            )}
+
+                                            {selectedOrder.items && selectedOrder.items.length > 0 && (
+                                                <div>
+                                                    <h4 className="text-md font-medium text-gray-900 mb-3">Order Items</h4>
+                                                    <div className="border rounded-lg overflow-hidden">
+                                                        <ul className="divide-y divide-gray-200">
+                                                            {selectedOrder.items.map((item: any) => (
+                                                                <li key={item.id} className="p-4 flex items-center space-x-4">
+                                                                    <img
+                                                                        src={item.product?.thumbnail || '/placeholder.jpg'}
+                                                                        alt={item.product?.title || 'Product'}
+                                                                        className="h-12 w-12 rounded-md object-cover"
+                                                                    />
+                                                                    <div className="flex-1">
+                                                                        <h5 className="text-sm font-medium text-gray-900">
+                                                                            {item.product?.title || 'Unknown Product'}
+                                                                        </h5>
+                                                                        <p className="text-sm text-gray-500">
+                                                                            Qty: {item.quantity} × ${item.price.toFixed(2)}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div className="text-right">
+                                                                        <p className="text-sm font-medium text-gray-900">
+                                                                            ${item.total.toFixed(2)}
+                                                                        </p>
+                                                                    </div>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

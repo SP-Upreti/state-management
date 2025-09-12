@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '../store/store';
-import { updateQuantity, removeItemCompletely, clearCart } from '../store/cart/cartSlice';
+import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../hooks/useCart';
+import { useAuth } from '../hooks/useAuth';
+import { useOrders } from '../hooks/useOrders';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 interface ShippingInfo {
     firstName: string;
@@ -24,16 +25,20 @@ interface PaymentInfo {
 }
 
 const Checkout = () => {
-    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const { items, totalAmount, totalQuantity } = useSelector((state: RootState) => state.cart);
+    const { user, isAuthenticated } = useAuth();
+    const { items, totals, updateQuantity, removeItem, clearCart } = useCart(isAuthenticated);
+    const { createOrder } = useOrders();
+
+    // Calculate totals
+    const { totalAmount, totalQuantity } = totals;
 
     const [currentStep, setCurrentStep] = useState(1);
     const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
+        firstName: user?.firstName || '',
+        lastName: user?.lastName || '',
+        email: user?.email || '',
+        phone: user?.phone || '',
         address: '',
         city: '',
         state: '',
@@ -146,12 +151,12 @@ const Checkout = () => {
 
     const handleQuantityChange = (id: number, quantity: number) => {
         if (quantity > 0) {
-            dispatch(updateQuantity({ id, quantity }));
+            updateQuantity(id, quantity);
         }
     };
 
     const handleRemoveItem = (id: number) => {
-        dispatch(removeItemCompletely(id));
+        removeItem(id);
     };
 
     const handleNextStep = () => {
@@ -170,13 +175,26 @@ const Checkout = () => {
         setIsProcessing(true);
 
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            const shippingAddress = `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.state} ${shippingInfo.zipCode}, ${shippingInfo.country}`;
+
+            const orderData = {
+                items: items.map(item => ({
+                    productId: item.product.id,
+                    quantity: item.quantity,
+                    price: item.priceAtTime
+                })),
+                shippingAddress,
+                totalAmount: finalTotal,
+                discountedTotal: totalAmount
+            };
+
+            const order = await createOrder(orderData);
 
             // Clear cart and redirect to success page
-            dispatch(clearCart());
+            clearCart();
             navigate('/order-success', {
                 state: {
+                    orderId: order.id,
                     orderTotal: finalTotal,
                     shippingInfo,
                     items: items.length
@@ -184,6 +202,7 @@ const Checkout = () => {
             });
         } catch (error) {
             console.error('Order placement failed:', error);
+            setErrors({ submit: 'Failed to place order. Please try again.' });
         } finally {
             setIsProcessing(false);
         }
@@ -551,12 +570,19 @@ const Checkout = () => {
 
                         {/* Navigation Buttons */}
                         <div className="mt-6 flex justify-between">
+                            {errors.submit && (
+                                <div className="flex-1 mr-4">
+                                    <div className="bg-red-50 border border-red-200 rounded-md p-3">
+                                        <p className="text-sm text-red-700">{errors.submit}</p>
+                                    </div>
+                                </div>
+                            )}
                             <button
                                 onClick={handlePrevStep}
                                 disabled={currentStep === 1}
                                 className={`px-4 py-2 text-sm font-medium rounded-md ${currentStep === 1
-                                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
                                     }`}
                             >
                                 Previous
@@ -573,9 +599,10 @@ const Checkout = () => {
                                 <button
                                     onClick={handlePlaceOrder}
                                     disabled={isProcessing}
-                                    className="px-6 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="px-6 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
                                 >
-                                    {isProcessing ? 'Processing...' : 'Place Order'}
+                                    {isProcessing && <LoadingSpinner size="sm" />}
+                                    <span>{isProcessing ? 'Processing...' : 'Place Order'}</span>
                                 </button>
                             )}
                         </div>
@@ -591,15 +618,15 @@ const Checkout = () => {
                                 {items.map((item) => (
                                     <div key={item.id} className="flex items-center space-x-4">
                                         <img
-                                            src={item.thumbnail}
-                                            alt={item.title}
+                                            src={item.product.thumbnail}
+                                            alt={item.product.title}
                                             className="h-16 w-16 rounded-lg object-cover"
                                         />
                                         <div className="flex-1 min-w-0">
                                             <h4 className="text-sm font-medium text-gray-900 truncate">
-                                                {item.title}
+                                                {item.product.title}
                                             </h4>
-                                            <p className="text-sm text-gray-500">{item.brand}</p>
+                                            <p className="text-sm text-gray-500">{item.product.brand}</p>
                                             <div className="flex items-center space-x-2">
                                                 <button
                                                     onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
@@ -628,7 +655,7 @@ const Checkout = () => {
                                             </p>
                                             {item.discountPercentage > 0 && (
                                                 <p className="text-xs text-gray-500 line-through">
-                                                    ${(item.price * item.quantity).toFixed(2)}
+                                                    ${(item.priceAtTime * item.quantity).toFixed(2)}
                                                 </p>
                                             )}
                                         </div>

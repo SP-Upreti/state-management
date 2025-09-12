@@ -1,69 +1,72 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AppDispatch, RootState } from '../../store/store';
-import {
-    fetchAdminProducts,
-    deleteProduct,
-    searchAdminProducts,
-    setCurrentPage
-} from '../../store/admin/adminProductSlice';
+import { useProducts, useDeleteProduct } from '../../hooks/admin';
 import ProductFormModal from '../../components/admin/ProductFormModal.tsx';
 
 const AdminProducts = () => {
-    const dispatch = useDispatch<AppDispatch>();
-    const { products, loading, currentPage, totalPages, totalProducts } = useSelector(
-        (state: RootState) => state.adminProducts
-    );
-
+    const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
     const [showAddModal, setShowAddModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
-    useEffect(() => {
-        if (searchQuery) {
-            dispatch(searchAdminProducts(searchQuery));
-        } else {
-            dispatch(fetchAdminProducts({ limit: 30, skip: (currentPage - 1) * 30 }));
-        }
-    }, [dispatch, currentPage, searchQuery]);
+    const limit = 12;
+    const { data, isLoading, error, refetch } = useProducts({
+        page: currentPage,
+        limit,
+        search: searchQuery || undefined,
+    });
+
+    const deleteProductMutation = useDeleteProduct();
+
+    const products = data?.data?.products || [];
+    const totalPages = data?.pagination?.pages || 1;
+    const totalProducts = data?.total || 0;
 
     const handleDelete = async (productId: number) => {
         if (window.confirm('Are you sure you want to delete this product?')) {
-            await dispatch(deleteProduct(productId));
+            try {
+                await deleteProductMutation.mutateAsync(productId);
+            } catch (error) {
+                console.error('Failed to delete product:', error);
+            }
         }
     };
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        if (searchQuery.trim()) {
-            dispatch(searchAdminProducts(searchQuery));
-        } else {
-            dispatch(fetchAdminProducts({ limit: 30, skip: 0 }));
-            dispatch(setCurrentPage(1));
-        }
+        setCurrentPage(1); // Reset to first page when searching
+        refetch(); // Refetch with new search query
     };
 
     const handlePageChange = (page: number) => {
-        dispatch(setCurrentPage(page));
+        setCurrentPage(page);
     };
 
     const handleAddModalClose = () => {
         setShowAddModal(false);
-        // Refresh the products list after adding
-        dispatch(fetchAdminProducts({ limit: 30, skip: (currentPage - 1) * 30 }));
+        refetch(); // Refresh the products list after adding
     };
 
     const handleEditModalClose = () => {
         setSelectedProduct(null);
-        // Refresh the products list after editing
-        dispatch(fetchAdminProducts({ limit: 30, skip: (currentPage - 1) * 30 }));
+        refetch(); // Refresh the products list after editing
     };
 
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="flex items-center justify-center h-64">
                 <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <div className="text-center">
+                    <div className="text-red-600 text-lg font-semibold mb-2">Error loading products</div>
+                    <div className="text-gray-600">Please try refreshing the page</div>
+                </div>
             </div>
         );
     }
@@ -113,8 +116,7 @@ const AdminProducts = () => {
                                 type="button"
                                 onClick={() => {
                                     setSearchQuery('');
-                                    dispatch(fetchAdminProducts({ limit: 30, skip: 0 }));
-                                    dispatch(setCurrentPage(1));
+                                    setCurrentPage(1);
                                 }}
                                 className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >
@@ -144,7 +146,7 @@ const AdminProducts = () => {
                                     Stock
                                 </th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Rating
+                                    Views
                                 </th>
                                 <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Actions
@@ -174,7 +176,7 @@ const AdminProducts = () => {
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{product.category}</div>
+                                        <div className="text-sm text-gray-900">{product.category?.name || 'N/A'}</div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="text-sm font-medium text-gray-900">${product.price}</div>
@@ -186,18 +188,17 @@ const AdminProducts = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${product.stock > 10
-                                                ? 'bg-green-100 text-green-800'
-                                                : product.stock > 0
-                                                    ? 'bg-yellow-100 text-yellow-800'
-                                                    : 'bg-red-100 text-red-800'
+                                            ? 'bg-green-100 text-green-800'
+                                            : product.stock > 0
+                                                ? 'bg-yellow-100 text-yellow-800'
+                                                : 'bg-red-100 text-red-800'
                                             }`}>
                                             {product.stock} units
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
-                                            <span className="text-sm text-gray-900">{product.rating}</span>
-                                            <span className="text-yellow-400 ml-1">★</span>
+                                            <span className="text-sm text-gray-900">{product.views || 0} views</span>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -228,7 +229,7 @@ const AdminProducts = () => {
                     </table>
                 </div>
 
-                {products.length === 0 && !loading && (
+                {products.length === 0 && !isLoading && (
                     <div className="text-center py-12">
                         <svg
                             className="mx-auto h-12 w-12 text-gray-400"

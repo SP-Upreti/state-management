@@ -1,53 +1,35 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store/store';
-import { fetchUsers, fetchOrders } from '../../store/admin/adminSlice';
-import { fetchAdminProducts } from '../../store/admin/adminProductSlice';
+import { useDashboardStats, useProductAnalytics } from '../../hooks/admin';
 
 const AdminAnalytics = () => {
-    const dispatch = useDispatch<AppDispatch>();
-    const { stats, loading } = useSelector((state: RootState) => state.admin);
-    const { totalProducts } = useSelector((state: RootState) => state.adminProducts);
+    const { data: stats, isLoading: statsLoading, error: statsError } = useDashboardStats('30');
+    const { data: productAnalytics, isLoading: analyticsLoading, error: analyticsError } = useProductAnalytics();
 
-    useEffect(() => {
-        dispatch(fetchUsers({ limit: 10 }));
-        dispatch(fetchOrders({ limit: 20 }));
-        dispatch(fetchAdminProducts({ limit: 10 }));
-    }, [dispatch]);
+    const isLoading = statsLoading || analyticsLoading;
+    const hasError = statsError || analyticsError;
 
-    // Mock analytics data
-    const salesData = [
-        { month: 'Jan', sales: 12000 },
-        { month: 'Feb', sales: 19000 },
-        { month: 'Mar', sales: 15000 },
-        { month: 'Apr', sales: 25000 },
-        { month: 'May', sales: 22000 },
-        { month: 'Jun', sales: 30000 },
-    ];
-
-    const topCategories = [
-        { name: 'Electronics', sales: 45000, percentage: 35 },
-        { name: 'Clothing', sales: 32000, percentage: 25 },
-        { name: 'Home & Garden', sales: 28000, percentage: 22 },
-        { name: 'Sports', sales: 15000, percentage: 12 },
-        { name: 'Books', sales: 8000, percentage: 6 },
-    ];
-
-    const recentActivity = [
-        { id: 1, action: 'New order placed', user: 'John Doe', time: '2 minutes ago', type: 'order' },
-        { id: 2, action: 'Product updated', user: 'Admin', time: '15 minutes ago', type: 'product' },
-        { id: 3, action: 'User registered', user: 'Jane Smith', time: '1 hour ago', type: 'user' },
-        { id: 4, action: 'Payment received', user: 'Mike Johnson', time: '2 hours ago', type: 'payment' },
-        { id: 5, action: 'Review submitted', user: 'Sarah Wilson', time: '3 hours ago', type: 'review' },
-    ];
-
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="flex items-center justify-center h-64">
                 <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
             </div>
         );
     }
+
+    if (hasError) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <div className="text-center">
+                    <div className="text-red-600 text-lg font-semibold mb-2">Error loading analytics</div>
+                    <div className="text-gray-600">Please try refreshing the page</div>
+                </div>
+            </div>
+        );
+    }
+
+    // Use real data from API with fallbacks
+    const salesData = stats?.salesData || [];
+    const topProducts = productAnalytics?.lowStockProducts || [];
+    const productsByCategory = productAnalytics?.productsByCategory || [];
 
     return (
         <div className="space-y-6">
@@ -73,8 +55,8 @@ const AdminAnalytics = () => {
                             </div>
                             <div className="ml-5 w-0 flex-1">
                                 <dl>
-                                    <dt className="text-sm font-medium text-gray-500 truncate">Monthly Revenue</dt>
-                                    <dd className="text-lg font-medium text-gray-900">${stats.totalRevenue.toLocaleString()}</dd>
+                                    <dt className="text-sm font-medium text-gray-500 truncate">Total Revenue</dt>
+                                    <dd className="text-lg font-medium text-gray-900">${stats?.overview?.totalRevenue?.toLocaleString() || '0'}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -93,8 +75,8 @@ const AdminAnalytics = () => {
                             </div>
                             <div className="ml-5 w-0 flex-1">
                                 <dl>
-                                    <dt className="text-sm font-medium text-gray-500 truncate">Orders This Month</dt>
-                                    <dd className="text-lg font-medium text-gray-900">{stats.totalOrders}</dd>
+                                    <dt className="text-sm font-medium text-gray-500 truncate">Total Orders</dt>
+                                    <dd className="text-lg font-medium text-gray-900">{stats?.overview?.totalOrders?.toLocaleString() || '0'}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -113,8 +95,8 @@ const AdminAnalytics = () => {
                             </div>
                             <div className="ml-5 w-0 flex-1">
                                 <dl>
-                                    <dt className="text-sm font-medium text-gray-500 truncate">Active Users</dt>
-                                    <dd className="text-lg font-medium text-gray-900">{stats.totalUsers}</dd>
+                                    <dt className="text-sm font-medium text-gray-500 truncate">Total Users</dt>
+                                    <dd className="text-lg font-medium text-gray-900">{stats?.overview?.totalUsers?.toLocaleString() || '0'}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -134,7 +116,7 @@ const AdminAnalytics = () => {
                             <div className="ml-5 w-0 flex-1">
                                 <dl>
                                     <dt className="text-sm font-medium text-gray-500 truncate">Total Products</dt>
-                                    <dd className="text-lg font-medium text-gray-900">{totalProducts}</dd>
+                                    <dd className="text-lg font-medium text-gray-900">{stats?.overview?.totalProducts?.toLocaleString() || '0'}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -149,14 +131,14 @@ const AdminAnalytics = () => {
                     <div className="px-4 py-5 sm:p-6">
                         <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Monthly Sales</h3>
                         <div className="space-y-3">
-                            {salesData.map((item, index) => (
+                            {salesData.length > 0 ? salesData.map((item, index) => (
                                 <div key={index} className="flex items-center justify-between">
                                     <span className="text-sm font-medium text-gray-600">{item.month}</span>
                                     <div className="flex items-center space-x-3">
                                         <div className="w-32 bg-gray-200 rounded-full h-2">
                                             <div
                                                 className="bg-indigo-600 h-2 rounded-full"
-                                                style={{ width: `${(item.sales / 30000) * 100}%` }}
+                                                style={{ width: `${Math.min((item.sales / Math.max(...salesData.map(d => d.sales))) * 100, 100)}%` }}
                                             ></div>
                                         </div>
                                         <span className="text-sm text-gray-900 w-16 text-right">
@@ -164,103 +146,78 @@ const AdminAnalytics = () => {
                                         </span>
                                     </div>
                                 </div>
-                            ))}
+                            )) : (
+                                <p className="text-sm text-gray-500">No sales data available</p>
+                            )}
                         </div>
                     </div>
                 </div>
 
-                {/* Top Categories */}
+                {/* Products by Category */}
                 <div className="bg-white shadow rounded-lg">
                     <div className="px-4 py-5 sm:p-6">
-                        <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Top Categories</h3>
+                        <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Products by Category</h3>
                         <div className="space-y-4">
-                            {topCategories.map((category, index) => (
-                                <div key={index} className="flex items-center justify-between">
-                                    <div className="flex-1">
-                                        <div className="flex items-center justify-between mb-1">
-                                            <span className="text-sm font-medium text-gray-900">{category.name}</span>
-                                            <span className="text-sm text-gray-500">{category.percentage}%</span>
-                                        </div>
-                                        <div className="w-full bg-gray-200 rounded-full h-2">
-                                            <div
-                                                className="bg-green-600 h-2 rounded-full"
-                                                style={{ width: `${category.percentage}%` }}
-                                            ></div>
+                            {productsByCategory.length > 0 ? productsByCategory.map((category, index) => {
+                                const maxProducts = Math.max(...productsByCategory.map(c => c.productCount));
+                                const percentage = maxProducts > 0 ? (category.productCount / maxProducts) * 100 : 0;
+
+                                return (
+                                    <div key={index} className="flex items-center justify-between">
+                                        <div className="flex-1">
+                                            <div className="flex items-center justify-between mb-1">
+                                                <span className="text-sm font-medium text-gray-900">{category.name}</span>
+                                                <span className="text-sm text-gray-500">{category.productCount} products</span>
+                                            </div>
+                                            <div className="w-full bg-gray-200 rounded-full h-2">
+                                                <div
+                                                    className="bg-green-600 h-2 rounded-full"
+                                                    style={{ width: `${percentage}%` }}
+                                                ></div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <span className="ml-4 text-sm text-gray-900">
-                                        ${category.sales.toLocaleString()}
-                                    </span>
-                                </div>
-                            ))}
+                                );
+                            }) : (
+                                <p className="text-sm text-gray-500">No category data available</p>
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Recent Activity */}
+            {/* Low Stock Products */}
             <div className="bg-white shadow rounded-lg">
                 <div className="px-4 py-5 sm:p-6">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Recent Activity</h3>
-                    <div className="flow-root">
-                        <ul className="-mb-8">
-                            {recentActivity.map((activity, index) => (
-                                <li key={activity.id} className={index !== recentActivity.length - 1 ? 'pb-8' : ''}>
-                                    <div className="relative">
-                                        {index !== recentActivity.length - 1 && (
-                                            <span className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" />
-                                        )}
-                                        <div className="relative flex space-x-3">
-                                            <div>
-                                                <span className={`h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white ${activity.type === 'order' ? 'bg-green-500' :
-                                                        activity.type === 'product' ? 'bg-blue-500' :
-                                                            activity.type === 'user' ? 'bg-purple-500' :
-                                                                activity.type === 'payment' ? 'bg-yellow-500' :
-                                                                    'bg-gray-500'
-                                                    }`}>
-                                                    {activity.type === 'order' && (
-                                                        <svg className="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                                        </svg>
-                                                    )}
-                                                    {activity.type === 'product' && (
-                                                        <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                                        </svg>
-                                                    )}
-                                                    {activity.type === 'user' && (
-                                                        <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                                        </svg>
-                                                    )}
-                                                    {activity.type === 'payment' && (
-                                                        <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                                                        </svg>
-                                                    )}
-                                                    {activity.type === 'review' && (
-                                                        <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                                        </svg>
-                                                    )}
-                                                </span>
-                                            </div>
-                                            <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                                <div>
-                                                    <p className="text-sm text-gray-500">
-                                                        {activity.action} by <span className="font-medium text-gray-900">{activity.user}</span>
-                                                    </p>
-                                                </div>
-                                                <div className="text-right text-sm whitespace-nowrap text-gray-500">
-                                                    {activity.time}
-                                                </div>
-                                            </div>
+                    <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Low Stock Products</h3>
+                    {topProducts.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {topProducts.slice(0, 6).map((product) => (
+                                <div key={product.id} className="border rounded-lg p-4">
+                                    <div className="flex items-center space-x-3">
+                                        <img
+                                            src={product.thumbnail}
+                                            alt={product.title}
+                                            className="h-12 w-12 rounded-md object-cover"
+                                        />
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-sm font-medium text-gray-900 truncate">
+                                                {product.title}
+                                            </p>
+                                            <p className="text-sm text-gray-500">
+                                                Stock: {product.stock} units
+                                            </p>
+                                            <p className="text-sm text-gray-500">
+                                                ${product.price}
+                                            </p>
                                         </div>
                                     </div>
-                                </li>
+                                </div>
                             ))}
-                        </ul>
-                    </div>
+                        </div>
+                    ) : (
+                        <p className="text-sm text-gray-500">No low stock products</p>
+                    )}
                 </div>
             </div>
         </div>

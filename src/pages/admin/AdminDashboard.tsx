@@ -1,24 +1,12 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store/store';
-import { fetchUsers, fetchOrders } from '../../store/admin/adminSlice';
-import { fetchAdminProducts } from '../../store/admin/adminProductSlice';
+import { useDashboardStats } from '../../hooks/admin';
 
 const AdminDashboard = () => {
-    const dispatch = useDispatch<AppDispatch>();
-    const { stats, loading } = useSelector((state: RootState) => state.admin);
-    const { totalProducts } = useSelector((state: RootState) => state.adminProducts);
-
-    useEffect(() => {
-        dispatch(fetchUsers({ limit: 10 }));
-        dispatch(fetchOrders({ limit: 10 }));
-        dispatch(fetchAdminProducts({ limit: 10 }));
-    }, [dispatch]);
+    const { data: stats, isLoading, error } = useDashboardStats('30');
 
     const statCards = [
         {
             title: 'Total Products',
-            value: totalProducts.toLocaleString(),
+            value: stats?.overview.totalProducts?.toLocaleString() || '0',
             icon: (
                 <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -30,7 +18,7 @@ const AdminDashboard = () => {
         },
         {
             title: 'Total Users',
-            value: stats.totalUsers.toLocaleString(),
+            value: stats?.overview.totalUsers?.toLocaleString() || '0',
             icon: (
                 <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
@@ -42,7 +30,7 @@ const AdminDashboard = () => {
         },
         {
             title: 'Total Orders',
-            value: stats.totalOrders.toLocaleString(),
+            value: stats?.overview.totalOrders?.toLocaleString() || '0',
             icon: (
                 <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -54,7 +42,7 @@ const AdminDashboard = () => {
         },
         {
             title: 'Total Revenue',
-            value: `$${stats.totalRevenue.toLocaleString()}`,
+            value: `$${stats?.overview.totalRevenue?.toLocaleString() || '0'}`,
             icon: (
                 <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
@@ -66,10 +54,21 @@ const AdminDashboard = () => {
         }
     ];
 
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="flex items-center justify-center h-64">
                 <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <div className="text-center">
+                    <div className="text-red-600 text-lg font-semibold mb-2">Error loading dashboard</div>
+                    <div className="text-gray-600">Please try refreshing the page</div>
+                </div>
             </div>
         );
     }
@@ -136,7 +135,7 @@ const AdminDashboard = () => {
                     <div className="px-4 py-5 sm:p-6">
                         <h3 className="text-lg leading-6 font-medium text-gray-900">Recent Orders</h3>
                         <div className="mt-5">
-                            {stats.recentOrders.length > 0 ? (
+                            {stats?.recentOrders && stats.recentOrders.length > 0 ? (
                                 <div className="flow-root">
                                     <ul className="-my-5 divide-y divide-gray-200">
                                         {stats.recentOrders.slice(0, 5).map((order) => (
@@ -147,7 +146,7 @@ const AdminDashboard = () => {
                                                             Order #{order.id}
                                                         </p>
                                                         <p className="text-sm text-gray-500">
-                                                            {order.totalProducts} items • User #{order.userId}
+                                                            {order.user ? `${order.user.firstName} ${order.user.lastName}` : `User #${order.userId}`}
                                                         </p>
                                                     </div>
                                                     <div className="text-sm font-medium text-gray-900">
