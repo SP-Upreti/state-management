@@ -1,32 +1,72 @@
 import { useEffect, useState } from 'react';
+import { useCategories } from '../../hooks/useCategories';
+import { useProducts } from '../../hooks/useProducts';
 
 const AdminCategories = () => {
-    // TODO: Replace with actual category data from backend
-    const categories: any[] = [];
-    const products: any[] = [];
-    const loading = false;
+    const {
+        categories,
+        isLoading,
+        error,
+        fetchCategories,
+        createCategory,
+        clearError
+    } = useCategories();
+
+    const {
+        products,
+        isLoading: productsLoading,
+        fetchProducts
+    } = useProducts();
+
     const [selectedCategory, setSelectedCategory] = useState<string>('');
-    const [newCategory, setNewCategory] = useState('');
+    const [newCategory, setNewCategory] = useState({
+        name: '',
+        slug: '',
+        description: ''
+    });
     const [showAddForm, setShowAddForm] = useState(false);
 
     useEffect(() => {
-        // TODO: Fetch categories from backend
-        console.log("AdminCategories component loaded");
-    }, []);
+        fetchCategories(false);
+    }, [fetchCategories]);
 
     const handleCategorySelect = async (categorySlug: string) => {
         setSelectedCategory(categorySlug);
-        // TODO: Fetch products by category from backend
-        console.log("Selected category:", categorySlug);
+        // Fetch products by category
+        fetchProducts({ category: categorySlug });
     };
 
-    const handleAddCategory = (e: React.FormEvent) => {
+    const generateSlug = (name: string) => {
+        return name
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .trim();
+    };
+
+    const handleNameChange = (name: string) => {
+        setNewCategory(prev => ({
+            ...prev,
+            name,
+            slug: generateSlug(name)
+        }));
+    };
+
+    const handleAddCategory = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (newCategory.trim()) {
-            // In a real app, you'd dispatch an action to add the category
-            console.log('Add category:', newCategory);
-            setNewCategory('');
-            setShowAddForm(false);
+        if (newCategory.name.trim()) {
+            try {
+                await createCategory({
+                    name: newCategory.name.trim(),
+                    slug: newCategory.slug,
+                    description: newCategory.description.trim() || undefined
+                });
+                setNewCategory({ name: '', slug: '', description: '' });
+                setShowAddForm(false);
+            } catch (error) {
+                console.error('Failed to create category:', error);
+            }
         }
     };
 
@@ -63,36 +103,70 @@ const AdminCategories = () => {
             {/* Add Category Form */}
             {showAddForm && (
                 <div className="bg-white shadow rounded-lg p-6">
-                    <form onSubmit={handleAddCategory} className="flex gap-4 items-end">
-                        <div className="flex-1">
+                    {error && (
+                        <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                            {error}
+                        </div>
+                    )}
+                    <form onSubmit={handleAddCategory} className="space-y-4">
+                        <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Category Name
                             </label>
                             <input
                                 type="text"
-                                value={newCategory}
-                                onChange={(e) => setNewCategory(e.target.value)}
+                                value={newCategory.name}
+                                onChange={(e) => handleNameChange(e.target.value)}
                                 placeholder="Enter category name"
                                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 required
                             />
                         </div>
-                        <button
-                            type="submit"
-                            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            Add
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setShowAddForm(false);
-                                setNewCategory('');
-                            }}
-                            className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            Cancel
-                        </button>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Slug
+                            </label>
+                            <input
+                                type="text"
+                                value={newCategory.slug}
+                                onChange={(e) => setNewCategory(prev => ({ ...prev, slug: e.target.value }))}
+                                placeholder="category-slug"
+                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Description (Optional)
+                            </label>
+                            <textarea
+                                value={newCategory.description}
+                                onChange={(e) => setNewCategory(prev => ({ ...prev, description: e.target.value }))}
+                                placeholder="Enter category description"
+                                rows={3}
+                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            />
+                        </div>
+                        <div className="flex gap-4">
+                            <button
+                                type="submit"
+                                disabled={isLoading}
+                                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isLoading ? 'Adding...' : 'Add'}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setShowAddForm(false);
+                                    setNewCategory({ name: '', slug: '', description: '' });
+                                    clearError();
+                                }}
+                                className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            >
+                                Cancel
+                            </button>
+                        </div>
                     </form>
                 </div>
             )}
@@ -185,7 +259,7 @@ const AdminCategories = () => {
                             Products in "{selectedCategory.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}"
                         </h3>
 
-                        {loading ? (
+                        {productsLoading ? (
                             <div className="flex items-center justify-center h-32">
                                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
                             </div>

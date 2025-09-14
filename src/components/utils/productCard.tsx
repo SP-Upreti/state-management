@@ -4,7 +4,7 @@ import { useAppContext } from "../../contexts/AppContext";
 
 interface ProductsInterface {
   id: number;
-  images: string[];
+  images: string | string[];
   discountPercentage: number;
   title: string;
   price: number | string;

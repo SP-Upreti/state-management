@@ -133,7 +133,7 @@ export default function Products() {
                                 <ProductCard
                                     key={product.id}
                                     id={product.id}
-                                    images={product.images}
+                                    images={product.images.length > 0 ? product.images : '/placeholder.png'}
                                     discountPercentage={product.discountPercentage}
                                     title={product.title}
                                     price={product.price}

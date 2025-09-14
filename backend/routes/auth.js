@@ -44,9 +44,10 @@ const register = async (req, res, next) => {
         const { firstName, lastName, username, email, password, phone, birthDate } = req.body;
 
         // Check if user exists
+        const { Op } = require('sequelize');
         const existingUser = await User.findOne({
             where: {
-                $or: [{ email }, { username }]
+                [Op.or]: [{ email }, { username }]
             }
         });
 

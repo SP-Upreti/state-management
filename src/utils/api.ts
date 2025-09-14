@@ -120,7 +120,7 @@ export interface Product {
     price: number;
     discountPercentage: number;
     thumbnail: string;
-    images: string[];
+    images: string[] | string;
     stock: number;
     brand: string;
     categoryId: number;
@@ -128,10 +128,45 @@ export interface Product {
     views: number;
     createdAt: string;
     updatedAt: string;
+    // Additional fields from the API
+    rating?: number;
+    sku?: string;
+    weight?: number | null;
+    dimensions?: any | null;
+    warrantyInformation?: string | null;
+    shippingInformation?: string | null;
+    availabilityStatus?: string;
+    returnPolicy?: string | null;
+    minimumOrderQuantity?: number;
+    tags?: string[] | string;
+    isFeatured?: boolean;
+    deletedAt?: string | null;
+    createdBy?: number | null;
     category?: {
         id: number;
         name: string;
+        slug?: string;
     };
+    reviews?: Array<{
+        id: number;
+        rating: number;
+        comment: string;
+        isVerifiedPurchase: boolean;
+        isApproved: boolean;
+        helpfulCount: number;
+        createdAt: string;
+        updatedAt: string;
+        deletedAt: string | null;
+        userId: number;
+        productId: number;
+        user: {
+            id: number;
+            firstName: string;
+            lastName: string;
+            image: string | null;
+        };
+    }>;
+    reviewCount?: number;
 }
 
 export interface Order {

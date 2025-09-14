@@ -7,7 +7,7 @@ export default function Image({ src, title }: { src: string, title: string }) {
         setFinished(true)
     }
     return (
-        <div className="relative">
+        <div className="relative h-full w-full flex justify-center items-center">
             <img className={`  w-full h-full object-contain object-center    
             ${finished ? "block" : "hidden"} mx-auto
             `} src={src} alt={title}

@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import { AppProvider } from './contexts/AppContext'
 import ErrorBoundary from './components/ErrorBoundary'
+import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/home'
 import Products from './pages/products'
 import ProductDetails from './pages/productDetails'
@@ -27,16 +28,30 @@ function App() {
             {/* Public Routes */}
             <Route path='/' element={<Home />} />
             <Route path='/products' element={<Products />} />
-            <Route path='/products/details' element={<ProductDetails />} />
-            <Route path='/checkout' element={<Checkout />} />
-            <Route path='/order-success' element={<OrderSuccess />} />
+            <Route path='/products/:id' element={<ProductDetails />} />
+
+            {/* Protected Routes */}
+            <Route path='/checkout' element={
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
+            } />
+            <Route path='/order-success' element={
+              <ProtectedRoute>
+                <OrderSuccess />
+              </ProtectedRoute>
+            } />
 
             {/* Auth Routes */}
             <Route path='/login' element={<LoginPage />} />
             <Route path='/register' element={<RegisterPage />} />
 
             {/* Admin Routes */}
-            <Route path='/admin' element={<AdminLayout />}>
+            <Route path='/admin' element={
+              <ProtectedRoute requireAdmin={true}>
+                <AdminLayout />
+              </ProtectedRoute>
+            }>
               <Route index element={<AdminDashboard />} />
               <Route path='products' element={<AdminProducts />} />
               <Route path='products/:id' element={<AdminProductDetails />} />

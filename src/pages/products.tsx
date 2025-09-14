@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 // @ts-expect-error link
 import { HashLink } from 'react-router-hash-link';
 import Footer from "../components/footer/footer";
@@ -85,24 +85,6 @@ export default function Products() {
             <Navbar />
             <Filtre>
                 <div className="mb-4 flex flex-wrap gap-4 items-center justify-between">
-                    {/* Categories Filter */}
-                    <div className="flex gap-2 flex-wrap">
-                        <button
-                            onClick={() => handleCategoryChange('')}
-                            className={`px-3 py-1 rounded-md text-sm ${!selectedCategory ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
-                        >
-                            All
-                        </button>
-                        {categories.map(category => (
-                            <button
-                                key={category.id}
-                                onClick={() => handleCategoryChange(category.slug)}
-                                className={`px-3 py-1 rounded-md text-sm ${selectedCategory === category.slug ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
-                            >
-                                {category.name}
-                            </button>
-                        ))}
-                    </div>
 
                     {/* Sort Filter */}
                     <select
@@ -134,7 +116,7 @@ export default function Products() {
                     </div>
                 )}
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1" id="productList">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1 w-full" id="productList">
                     {isLoading ? (
                         Array.from({ length: limit }).map((_, key) => (
                             <div key={key} className="flex flex-col bg-neutral-300 w-full animate-pulse rounded-xl p-4 gap-4">
@@ -149,7 +131,7 @@ export default function Products() {
                         ))
                     ) : products.length > 0 ? (
                         products.map((product) => (
-                            <HashLink to={`/products/details#${product.id}`} key={product.id}>
+                            <Link to={`/products/${product.id}`} key={product.id}>
                                 <DefaultCard
                                     id={product.id}
                                     images={product.images}
@@ -162,7 +144,7 @@ export default function Products() {
                                     rating={0} // TODO: Add rating to Product interface
                                     stock={product.stock}
                                 />
-                            </HashLink>
+                            </Link>
                         ))
                     ) : (
                         <div className="col-span-full text-center py-12">
