@@ -5,9 +5,19 @@ import { adminApi } from '../../utils/api';
 export const useDashboardStats = (period: string = '30') => {
     return useQuery({
         queryKey: ['admin', 'dashboard-stats', period],
-        queryFn: () => adminApi.getDashboardStats(period),
+        queryFn: async () => {
+            try {
+                const response = await adminApi.getDashboardStats(period);
+                return response;
+            } catch (error) {
+                console.error('Error fetching dashboard stats:', error);
+                throw error;
+            }
+        },
         select: (response) => response.data.data,
         staleTime: 2 * 60 * 1000, // 2 minutes
+        retry: 1,
+        throwOnError: false, // Prevent errors from propagating to ErrorBoundary
     });
 };
 

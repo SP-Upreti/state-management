@@ -1,7 +1,17 @@
 import { useDashboardStats } from '../../hooks/admin';
+import { useEffect } from 'react';
 
 const AdminDashboard = () => {
     const { data: stats, isLoading, error } = useDashboardStats('30');
+
+    useEffect(() => {
+        if (error) {
+            console.error('Dashboard error:', error);
+        }
+        if (stats) {
+            console.log('Dashboard stats loaded:', stats);
+        }
+    }, [error, stats]);
 
     const statCards = [
         {
@@ -65,9 +75,17 @@ const AdminDashboard = () => {
     if (error) {
         return (
             <div className="flex items-center justify-center h-64">
-                <div className="text-center">
+                <div className="text-center max-w-md">
                     <div className="text-red-600 text-lg font-semibold mb-2">Error loading dashboard</div>
-                    <div className="text-gray-600">Please try refreshing the page</div>
+                    <div className="text-gray-600 mb-4">
+                        {error instanceof Error ? error.message : 'Please try refreshing the page'}
+                    </div>
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                    >
+                        Refresh Page
+                    </button>
                 </div>
             </div>
         );
@@ -150,7 +168,7 @@ const AdminDashboard = () => {
                                                         </p>
                                                     </div>
                                                     <div className="text-sm font-medium text-gray-900">
-                                                        ${order.discountedTotal.toFixed(2)}
+                                                        ${order.discountedTotal}
                                                     </div>
                                                 </div>
                                             </li>

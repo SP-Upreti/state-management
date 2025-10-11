@@ -12,7 +12,7 @@ export const useOrders = (params?: {
 }) => {
     return useQuery({
         queryKey: ['admin', 'orders', params],
-        queryFn: () => ordersApi.getOrders(params),
+        queryFn: () => ordersApi.getOrders({ ...params, isAdmin: true }),
         select: (response) => response.data,
         placeholderData: (previousData) => previousData,
     });

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { OrderResponse, Order } from '../components/order';
 
 // Create axios instance with base configuration
 const api = axios.create({
@@ -29,10 +30,17 @@ api.interceptors.response.use(
         return response;
     },
     (error) => {
-        if (error.response?.status === 401) {
+        // Only redirect on 401 if it's not a login/register request
+        const isAuthEndpoint = error.config?.url?.includes('/auth/login') ||
+            error.config?.url?.includes('/auth/register');
+
+        if (error.response?.status === 401 && !isAuthEndpoint) {
             // Clear token and redirect to login if unauthorized
             localStorage.removeItem('token');
-            window.location.href = '/login';
+            // Use React Router navigation instead of window.location
+            if (window.location.pathname !== '/login') {
+                window.location.href = '/login';
+            }
         }
         return Promise.reject(error);
     }
@@ -169,34 +177,6 @@ export interface Product {
     reviewCount?: number;
 }
 
-export interface Order {
-    id: number;
-    userId: number;
-    totalAmount: number;
-    discountedTotal: number;
-    status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
-    paymentStatus: 'pending' | 'paid' | 'failed';
-    shippingAddress: string;
-    createdAt: string;
-    updatedAt: string;
-    user?: {
-        firstName: string;
-        lastName: string;
-        email: string;
-    };
-    items?: Array<{
-        id: number;
-        productId: number;
-        quantity: number;
-        price: number;
-        total: number;
-        product: {
-            title: string;
-            thumbnail: string;
-        };
-    }>;
-}
-
 export interface ProductAnalytics {
     productsByCategory: Array<{
         id: number;
@@ -299,6 +279,7 @@ export const ordersApi = {
         userId?: number;
         startDate?: string;
         endDate?: string;
+        isAdmin?: boolean;
     }) => {
         const queryParams = new URLSearchParams();
         if (params?.page) queryParams.append('page', params.page.toString());
@@ -308,11 +289,13 @@ export const ordersApi = {
         if (params?.startDate) queryParams.append('startDate', params.startDate);
         if (params?.endDate) queryParams.append('endDate', params.endDate);
 
-        return api.get<ApiResponse<{ orders: Order[] }>>(`/orders?${queryParams.toString()}`);
+        // Use admin endpoint if isAdmin is true
+        const endpoint = params?.isAdmin ? '/orders/admin/all' : '/orders';
+        return api.get<OrderResponse>(`${endpoint}?${queryParams.toString()}`);
     },
 
     getOrder: (id: number) =>
-        api.get<ApiResponse<{ order: Order }>>(`/orders/${id}`),
+        api.get<OrderResponse>(`/orders/${id}`),
 
     updateOrderStatus: (id: number, status: string) =>
         api.put<ApiResponse<{ order: Order }>>(`/orders/${id}/status`, { status }),

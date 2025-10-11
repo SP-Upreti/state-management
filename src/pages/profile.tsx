@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../contexts/AppContext';
+import { useOrders } from '../hooks/useOrders';
 import Navbar from '../components/navigation/navbar';
 import Footer from '../components/footer/footer';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const ProfilePage: React.FC = () => {
     const { auth } = useAppContext();
+    const { orders, isLoading, error, fetchOrders } = useOrders();
     const [activeTab, setActiveTab] = useState<'profile' | 'orders'>('profile');
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
@@ -15,6 +18,13 @@ const ProfilePage: React.FC = () => {
         phone: auth.user?.phone || '',
         birthDate: auth.user?.birthDate || '',
     });
+
+    // Fetch orders when the orders tab is active
+    useEffect(() => {
+        if (activeTab === 'orders' && auth.user?.id) {
+            fetchOrders({ userId: auth.user.id });
+        }
+    }, [activeTab, auth.user?.id, fetchOrders]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -65,8 +75,8 @@ const ProfilePage: React.FC = () => {
                                     </h1>
                                     <p className="text-gray-500">{auth.user?.email}</p>
                                     <span className={`inline-block px-3 py-1 mt-2 text-xs font-semibold rounded-full ${auth.user?.role === 'admin'
-                                            ? 'bg-purple-100 text-purple-800'
-                                            : 'bg-green-100 text-green-800'
+                                        ? 'bg-purple-100 text-purple-800'
+                                        : 'bg-green-100 text-green-800'
                                         }`}>
                                         {auth.user?.role === 'admin' ? 'Admin' : 'User'}
                                     </span>
@@ -82,8 +92,8 @@ const ProfilePage: React.FC = () => {
                                 <button
                                     onClick={() => setActiveTab('profile')}
                                     className={`py-4 px-6 text-sm font-medium ${activeTab === 'profile'
-                                            ? 'border-b-2 border-indigo-500 text-indigo-600'
-                                            : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                        ? 'border-b-2 border-indigo-500 text-indigo-600'
+                                        : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                         }`}
                                 >
                                     Profile Information
@@ -91,8 +101,8 @@ const ProfilePage: React.FC = () => {
                                 <button
                                     onClick={() => setActiveTab('orders')}
                                     className={`py-4 px-6 text-sm font-medium ${activeTab === 'orders'
-                                            ? 'border-b-2 border-indigo-500 text-indigo-600'
-                                            : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                        ? 'border-b-2 border-indigo-500 text-indigo-600'
+                                        : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                         }`}
                                 >
                                     My Orders
@@ -122,7 +132,7 @@ const ProfilePage: React.FC = () => {
                                                     disabled={!isEditing}
                                                     value={formData.firstName}
                                                     onChange={handleChange}
-                                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500"
+                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
                                                 />
                                             </div>
 
@@ -137,7 +147,7 @@ const ProfilePage: React.FC = () => {
                                                     disabled={!isEditing}
                                                     value={formData.lastName}
                                                     onChange={handleChange}
-                                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500"
+                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
                                                 />
                                             </div>
 
@@ -151,7 +161,7 @@ const ProfilePage: React.FC = () => {
                                                     id="email"
                                                     disabled={true}
                                                     value={formData.email}
-                                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-50 text-gray-500 sm:text-sm cursor-not-allowed"
+                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
                                                 />
                                                 <p className="mt-1 text-xs text-gray-500">Email cannot be changed</p>
                                             </div>
@@ -167,7 +177,7 @@ const ProfilePage: React.FC = () => {
                                                     disabled={!isEditing}
                                                     value={formData.phone}
                                                     onChange={handleChange}
-                                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500"
+                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
                                                 />
                                             </div>
 
@@ -182,7 +192,7 @@ const ProfilePage: React.FC = () => {
                                                     disabled={!isEditing}
                                                     value={formData.birthDate}
                                                     onChange={handleChange}
-                                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500"
+                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
                                                 />
                                             </div>
 
@@ -194,7 +204,7 @@ const ProfilePage: React.FC = () => {
                                                     type="text"
                                                     disabled={true}
                                                     value={auth.user?.username || ''}
-                                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-50 text-gray-500 sm:text-sm cursor-not-allowed"
+                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
                                                 />
                                                 <p className="mt-1 text-xs text-gray-500">Username cannot be changed</p>
                                             </div>
@@ -256,30 +266,176 @@ const ProfilePage: React.FC = () => {
                             )}
 
                             {activeTab === 'orders' && (
-                                <div className="text-center py-12">
-                                    <svg
-                                        className="mx-auto h-12 w-12 text-gray-400"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                                        />
-                                    </svg>
-                                    <h3 className="mt-2 text-sm font-medium text-gray-900">No orders yet</h3>
-                                    <p className="mt-1 text-sm text-gray-500">Start shopping to see your orders here.</p>
-                                    <div className="mt-6">
-                                        <Link
-                                            to="/products"
-                                            className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
-                                        >
-                                            Browse Products
-                                        </Link>
-                                    </div>
+                                <div>
+                                    {isLoading ? (
+                                        <div className="flex justify-center py-12">
+                                            <LoadingSpinner />
+                                        </div>
+                                    ) : error ? (
+                                        <div className="text-center py-12">
+                                            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+                                                {error}
+                                            </div>
+                                            <button
+                                                onClick={() => fetchOrders({ userId: auth.user?.id })}
+                                                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                                            >
+                                                Retry
+                                            </button>
+                                        </div>
+                                    ) : orders.length === 0 ? (
+                                        <div className="text-center py-12">
+                                            <svg
+                                                className="mx-auto h-12 w-12 text-gray-400"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                                                />
+                                            </svg>
+                                            <h3 className="mt-2 text-sm font-medium text-gray-900">No orders yet</h3>
+                                            <p className="mt-1 text-sm text-gray-500">Start shopping to see your orders here.</p>
+                                            <div className="mt-6">
+                                                <Link
+                                                    to="/products"
+                                                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                                                >
+                                                    Browse Products
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-4">
+                                            {orders.map((order) => (
+                                                <div
+                                                    key={order.id}
+                                                    className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+                                                >
+                                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+                                                        <div>
+                                                            <h3 className="text-lg font-semibold text-gray-900">
+                                                                Order #{order.id}
+                                                            </h3>
+                                                            <p className="text-sm text-gray-500">
+                                                                Placed on {new Date(order.createdAt).toLocaleDateString('en-US', {
+                                                                    year: 'numeric',
+                                                                    month: 'long',
+                                                                    day: 'numeric'
+                                                                })}
+                                                            </p>
+                                                        </div>
+                                                        <div className="mt-3 sm:mt-0 flex flex-col items-start sm:items-end space-y-2">
+                                                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                                                                order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
+                                                                    order.status === 'confirmed' ? 'bg-yellow-100 text-yellow-800' :
+                                                                        order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+                                                                            'bg-gray-100 text-gray-800'
+                                                                }`}>
+                                                                {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                                            </span>
+                                                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${order.paymentStatus === 'paid' ? 'bg-green-100 text-green-800' :
+                                                                order.paymentStatus === 'failed' ? 'bg-red-100 text-red-800' :
+                                                                    'bg-yellow-100 text-yellow-800'
+                                                                }`}>
+                                                                Payment: {order.paymentStatus.charAt(0).toUpperCase() + order.paymentStatus.slice(1)}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Order Items */}
+                                                    {order.items && order.items.length > 0 && (
+                                                        <div className="space-y-3 mb-4">
+                                                            {order.items.map((item) => (
+                                                                <div key={item.id} className="flex items-center space-x-4">
+                                                                    <img
+                                                                        src={item.product.thumbnail}
+                                                                        alt={item.product.title}
+                                                                        className="w-16 h-16 object-cover rounded"
+                                                                    />
+                                                                    <div className="flex-1">
+                                                                        <h4 className="text-sm font-medium text-gray-900">
+                                                                            {item.product.title}
+                                                                        </h4>
+                                                                        <p className="text-sm text-gray-500">
+                                                                            Quantity: {item.quantity} × ${parseFloat(item.price).toFixed(2)}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div className="text-sm font-semibold text-gray-900">
+                                                                        ${parseFloat(item.total).toFixed(2)}
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+
+                                                    {/* Order Total */}
+                                                    <div className="border-t border-gray-200 pt-4 space-y-2">
+                                                        {parseFloat(order.totalAmount) !== parseFloat(order.discountedTotal) && (
+                                                            <div className="flex justify-between text-sm">
+                                                                <span className="text-gray-500">Subtotal:</span>
+                                                                <span className="text-gray-900">${parseFloat(order.totalAmount).toFixed(2)}</span>
+                                                            </div>
+                                                        )}
+                                                        {parseFloat(order.totalAmount) !== parseFloat(order.discountedTotal) && (
+                                                            <div className="flex justify-between text-sm">
+                                                                <span className="text-gray-500">Discount:</span>
+                                                                <span className="text-green-600">
+                                                                    -${(parseFloat(order.totalAmount) - parseFloat(order.discountedTotal)).toFixed(2)}
+                                                                </span>
+                                                            </div>
+                                                        )}
+                                                        <div className="flex justify-between text-base font-semibold">
+                                                            <span className="text-gray-900">Total:</span>
+                                                            <span className="text-gray-900">${parseFloat(order.discountedTotal).toFixed(2)}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Shipping Address */}
+                                                    {order.shippingAddress && (() => {
+                                                        try {
+                                                            const address = typeof order.shippingAddress === 'string'
+                                                                ? JSON.parse(order.shippingAddress)
+                                                                : order.shippingAddress;
+                                                            return (
+                                                                <div className="mt-4 pt-4 border-t border-gray-200">
+                                                                    <h4 className="text-sm font-medium text-gray-900 mb-2">Shipping Address</h4>
+                                                                    <div className="text-sm text-gray-600 space-y-1">
+                                                                        <p className="font-medium text-gray-900">
+                                                                            {address.firstName} {address.lastName}
+                                                                        </p>
+                                                                        <p>{address.address}</p>
+                                                                        <p>
+                                                                            {address.city}, {address.state} {address.zipCode}
+                                                                        </p>
+                                                                        <p>{address.country}</p>
+                                                                        {address.phone && (
+                                                                            <p className="mt-2 text-gray-500">
+                                                                                Phone: {address.phone}
+                                                                            </p>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        } catch (e) {
+                                                            return (
+                                                                <div className="mt-4 pt-4 border-t border-gray-200">
+                                                                    <h4 className="text-sm font-medium text-gray-900 mb-2">Shipping Address</h4>
+                                                                    <p className="text-sm text-gray-600 whitespace-pre-line">
+                                                                        {order.shippingAddress}
+                                                                    </p>
+                                                                </div>
+                                                            );
+                                                        }
+                                                    })()}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>

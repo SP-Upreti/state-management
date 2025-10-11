@@ -46,20 +46,15 @@ const RegisterPage: React.FC = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
+            <div className="max-w-lg bg-white border rounded-xl p-6 py-12 w-full space-y-8">
                 <div>
-                    <Link to="/" className="flex justify-center">
-                        <img className="h-12 w-auto" src="/logo.svg" alt="Logo" />
+                    <Link to="/" className="flex text-3xl text-purple-800 italic font-serif justify-center">
+                        SwiftKart
                     </Link>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                    <h2 className=" text-center text-3xl font-semibold text-gray-900">
                         Create your account
                     </h2>
-                    <p className="mt-2 text-center text-sm text-gray-600">
-                        Or{' '}
-                        <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
-                            sign in to your existing account
-                        </Link>
-                    </p>
+
                 </div>
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                     {auth.error && (
@@ -101,67 +96,70 @@ const RegisterPage: React.FC = () => {
                                 />
                             </div>
                         </div>
+                        <div className="lg:grid grid-cols-2 gap-4">
 
-                        <div>
-                            <label htmlFor="username" className="sr-only">
-                                Username
-                            </label>
-                            <input
-                                id="username"
-                                name="username"
-                                type="text"
-                                required
-                                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                placeholder="Username"
-                                value={formData.username}
-                                onChange={handleChange}
-                            />
-                        </div>
+                            <div className=''>
+                                <label htmlFor="username" className="sr-only">
+                                    Username
+                                </label>
+                                <input
+                                    id="username"
+                                    name="username"
+                                    type="text"
+                                    required
+                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    placeholder="Username"
+                                    value={formData.username}
+                                    onChange={handleChange}
+                                />
+                            </div>
 
-                        <div>
-                            <label htmlFor="email" className="sr-only">
-                                Email address
-                            </label>
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                autoComplete="email"
-                                required
-                                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                placeholder="Email address"
-                                value={formData.email}
-                                onChange={handleChange}
-                            />
-                        </div>
+                            <div>
+                                <label htmlFor="email" className="sr-only">
+                                    Email address
+                                </label>
+                                <input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    autoComplete="email"
+                                    required
+                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    placeholder="Email address"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                />
+                            </div>
 
-                        <div>
-                            <label htmlFor="phone" className="sr-only">
-                                Phone Number
-                            </label>
-                            <input
-                                id="phone"
-                                name="phone"
-                                type="tel"
-                                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                placeholder="Phone Number (optional)"
-                                value={formData.phone}
-                                onChange={handleChange}
-                            />
-                        </div>
+                            <div>
+                                <label htmlFor="phone" className="sr-only">
+                                    Phone Number
+                                </label>
+                                <input
+                                    id="phone"
+                                    name="phone"
+                                    type="tel"
+                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    placeholder="Phone Number (optional)"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                />
+                            </div>
 
-                        <div>
-                            <label htmlFor="birthDate" className="sr-only">
-                                Birth Date
-                            </label>
-                            <input
-                                id="birthDate"
-                                name="birthDate"
-                                type="date"
-                                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                value={formData.birthDate}
-                                onChange={handleChange}
-                            />
+                            <div>
+                                <label htmlFor="birthDate" className="sr-only">
+                                    Birth Date
+                                </label>
+                                <input
+                                    id="birthDate"
+                                    name="birthDate"
+                                    type="date"
+                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    value={formData.birthDate}
+                                    onChange={handleChange}
+                                />
+                            </div>
+
                         </div>
 
                         <div>
@@ -209,6 +207,13 @@ const RegisterPage: React.FC = () => {
                         </button>
                     </div>
                 </form>
+
+                <p className="mt-2 text-center text-sm text-gray-600">
+                    Or{' '}
+                    <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
+                        sign in to your existing account
+                    </Link>
+                </p>
             </div>
         </div>
     );

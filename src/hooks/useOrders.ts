@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
-import { ordersApi, Order } from '../utils/api';
+import { ordersApi } from '../utils/api';
+import { Order } from '../components/order';
 
 interface OrdersState {
     orders: Order[];
@@ -100,11 +101,11 @@ export const useOrders = (): OrdersState & OrdersActions => {
         try {
             setLoading(true);
             const response = await ordersApi.getOrder(id);
-            const { order } = response.data.data;
+            const { orders } = response.data.data;
 
             setState(prev => ({
                 ...prev,
-                currentOrder: order,
+                currentOrder: orders[0] || null,
                 isLoading: false,
                 error: null,
             }));

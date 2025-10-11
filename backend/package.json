@@ -6,7 +6,9 @@
     "scripts": {
         "start": "node server.js",
         "dev": "nodemon server.js",
-        "setup-db": "node scripts/setupDatabase.js"
+        "setup-db": "node scripts/setupDatabase.js",
+        "create-admin": "node scripts/createAdmin.js",
+        "create-admin-quick": "node scripts/createAdminQuick.js"
     },
     "keywords": [
         "express",

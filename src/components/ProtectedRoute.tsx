@@ -47,7 +47,7 @@ const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRouteProps)
     }
 
     // If admin access is required and user is not admin, show unauthorized
-    if (requireAdmin) {
+    if (requireAdmin && (!auth.user || auth.user.role !== 'admin')) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">

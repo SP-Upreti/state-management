@@ -115,13 +115,13 @@ const AdminOrders = () => {
                                             </span>
                                         </div>
                                         <p className="text-sm text-gray-500 mt-1">
-                                            {order.user ? `${order.user.firstName} ${order.user.lastName} (${order.user.email})` : `User ID: ${order.userId}`}
+                                            User ID: {order.userId}
                                         </p>
                                         <div className="mt-2 flex items-center space-x-4 text-sm text-gray-500">
-                                            <span>Amount: ${order.totalAmount.toFixed(2)}</span>
-                                            <span>Final: ${order.discountedTotal.toFixed(2)}</span>
+                                            <span>Amount: ${parseFloat(order.totalAmount).toFixed(2)}</span>
+                                            <span>Final: ${parseFloat(order.discountedTotal).toFixed(2)}</span>
                                             <span className="text-green-600">
-                                                Saved: ${(order.totalAmount - order.discountedTotal).toFixed(2)}
+                                                Saved: ${(parseFloat(order.totalAmount) - parseFloat(order.discountedTotal)).toFixed(2)}
                                             </span>
                                             <span>Items: {order.items?.length || 0}</span>
                                         </div>
@@ -130,7 +130,7 @@ const AdminOrders = () => {
                                 <div className="flex items-center space-x-4">
                                     <div className="text-right">
                                         <div className="text-lg font-semibold text-gray-900">
-                                            ${order.discountedTotal.toFixed(2)}
+                                            ${parseFloat(order.discountedTotal).toFixed(2)}
                                         </div>
                                         <div className="text-sm text-gray-500">
                                             {new Date(order.createdAt).toLocaleDateString()}
@@ -269,19 +269,13 @@ const AdminOrders = () => {
                                                 <div>
                                                     <p className="text-sm font-medium text-gray-500">Customer</p>
                                                     <p className="text-lg text-gray-900">
-                                                        {selectedOrder.user
-                                                            ? `${selectedOrder.user.firstName} ${selectedOrder.user.lastName}`
-                                                            : `User ID: ${selectedOrder.userId}`
-                                                        }
+                                                        User ID: {selectedOrder.userId}
                                                     </p>
-                                                    {selectedOrder.user && (
-                                                        <p className="text-sm text-gray-500">{selectedOrder.user.email}</p>
-                                                    )}
                                                 </div>
                                                 <div>
                                                     <p className="text-sm font-medium text-gray-500">Total Amount</p>
-                                                    <p className="text-lg text-gray-900">${selectedOrder.discountedTotal.toFixed(2)}</p>
-                                                    <p className="text-sm text-gray-500">Original: ${selectedOrder.totalAmount.toFixed(2)}</p>
+                                                    <p className="text-lg text-gray-900">${parseFloat(selectedOrder.discountedTotal).toFixed(2)}</p>
+                                                    <p className="text-sm text-gray-500">Original: ${parseFloat(selectedOrder.totalAmount).toFixed(2)}</p>
                                                 </div>
                                                 <div>
                                                     <p className="text-sm font-medium text-gray-500">Status</p>
@@ -297,12 +291,40 @@ const AdminOrders = () => {
                                                 </div>
                                             </div>
 
-                                            {selectedOrder.shippingAddress && (
-                                                <div>
-                                                    <p className="text-sm font-medium text-gray-500">Shipping Address</p>
-                                                    <p className="text-gray-900">{selectedOrder.shippingAddress}</p>
-                                                </div>
-                                            )}
+                                            {selectedOrder.shippingAddress && (() => {
+                                                try {
+                                                    const address = typeof selectedOrder.shippingAddress === 'string'
+                                                        ? JSON.parse(selectedOrder.shippingAddress)
+                                                        : selectedOrder.shippingAddress;
+                                                    return (
+                                                        <div>
+                                                            <p className="text-sm font-medium text-gray-500 mb-2">Shipping Address</p>
+                                                            <div className="text-sm text-gray-900 space-y-1">
+                                                                <p className="font-medium">
+                                                                    {address.firstName} {address.lastName}
+                                                                </p>
+                                                                <p>{address.address}</p>
+                                                                <p>
+                                                                    {address.city}, {address.state} {address.zipCode}
+                                                                </p>
+                                                                <p>{address.country}</p>
+                                                                {address.phone && (
+                                                                    <p className="text-gray-500">
+                                                                        Phone: {address.phone}
+                                                                    </p>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                } catch (e) {
+                                                    return (
+                                                        <div>
+                                                            <p className="text-sm font-medium text-gray-500">Shipping Address</p>
+                                                            <p className="text-gray-900">{selectedOrder.shippingAddress}</p>
+                                                        </div>
+                                                    );
+                                                }
+                                            })()}
 
                                             {selectedOrder.items && selectedOrder.items.length > 0 && (
                                                 <div>
@@ -321,12 +343,12 @@ const AdminOrders = () => {
                                                                             {item.product?.title || 'Unknown Product'}
                                                                         </h5>
                                                                         <p className="text-sm text-gray-500">
-                                                                            Qty: {item.quantity} × ${item.price.toFixed(2)}
+                                                                            Qty: {item.quantity} × ${parseFloat(item.price).toFixed(2)}
                                                                         </p>
                                                                     </div>
                                                                     <div className="text-right">
                                                                         <p className="text-sm font-medium text-gray-900">
-                                                                            ${item.total.toFixed(2)}
+                                                                            ${parseFloat(item.total).toFixed(2)}
                                                                         </p>
                                                                     </div>
                                                                 </li>

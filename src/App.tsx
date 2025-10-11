@@ -19,10 +19,12 @@ import AdminUsers from './pages/admin/AdminUsers'
 import AdminOrders from './pages/admin/AdminOrders'
 import AdminCategories from './pages/admin/AdminCategories'
 import AdminAnalytics from './pages/admin/AdminAnalytics'
+import { ToastContainer } from 'react-toastify'
 
 function App() {
   return (
     <ErrorBoundary>
+      <ToastContainer />
       <AppProvider>
         <BrowserRouter>
           <Routes>
