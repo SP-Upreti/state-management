@@ -114,7 +114,9 @@ export default function Navbar() {
     return (
         <>
             <nav className="bg-white border-b sticky top-0 z-10" style={{ height: menuState ? "100dvh" : "" }}>
-                <div className="flex items-center space-x-8 py-3 px-4 max-w-screen-xl mx-auto ">
+
+
+                <div className="flex items-center space-x-8 py-3 px-4 lg:px-0 max-w-screen-xl mx-auto ">
                     <div className="flex-none lg:flex-initial">
                         <Link to="/">
                             <img
@@ -162,9 +164,7 @@ export default function Navbar() {
                                 onClick={handleCartToggle}
                                 className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors"
                             >
-                                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5L2 21m5-8v8m0-8h10m-9 8h9" />
-                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 32 32"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}><path d="M6 6h24l-3 13H9m18 4H10L5 2H2"></path><circle cx={25} cy={27} r={2}></circle><circle cx={12} cy={27} r={2}></circle></g></svg>
                                 {cart.totals.totalQuantity > 0 && (
                                     <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                                         {cart.totals.totalQuantity > 99 ? '99+' : cart.totals.totalQuantity}

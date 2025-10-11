@@ -54,7 +54,7 @@ export default function Products() {
     if (error) {
         return (
             <section className="py-12">
-                <div className="max-w-screen-xl mx-auto px-4 md:px-8">
+                <div className="max-w-7xl mx-auto px-4 lg:px-0">
                     <div className="text-center">
                         <div className="text-red-600 mb-4">{error}</div>
                         <button
@@ -74,7 +74,7 @@ export default function Products() {
 
     return (
         <section className="py-12">
-            <div className="max-w-screen-xl mx-auto px-4 md:px-8">
+            <div className="max-w-screen-xl mx-auto px-4 lg:px-0">
                 <div className="flex justify-between items-center gap-4 flex-wrap">
                     <h3 className="text-gray-800 text-2xl font-semibold sm:text-4xl">Our Popular Products</h3>
                     <div className="flex gap-4">

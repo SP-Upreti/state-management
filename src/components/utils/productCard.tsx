@@ -32,7 +32,7 @@ export default function ProductCard({
 
   // Ensure price is a number and handle potential undefined/null values
   const safePrice = typeof price === 'number' ? price : parseFloat(price) || 0;
-  const safeDiscountPercentage = typeof discountPercentage === 'number' ? discountPercentage : 0;
+  const safeDiscountPercentage = discountPercentage;
   const discountedPrice = safePrice * (1 - safeDiscountPercentage / 100);
 
   // Ensure images array is valid
@@ -57,12 +57,15 @@ export default function ProductCard({
   const isOutOfStock = !stock || stock <= 0;
 
   return (
-    <li className="relative flex flex-col overflow-hidden rounded-lg border bg-white shadow-md hover:shadow-lg transition-shadow">
+    <li className="relative flex flex-col overflow-hidden rounded-lg border bg-white  transition-shadow">
       <span className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl">
         <Image src={imageUrl} title={title} />
-        <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-sm font-medium text-white">
-          {safeDiscountPercentage}% OFF
-        </span>
+        {
+          safeDiscountPercentage > 0 && (
+            <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-sm font-medium text-white">
+              {safeDiscountPercentage}% OFF
+            </span>
+          )}
         {isOutOfStock && (
           <span className="absolute top-0 right-0 m-2 rounded-full bg-red-600 px-2 text-sm font-medium text-white">
             Out of Stock
@@ -76,9 +79,6 @@ export default function ProductCard({
         {brand && (
           <p className="text-sm text-gray-500 mt-1">{brand}</p>
         )}
-        {category && (
-          <p className="text-sm text-indigo-600 mt-1">{category}</p>
-        )}
         <div className="mt-2 mb-4 flex items-center justify-between">
           <p>
             <span className="text-3xl font-bold text-slate-900">${discountedPrice.toFixed(2)}</span>
@@ -86,9 +86,9 @@ export default function ProductCard({
               <span className="text-sm text-slate-900 line-through ml-2">${safePrice.toFixed(2)}</span>
             )}
           </p>
-          {stock && stock > 0 && (
+          {/* {stock && stock > 0 && (
             <p className="text-sm text-gray-500">{stock} in stock</p>
-          )}
+          )} */}
         </div>
         <button
           onClick={handleAddToCart}

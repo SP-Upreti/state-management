@@ -72,15 +72,15 @@ export default function Categories() {
     // ]
 
     return (
-        <section className="py-10 ">
+        <section className="py-10 max-w-7xl mx-auto">
             <div className="container relative  mx-auto ">
-                <div className="mb-5 mx-4 lg:mx-6">
-                    <h2 className="text-xl lg:text-2xl font-semibold">Shop by Categories</h2>
+                <div className="mb-5 mx-4 lg:mx-0">
+                    <h2 className="text-gray-800 text-2xl font-semibold sm:text-4xl">Shop by Categories</h2>
                     <p className="max-w-xl ">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, nisi!
                     </p>
                 </div>
-                <div className="flex flex-wrap justify-center  lg:w-full md:w-5/6 xl:shadow-small-blue mx-4 lg:mx-6">
+                <div className="flex flex-wrap justify-center ">
 
                     <a href="#" className="block w-1/2 py-10 text-center border lg:w-1/4">
                         <div>

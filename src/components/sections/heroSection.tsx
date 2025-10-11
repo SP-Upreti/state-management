@@ -7,7 +7,7 @@ import "swiper/swiper-bundle.css"
 
 export default function HeroSection() {
     return (
-        <section className="max-h-[500px] overflow-hidden mx-auto max-w-screen-xl  px-4 items-center flex flex-col-reverse lg:flex-row md:px-8">
+        <section className="max-h-[500px] overflow-hidden mx-auto max-w-screen-xl  px-4 items-center flex flex-col-reverse lg:flex-row lg:px-0">
             <Slides />
         </section>
     );
