@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { authApi, AuthUser, LoginCredentials, RegisterData } from '../utils/api';
 
 interface AuthState {
@@ -20,13 +20,17 @@ interface AuthActions {
 }
 
 export const useAuth = (): AuthState & AuthActions => {
-    const [state, setState] = useState<AuthState>({
-        user: null,
-        token: localStorage.getItem('token'),
-        isAuthenticated: !!localStorage.getItem('token'),
-        isLoading: false,
-        error: null,
+    const [state, setState] = useState<AuthState>(() => {
+        const token = localStorage.getItem('token');
+        return {
+            user: null,
+            token,
+            isAuthenticated: !!token,
+            isLoading: !!token, // Set to true if token exists on mount
+            error: null,
+        };
     });
+    const isRefreshingRef = useRef(false);
 
     const setLoading = (loading: boolean) => {
         setState(prev => ({ ...prev, isLoading: loading }));
@@ -131,34 +135,68 @@ export const useAuth = (): AuthState & AuthActions => {
     }, []);
 
     const refreshUser = useCallback(async () => {
-        if (!state.token) return;
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.log('refreshUser: No token found, clearing auth');
+            clearAuth();
+            return;
+        }
+
+        // Prevent multiple simultaneous refresh calls
+        if (isRefreshingRef.current) {
+            console.log('refreshUser: Already refreshing, skipping');
+            return;
+        }
 
         try {
+            console.log('refreshUser: Fetching user data with token');
+            isRefreshingRef.current = true;
             setLoading(true);
             const response = await authApi.getMe();
             const { user } = response.data.data;
+            console.log('refreshUser: User data fetched successfully', user);
             setState(prev => ({
                 ...prev,
                 user,
+                token,
+                isAuthenticated: true,
                 isLoading: false,
                 error: null,
             }));
         } catch (error: any) {
+            console.error('refreshUser: Error fetching user', error);
             // If token is invalid, clear auth
             if (error.response?.status === 401) {
+                console.log('refreshUser: Token invalid (401), clearing auth');
                 clearAuth();
             } else {
-                setError('Failed to fetch user data');
+                console.log('refreshUser: Other error, keeping token but showing error');
+                setState(prev => ({
+                    ...prev,
+                    isLoading: false,
+                    error: 'Failed to fetch user data'
+                }));
             }
+        } finally {
+            isRefreshingRef.current = false;
         }
-    }, [state.token]);
+    }, []);
 
     // Auto-fetch user data on mount if token exists
     useEffect(() => {
-        if (state.token && !state.user) {
+        const token = localStorage.getItem('token');
+        console.log('useAuth mount effect - Token exists:', !!token, 'User exists:', !!state.user);
+
+        if (token && !state.user && !state.error) {
+            console.log('useAuth: Calling refreshUser on mount');
             refreshUser();
+        } else if (!token) {
+            console.log('useAuth: No token on mount, clearing auth state');
+            clearAuth();
+        } else if (state.user) {
+            console.log('useAuth: User already loaded');
         }
-    }, [state.token, state.user, refreshUser]);
+    }, []); // Only run once on mount
 
     return {
         ...state,

@@ -62,11 +62,11 @@ const Checkout = () => {
     const tax = totalAmount * 0.08; // 8% tax
     const finalTotal = totalAmount + shippingCost + tax;
 
-    useEffect(() => {
-        if (items.length === 0) {
-            navigate('/products');
-        }
-    }, [items.length, navigate]);
+    // useEffect(() => {
+    //     if (items.length === 0) {
+    //         navigate('/products');
+    //     }
+    // }, [items.length, navigate]);
 
     const validateShippingInfo = () => {
         const newErrors: { [key: string]: string } = {};
@@ -175,17 +175,19 @@ const Checkout = () => {
         setIsProcessing(true);
 
         try {
-            const shippingAddress = `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.state} ${shippingInfo.zipCode}, ${shippingInfo.country}`;
-
             const orderData = {
-                items: items.map(item => ({
-                    productId: item.product.id,
-                    quantity: item.quantity,
-                    price: item.priceAtTime
-                })),
-                shippingAddress,
-                totalAmount: finalTotal,
-                discountedTotal: totalAmount
+                shippingAddress: {
+                    firstName: shippingInfo.firstName,
+                    lastName: shippingInfo.lastName,
+                    address: shippingInfo.address,
+                    city: shippingInfo.city,
+                    state: shippingInfo.state,
+                    zipCode: shippingInfo.zipCode,
+                    country: shippingInfo.country,
+                    phone: shippingInfo.phone
+                },
+                paymentMethod: (paymentMethod === 'card' ? 'card' : 'paypal') as 'card' | 'paypal' | 'cash_on_delivery',
+                paymentId: paymentMethod === 'card' ? `CARD_${Date.now()}` : undefined
             };
 
             const order = await createOrder(orderData);
@@ -196,7 +198,7 @@ const Checkout = () => {
                 state: {
                     orderId: order.id,
                     orderTotal: finalTotal,
-                    shippingInfo,
+                    shippingAddress: `${shippingInfo.firstName} ${shippingInfo.lastName}, ${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.state} ${shippingInfo.zipCode}, ${shippingInfo.country}`,
                     items: items.length
                 }
             });

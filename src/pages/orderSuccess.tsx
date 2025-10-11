@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 const OrderSuccess = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { orderTotal, shippingInfo, items } = location.state || {};
+    const { orderId, orderTotal, shippingAddress, items } = location.state || {};
 
     useEffect(() => {
         if (!orderTotal) {
@@ -55,21 +55,18 @@ const OrderSuccess = () => {
                             <div>
                                 <h3 className="text-sm font-medium text-gray-900 mb-2">Order Details</h3>
                                 <div className="space-y-1 text-sm text-gray-600">
-                                    <p><span className="font-medium">Order Number:</span> #{orderNumber}</p>
+                                    <p><span className="font-medium">Order Number:</span> #{orderId || orderNumber}</p>
                                     <p><span className="font-medium">Total Amount:</span> ${orderTotal.toFixed(2)}</p>
                                     <p><span className="font-medium">Items:</span> {items} item{items > 1 ? 's' : ''}</p>
                                     <p><span className="font-medium">Estimated Delivery:</span> {estimatedDelivery.toLocaleDateString()}</p>
                                 </div>
                             </div>
 
-                            {shippingInfo && (
+                            {shippingAddress && (
                                 <div>
                                     <h3 className="text-sm font-medium text-gray-900 mb-2">Shipping Address</h3>
                                     <div className="text-sm text-gray-600">
-                                        <p>{shippingInfo.firstName} {shippingInfo.lastName}</p>
-                                        <p>{shippingInfo.address}</p>
-                                        <p>{shippingInfo.city}, {shippingInfo.state} {shippingInfo.zipCode}</p>
-                                        <p>{shippingInfo.country}</p>
+                                        <p>{shippingAddress}</p>
                                     </div>
                                 </div>
                             )}

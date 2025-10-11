@@ -25,7 +25,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
                 cart.mergeCart(guestSessionId).catch(console.error);
             }
         }
-    }, [auth.isAuthenticated, auth.user, cart]);
+    }, [auth.isAuthenticated, auth.user]);
 
     const value: AppContextType = {
         auth,

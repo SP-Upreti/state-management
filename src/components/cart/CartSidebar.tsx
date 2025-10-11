@@ -9,12 +9,25 @@ interface CartSidebarProps {
 
 const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
     const navigate = useNavigate();
-    const { cart } = useAppContext();
+    const { cart, auth } = useAppContext();
     const [updatingItems, setUpdatingItems] = useState<Set<number>>(new Set());
 
     const handleCheckout = () => {
-        onClose();
+        console.log('Checkout clicked - Auth state:', {
+            isAuthenticated: auth.isAuthenticated,
+            hasUser: !!auth.user,
+            isLoading: auth.isLoading
+        });
+
+        // Check if user is authenticated
+        if (!auth.isAuthenticated || !auth.user) {
+            console.log('User not authenticated, redirecting to login');
+            navigate('/login', { state: { from: '/checkout' } });
+            onClose();
+            return;
+        }
         navigate('/checkout');
+        onClose();
     };
 
     const handleQuantityChange = async (itemId: number, quantity: number) => {
@@ -223,10 +236,10 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
                         </div>
                         <button
                             onClick={handleCheckout}
-                            disabled={cart.isLoading}
-                            className="w-full bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 font-medium disabled:opacity-50"
+                            disabled={cart.isLoading || auth.isLoading}
+                            className="w-full bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Checkout
+                            {auth.isLoading ? 'Loading...' : 'Checkout'}
                         </button>
                         <button
                             onClick={handleContinueShopping}

@@ -15,9 +15,9 @@ const ProfileDropDown = (props: PropsTypes) => {
     const profileRef = useRef<HTMLButtonElement>(null)
 
     const navigation = [
-        { title: "Dashboard", path: "/" },
-        { title: "Admin Panel", path: "/admin" },
-        { title: "Settings", path: "/" },
+        { title: "My Profile", path: "/profile" },
+        ...(auth.user?.role === 'admin' ? [{ title: "Admin Panel", path: "/admin" }] : []),
+        { title: "My Orders", path: "/profile" },
         { title: "Log out", path: "/", action: 'logout' },
     ]
 
@@ -98,12 +98,13 @@ export default function Navbar() {
         setCartOpen(!cartOpen);
     }
 
-    // Replace / path with your path
+    // Main navigation with category filters
     const navigation = [
-        { title: "Fashion", path: "/products" },
-        { title: "Grocery", path: "/products" },
-        { title: "Accessories", path: "/products" },
-        { title: "All Categories", path: "/products" },
+        { title: "Home", path: "/" },
+        { title: "Fashion", path: "/products?category=fashion" },
+        { title: "Grocery", path: "/products?category=grocery" },
+        { title: "Accessories", path: "/products?category=accessories" },
+        { title: "All Products", path: "/products" },
     ]
 
     // Only show admin link for admin users

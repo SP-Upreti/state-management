@@ -25,10 +25,27 @@ interface OrdersActions {
     }) => Promise<void>;
     fetchOrder: (id: number) => Promise<void>;
     createOrder: (orderData: {
-        items: Array<{ productId: number; quantity: number; price: number }>;
-        shippingAddress: string;
-        totalAmount: number;
-        discountedTotal: number;
+        shippingAddress: {
+            firstName: string;
+            lastName: string;
+            address: string;
+            city: string;
+            state: string;
+            zipCode: string;
+            country: string;
+            phone?: string;
+        };
+        billingAddress?: {
+            firstName: string;
+            lastName: string;
+            address: string;
+            city: string;
+            state: string;
+            zipCode: string;
+            country: string;
+        };
+        paymentMethod: 'card' | 'paypal' | 'cash_on_delivery';
+        paymentId?: string;
     }) => Promise<Order>;
     updateOrderStatus: (id: number, status: string) => Promise<void>;
     clearError: () => void;
@@ -98,10 +115,27 @@ export const useOrders = (): OrdersState & OrdersActions => {
     }, []);
 
     const createOrder = useCallback(async (orderData: {
-        items: Array<{ productId: number; quantity: number; price: number }>;
-        shippingAddress: string;
-        totalAmount: number;
-        discountedTotal: number;
+        shippingAddress: {
+            firstName: string;
+            lastName: string;
+            address: string;
+            city: string;
+            state: string;
+            zipCode: string;
+            country: string;
+            phone?: string;
+        };
+        billingAddress?: {
+            firstName: string;
+            lastName: string;
+            address: string;
+            city: string;
+            state: string;
+            zipCode: string;
+            country: string;
+        };
+        paymentMethod: 'card' | 'paypal' | 'cash_on_delivery';
+        paymentId?: string;
     }): Promise<Order> => {
         try {
             setLoading(true);

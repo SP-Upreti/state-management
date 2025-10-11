@@ -10,6 +10,7 @@ import Checkout from './pages/checkout'
 import OrderSuccess from './pages/orderSuccess'
 import LoginPage from './pages/login'
 import RegisterPage from './pages/register'
+import ProfilePage from './pages/profile'
 import AdminLayout from './components/admin/AdminLayout'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminProducts from './pages/admin/AdminProducts'
@@ -31,6 +32,11 @@ function App() {
             <Route path='/products/:id' element={<ProductDetails />} />
 
             {/* Protected Routes */}
+            <Route path='/profile' element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            } />
             <Route path='/checkout' element={
               <ProtectedRoute>
                 <Checkout />

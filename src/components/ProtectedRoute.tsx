@@ -12,8 +12,19 @@ const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRouteProps)
     const { auth } = useAppContext();
     const location = useLocation();
 
+    // Debug logging
+    console.log('ProtectedRoute check:', {
+        path: location.pathname,
+        isAuthenticated: auth.isAuthenticated,
+        hasUser: !!auth.user,
+        isLoading: auth.isLoading,
+        user: auth.user,
+        token: !!auth.token
+    });
+
     // Show loading spinner while checking authentication
     if (auth.isLoading) {
+        console.log('ProtectedRoute: Showing loading spinner');
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <LoadingSpinner />
@@ -21,13 +32,22 @@ const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRouteProps)
         );
     }
 
+    console.log(auth)
+
     // If not authenticated, redirect to login
-    if (!auth.isAuthenticated || !auth.user) {
+    if (!auth.isAuthenticated) {
+        console.log('ProtectedRoute: Redirecting to login', {
+            isAuthenticated: auth.isAuthenticated,
+            hasUser: !!auth.user,
+            hasToken: !!auth.token,
+            hasError: !!auth.error
+        });
+
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
     // If admin access is required and user is not admin, show unauthorized
-    if (requireAdmin && auth.user.role !== 'admin') {
+    if (requireAdmin) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">

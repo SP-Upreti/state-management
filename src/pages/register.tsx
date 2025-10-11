@@ -36,7 +36,8 @@ const RegisterPage: React.FC = () => {
         try {
             const { confirmPassword, ...registerData } = formData;
             await auth.register(registerData);
-            navigate('/');
+            // Redirect to profile page after successful registration
+            navigate('/profile', { replace: true });
         } catch (error) {
             // Error is handled by the auth hook
             console.error('Registration failed:', error);

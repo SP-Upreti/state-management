@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../contexts/AppContext';
 
 const LoginPage: React.FC = () => {
@@ -7,16 +7,14 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState('');
     const { auth } = useAppContext();
     const navigate = useNavigate();
-    const location = useLocation();
-
-    const from = (location.state as any)?.from?.pathname || '/';
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
             await auth.login({ email, password });
-            navigate(from, { replace: true });
+            // Redirect to profile page after successful login
+            navigate('/profile', { replace: true });
         } catch (error) {
             // Error is handled by the auth hook
             console.error('Login failed:', error);

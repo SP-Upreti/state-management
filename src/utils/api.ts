@@ -318,10 +318,27 @@ export const ordersApi = {
         api.put<ApiResponse<{ order: Order }>>(`/orders/${id}/status`, { status }),
 
     createOrder: (orderData: {
-        items: Array<{ productId: number; quantity: number; price: number }>;
-        shippingAddress: string;
-        totalAmount: number;
-        discountedTotal: number;
+        shippingAddress: {
+            firstName: string;
+            lastName: string;
+            address: string;
+            city: string;
+            state: string;
+            zipCode: string;
+            country: string;
+            phone?: string;
+        };
+        billingAddress?: {
+            firstName: string;
+            lastName: string;
+            address: string;
+            city: string;
+            state: string;
+            zipCode: string;
+            country: string;
+        };
+        paymentMethod: 'card' | 'paypal' | 'cash_on_delivery';
+        paymentId?: string;
     }) =>
         api.post<ApiResponse<{ order: Order }>>('/orders', orderData),
 };
