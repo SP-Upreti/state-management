@@ -1,170 +1,99 @@
-// import { useDispatch, useSelector } from "react-redux"
-// import Image from "../utils/Image"
-// import { AppDispatch, RootState } from "../../store/store"
-// import { useEffect } from "react";
-// import { getAllCategories } from "../../store/categories/allCategories";
+import { useEffect } from 'react';
+import { useCategories } from '../../hooks/useCategories';
+import { Link } from 'react-router-dom';
+import LoadingSpinner from '../LoadingSpinner';
 
 export default function Categories() {
+    const { categories, isLoading, error, fetchCategories } = useCategories();
 
-    // const Categories = useSelector((state: RootState) => state.categories.categories);
-    // const dispatch = useDispatch<AppDispatch>();
+    useEffect(() => {
+        fetchCategories();
+    }, [fetchCategories]);
 
-    // useEffect(() => {
-    //     dispatch(getAllCategories())
-    // })
+    if (isLoading) {
+        return (
+            <section className="py-10 max-w-7xl mx-auto">
+                <div className="flex justify-center items-center min-h-[400px]">
+                    <LoadingSpinner />
+                </div>
+            </section>
+        );
+    }
 
-    // console.log("categories", Categories)
-    // const team = [
-    //     {
-    //         avatar: "https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/thumbnail.png",
-    //         name: "Beauty",
-    //         title: "Product designer",
-    //         desc: "Lorem Ipsum is simply dummy text of the printing and typesettin industry.",
-    //         linkedin: "javascript:void(0)",
-    //         twitter: "javascript:void(0)",
-    //         github: "javascript:void(0)"
-    //     },
-    //     {
-    //         avatar: "https://cdn.dummyjson.com/products/images/fragrances/Chanel%20Coco%20Noir%20Eau%20De/1.png",
-    //         name: "Fragrance",
-    //         title: "Software engineer",
-    //         desc: "Lorem Ipsum is simply dummy text of the printing and typesettin industry.",
-    //         linkedin: "javascript:void(0)",
-    //         twitter: "javascript:void(0)",
-    //         github: "javascript:void(0)"
-    //     },
-    //     {
-    //         avatar: "https://cdn.dummyjson.com/products/images/furniture/Annibale%20Colombo%20Sofa/1.png",
-    //         name: "Furniture",
-    //         title: "Full stack engineer",
-    //         desc: "Lorem Ipsum is simply dummy text of the printing and typesettin industry.",
-    //         linkedin: "javascript:void(0)",
-    //         twitter: "javascript:void(0)",
-    //         github: "javascript:void(0)"
-    //     },
-    //     {
-    //         avatar: "https://cdn.dummyjson.com/products/images/groceries/Beef%20Steak/1.png",
-    //         name: "Groceries",
-    //         title: "Head of designers",
-    //         desc: "Lorem Ipsum is simply dummy text of the printing and typesettin industry.",
-    //         linkedin: "javascript:void(0)",
-    //         twitter: "javascript:void(0)",
-    //         github: "javascript:void(0)"
-    //     },
-    //     {
-    //         avatar: "https://cdn.dummyjson.com/products/images/home-decoration/Decoration%20Swing/1.png",
-    //         name: "Home Decoration",
-    //         title: "Product designer",
-    //         desc: "Lorem Ipsum is simply dummy text of the printing and typesettin industry.",
-    //         linkedin: "javascript:void(0)",
-    //         twitter: "javascript:void(0)",
-    //         github: "javascript:void(0)"
-    //     },
-    //     {
-    //         avatar: "https://cdn.dummyjson.com/products/images/laptops/Apple%20MacBook%20Pro%2014%20Inch%20Space%20Grey/1.png",
-    //         name: "Laptops",
-    //         title: "Product manager",
-    //         desc: "Lorem Ipsum is simply dummy text of the printing and typesettin industry.",
-    //         linkedin: "javascript:void(0)",
-    //         twitter: "javascript:void(0)",
-    //         github: "javascript:void(0)"
-    //     },
-    // ]
+    if (error) {
+        return (
+            <section className="py-10 max-w-7xl mx-auto">
+                <div className="flex justify-center items-center min-h-[400px]">
+                    <div className="text-center">
+                        <p className="text-red-600 mb-4">{error}</p>
+                        <button
+                            onClick={() => fetchCategories()}
+                            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        >
+                            Retry
+                        </button>
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className="py-10 max-w-7xl mx-auto">
-            <div className="container relative  mx-auto ">
+            <div className="container relative mx-auto">
                 <div className="mb-5 mx-4 lg:mx-0">
                     <h2 className="text-gray-800 text-2xl font-semibold sm:text-4xl">Shop by Categories</h2>
-                    <p className="max-w-xl ">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, nisi!
+                    <p className="max-w-xl">
+                        Browse our wide range of product categories and find exactly what you're looking for.
                     </p>
                 </div>
-                <div className="flex flex-wrap justify-center ">
 
-                    <a href="#" className="block w-1/2 py-10 text-center border lg:w-1/4">
-                        <div>
-                            <img src="https://redpixelthemes.com/assets/images/icon-portfolio-green.svg" className="block mx-auto" />
+                {categories.length === 0 ? (
+                    <div className="text-center py-10">
+                        <p className="text-gray-600">No categories available at the moment.</p>
+                    </div>
+                ) : (
+                    <div className="flex flex-wrap justify-center">
+                        {categories.slice(0, 8).map((category) => (
+                            <Link
+                                key={category.id}
+                                to={`/products?category=${category.slug}`}
+                                className="block w-1/2 py-10 text-center border lg:w-1/4 hover:bg-gray-50 transition-colors duration-200"
+                            >
+                                <div>
+                                    {category.imageUrl ? (
+                                        <img
+                                            src={category.imageUrl}
+                                            alt={category.name}
+                                            className="block mx-auto size-20 object-contain"
+                                            onError={(e) => {
+                                                const target = e.target as HTMLImageElement;
+                                                target.src = 'https://via.placeholder.com/64?text=Category';
+                                            }}
+                                        />
+                                    ) : (
+                                        <div className="w-16 h-16 mx-auto bg-gray-200 rounded-full flex items-center justify-center">
+                                            <span className="text-2xl text-gray-500">
+                                                {category.name.charAt(0).toUpperCase()}
+                                            </span>
+                                        </div>
+                                    )}
 
-                            <p className="pt-4 text-sm font-medium capitalize font-body text-green-900 lg:text-lg md:text-base md:pt-6">
-                                portfolio
-                            </p>
+                                    <p className="pt-4 text-sm font-medium capitalize text-gray-900 lg:text-lg md:text-base md:pt-6">
+                                        {category.name}
+                                    </p>
+
+                                    {category.productCount !== undefined && (
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            {category.productCount} products
+                                        </p>
+                                    )}
+                                </div>
+                            </Link>
+                        ))}
                         </div>
-                    </a>
-
-                    <a href="#" className="block w-1/2 py-10 text-center border lg:w-1/4">
-                        <div>
-                            <img src="https://redpixelthemes.com/assets/images/icon-blog-green.svg" className="block mx-auto" />
-
-                            <p className="pt-4 text-sm font-medium capitalize font-body text-green-900 lg:text-lg md:text-base md:pt-6">
-                                blog
-                            </p>
-                        </div>
-                    </a>
-
-                    <a href="#" className="block w-1/2 py-10 text-center border lg:w-1/4">
-                        <div>
-                            <img src="https://redpixelthemes.com/assets/images/icon-ecommerce-green.svg" className="block mx-auto" />
-
-                            <p className="pt-4 text-sm font-medium capitalize font-body text-green-900 lg:text-lg md:text-base md:pt-6">
-                                ecommerce
-                            </p>
-                        </div>
-                    </a>
-
-                    <a href="#" className="block w-1/2 py-10 text-center border lg:w-1/4">
-                        <div>
-                            <img src="https://redpixelthemes.com/assets/images/icon-startup-green.svg" className="block mx-auto" />
-
-                            <p className="pt-4 text-sm font-medium capitalize font-body text-green-900 lg:text-lg md:text-base md:pt-6">
-                                startup
-                            </p>
-                        </div>
-                    </a>
-
-                    <a href="#" className="block w-1/2 py-10 text-center border lg:w-1/4">
-                        <div>
-                            <img src="https://redpixelthemes.com/assets/images/icon-business-green.svg" className="block mx-auto" />
-
-                            <p className="pt-4 text-sm font-medium capitalize font-body text-green-900 lg:text-lg md:text-base md:pt-6">
-                                business
-                            </p>
-                        </div>
-                    </a>
-
-                    <a href="#" className="block w-1/2 py-10 text-center border lg:w-1/4">
-                        <div>
-                            <img src="https://redpixelthemes.com/assets/images/icon-lifestyle-green.svg" className="block mx-auto" />
-
-                            <p className="pt-4 text-sm font-medium capitalize font-body text-green-900 lg:text-lg md:text-base md:pt-6">
-                                lifestyle
-                            </p>
-                        </div>
-                    </a>
-
-                    <a href="#" className="block w-1/2 py-10 text-center border lg:w-1/4">
-                        <div>
-                            <img src="https://redpixelthemes.com/assets/images/icon-landing-page-green.svg" className="block mx-auto" />
-
-                            <p className="pt-4 text-sm font-medium capitalize font-body text-green-900 lg:text-lg md:text-base md:pt-6">
-                                landing pages
-                            </p>
-                        </div>
-                    </a>
-
-                    <a href="#" className="block w-1/2 py-10 text-center border lg:w-1/4">
-                        <div>
-                            <img src="https://redpixelthemes.com/assets/images/icon-health-green.svg" className="block mx-auto" />
-
-                            <p className="pt-4 text-sm font-medium capitalize font-body text-green-900 lg:text-lg md:text-base md:pt-6">
-                                health
-                            </p>
-                        </div>
-                    </a>
-
-                </div>
-
+                )}
             </div>
         </section>
-    )
+    );
 }

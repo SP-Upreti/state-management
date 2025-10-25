@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Image from "./Image"
 import { useAppContext } from "../../contexts/AppContext";
+import { Link } from "react-router-dom";
 
 interface ProductsInterface {
   id: number;
@@ -57,12 +58,13 @@ export default function ProductCard({
   const isOutOfStock = !stock || stock <= 0;
 
   return (
-    <li className="relative flex flex-col overflow-hidden rounded-lg border bg-white  transition-shadow">
+    <Link to={`/products/${id}`}>
+      <li className="relative hover:shadow cursor-pointer flex flex-col overflow-hidden rounded-sm border border-gray-200 bg-white  transition-shadow">
       <span className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl">
         <Image src={imageUrl} title={title} />
         {
           safeDiscountPercentage > 0 && (
-            <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-sm font-medium text-white">
+              <span className="absolute top-0 left-0 m-2 rounded-full bg-pink-100 px-2 text-sm font-medium text-pink-500">
               {safeDiscountPercentage}% OFF
             </span>
           )}
@@ -73,40 +75,26 @@ export default function ProductCard({
         )}
       </span>
       <div className="mt-4 px-5 pb-5">
-        <h5 className="text-xl tracking-tight text-slate-900">
-          {title.length > 20 ? title.substring(0, 20) + "..." : title}
+          <h5 className="text-xl truncate line-clamp-1 tracking-tight text-slate-900">
+            {title}
         </h5>
         {brand && (
           <p className="text-sm text-gray-500 mt-1">{brand}</p>
         )}
         <div className="mt-2 mb-4 flex items-center justify-between">
           <p>
-            <span className="text-3xl font-bold text-slate-900">${discountedPrice.toFixed(2)}</span>
+              <span className="text-2xl font-semibold text-slate-900">${discountedPrice.toFixed(2)}</span>
             {safeDiscountPercentage > 0 && (
               <span className="text-sm text-slate-900 line-through ml-2">${safePrice.toFixed(2)}</span>
             )}
-          </p>
-          {/* {stock && stock > 0 && (
-            <p className="text-sm text-gray-500">{stock} in stock</p>
-          )} */}
-        </div>
-        <button
-          onClick={handleAddToCart}
-          disabled={isAdding || isOutOfStock}
-          className={`w-full py-2 px-4 rounded-md transition-colors font-medium ${isOutOfStock
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : isAdding
-              ? 'bg-indigo-400 text-white cursor-not-allowed'
-              : 'bg-indigo-600 text-white hover:bg-indigo-700'
-            }`}
-        >
-          {isAdding ? 'Adding...' : isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
-        </button>
+            </p>
+          </div>
         {cart.error && (
           <p className="text-red-500 text-sm mt-2">{cart.error}</p>
         )}
       </div>
     </li>
+    </Link>
   )
 }
 
@@ -117,9 +105,6 @@ export function DefaultCard({
   title,
   price,
   thumbnail,
-  brand,
-  category,
-  rating,
   stock
 }: ProductsInterface) {
   const { cart } = useAppContext();
@@ -127,7 +112,7 @@ export function DefaultCard({
 
   // Ensure price is a number and handle potential undefined/null values
   const safePrice = typeof price === 'number' ? price : parseFloat(price) || 0;
-  const safeDiscountPercentage = typeof discountPercentage === 'number' ? discountPercentage : 0;
+  const safeDiscountPercentage = discountPercentage;
   const discountedPrice = safePrice * (1 - safeDiscountPercentage / 100);
 
   // Ensure images array is valid
@@ -152,10 +137,11 @@ export function DefaultCard({
   const isOutOfStock = !stock || stock <= 0;
 
   return (
-    <li className="relative flex flex-col overflow-hidden rounded-md border bg-white shadow-md hover:shadow-lg transition-shadow">
+    <Link to={`/products/${id}`}>
+      <li className="relative flex hover:shadow flex-col overflow-hidden rounded-sm border bg-white  transition-shadow">
       <span className="relative mx-3 mt-3 flex h-24 sm:h-40 overflow-hidden rounded-xl" >
         <Image src={imageUrl} title={title} />
-        <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-sm font-medium text-white">
+          <span className="absolute top-0 left-0 m-1 rounded-full bg-pink-100 px-2 text-sm font-medium text-pink-500">
           {safeDiscountPercentage}% OFF
         </span>
         {isOutOfStock && (
@@ -167,37 +153,20 @@ export function DefaultCard({
       <div className="mt-4 px-5 pb-4">
         <h5 className="sm:text-xl tracking-tight text-slate-900">
           {title.length > 20 ? title.substring(0, 20) + "..." : title}
-        </h5>
-        {brand && (
-          <p className="text-sm text-gray-500 mt-1">{brand}</p>
-        )}
-        {category && (
-          <p className="text-sm text-indigo-600 mt-1">{category}</p>
-        )}
+          </h5>
         <div className="mt-2 mb-4 flex items-center justify-between">
           <p>
-            <span className="text-2xl sm:text-3xl font-bold text-slate-900">${discountedPrice.toFixed(2)}</span>
+              <span className="text-xl  font-semibold text-slate-900">${discountedPrice.toFixed(2)}</span>
             {safeDiscountPercentage > 0 && (
               <span className="text-sm text-slate-900 line-through ml-2">${safePrice.toFixed(2)}</span>
             )}
           </p>
-        </div>
-        <button
-          onClick={handleAddToCart}
-          disabled={isAdding || isOutOfStock}
-          className={`w-full py-2 px-3 rounded-md transition-colors font-medium text-sm ${isOutOfStock
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : isAdding
-              ? 'bg-indigo-400 text-white cursor-not-allowed'
-              : 'bg-indigo-600 text-white hover:bg-indigo-700'
-            }`}
-        >
-          {isAdding ? 'Adding...' : isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
-        </button>
+          </div>
         {cart.error && (
           <p className="text-red-500 text-xs mt-2">{cart.error}</p>
         )}
       </div>
     </li>
+    </Link>
   )
 }

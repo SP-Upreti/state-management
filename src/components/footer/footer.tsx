@@ -86,11 +86,10 @@ export default function Footer() {
     return (
         <footer className="pt-10">
             <div className="max-w-screen-xl mx-auto px-4 lg:px-0">
-                <div className="justify-between items-center gap-12 md:flex">
-                    <div className="flex-1 max-w-lg">
-                        <h3 className="text-2xl font-bold">
-                            Get our beautiful newsletter straight to your inbox.
-                        </h3>
+                <div className="justify-between items-center gap-6 lg:gap-12 md:flex">
+                    <div className=" max-w-lg">
+                        <img src="/logo.png" alt="swift kart" width={150} />
+                        <h2 className="mt-2">Best Shopping experience in Nepal. Browse, shop & enjoy</h2>
                     </div>
                     <div className="flex-1 mt-6 md:mt-0">
                         <form onSubmit={(e) => e.preventDefault()} className="flex items-center gap-x-3 md:justify-end">
@@ -102,16 +101,16 @@ export default function Footer() {
                                     type="email"
                                     required
                                     placeholder="Enter your email"
-                                    className="w-full pl-12 pr-3 py-2 text-gray-500 bg-white outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+                                    className="w-full pl-12 pr-3 py-2 text-gray-500  outline-none border focus:border-pink-600  rounded-sm bg-white"
                                 />
                             </div>
-                            <button className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 active:shadow-none rounded-lg shadow">
+                            <button className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-pink-600 hover:bg-pink-500 active:bg-pink-700 active:shadow-none rounded-sm shadow">
                                 Subscribe
                             </button>
                         </form>
                     </div>
                 </div>
-                <div className="flex-1 mt-16 space-y-6 justify-between sm:flex md:space-y-0">
+                <div className="flex-1 mt-8 space-y-6 justify-between sm:flex md:space-y-0">
                     {
                         footerNavs.map((item, idx) => (
                             <ul

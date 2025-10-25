@@ -97,7 +97,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                                     className={`${location.pathname === item.href
                                         ? 'bg-gray-100 text-gray-900'
                                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                                        } group flex items-center px-2 py-2 text-base font-medium rounded-md`}
+                                        } group flex items-center px-2 py-2 text-base font-medium rounded-sm`}
                                 >
                                     <span className="mr-4 flex-shrink-0">{item.icon}</span>
                                     {item.name}
@@ -113,8 +113,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                 <div className="flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white">
                     <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                         <div className="flex items-center flex-shrink-0 px-4">
-                            <img className="h-8 w-auto" src="/logo.svg" alt="Admin" />
-                            <span className="ml-2 text-xl font-bold text-gray-800">Admin</span>
+                            <h2 className='text-pink-500 text-2xl font-semibold font-serif italic'>Swift <span className='text-[#050b2a]'>Karts</span></h2>
                         </div>
                         <nav className="mt-5 flex-1 px-2 bg-white space-y-1">
                             {navigation.map((item) => (
@@ -124,7 +123,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                                     className={`${location.pathname === item.href
                                         ? 'bg-gray-100 text-gray-900'
                                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                                        } group flex items-center px-2 py-2 text-sm font-medium rounded-md`}
+                                        } group flex items-center px-2 py-2 text-sm font-medium rounded-sm`}
                                 >
                                     <span className="mr-3 flex-shrink-0">{item.icon}</span>
                                     {item.name}
@@ -140,7 +139,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                 <div className="sticky top-0 z-10 md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3 bg-gray-100">
                     <button
                         type="button"
-                        className="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                        className="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-sm text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-pink-500"
                         onClick={() => setSidebarOpen(true)}
                     >
                         <span className="sr-only">Open sidebar</span>
@@ -162,7 +161,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                             <div className="flex items-center space-x-4">
                                 <Link
                                     to="/"
-                                    className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium"
+                                    className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-sm text-sm font-medium"
                                 >
                                     View Store
                                 </Link>

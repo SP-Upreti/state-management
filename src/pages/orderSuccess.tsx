@@ -74,9 +74,9 @@ const OrderSuccess = () => {
                     </div>
 
                     {/* Next Steps */}
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
-                        <h3 className="text-sm font-medium text-blue-900 mb-2">What happens next?</h3>
-                        <div className="text-sm text-blue-700 text-left space-y-1">
+                    <div className="bg-pink-50 border border-pink-200 rounded-lg p-4 mb-8">
+                        <h3 className="text-sm font-medium text-pink-900 mb-2">What happens next?</h3>
+                        <div className="text-sm text-pink-700 text-left space-y-1">
                             <p>• You'll receive an email confirmation shortly</p>
                             <p>• We'll send you tracking information once your order ships</p>
                             <p>• Your order will be delivered within 3-7 business days</p>
@@ -87,13 +87,13 @@ const OrderSuccess = () => {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <button
                             onClick={() => navigate('/products')}
-                            className="px-6 py-3 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 transition-colors"
+                            className="px-6 py-3 bg-pink-600 text-white font-medium rounded-sm hover:bg-pink-700 transition-colors"
                         >
                             Continue Shopping
                         </button>
                         <button
                             onClick={() => navigate('/')}
-                            className="px-6 py-3 bg-white text-gray-700 font-medium rounded-md border border-gray-300 hover:bg-gray-50 transition-colors"
+                            className="px-6 py-3 bg-white text-gray-700 font-medium rounded-sm border border-gray-300 hover:bg-gray-50 transition-colors"
                         >
                             Go to Homepage
                         </button>
@@ -103,11 +103,11 @@ const OrderSuccess = () => {
                     <div className="mt-8 pt-6 border-t border-gray-200">
                         <p className="text-sm text-gray-500">
                             Need help? Contact our customer support at{' '}
-                            <a href="mailto:support@example.com" className="text-indigo-600 hover:text-indigo-500">
+                            <a href="mailto:support@example.com" className="text-pink-600 hover:text-pink-500">
                                 support@example.com
                             </a>{' '}
                             or call{' '}
-                            <a href="tel:+1234567890" className="text-indigo-600 hover:text-indigo-500">
+                            <a href="tel:+1234567890" className="text-pink-600 hover:text-pink-500">
                                 (123) 456-7890
                             </a>
                         </p>

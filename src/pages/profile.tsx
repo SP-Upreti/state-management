@@ -67,7 +67,7 @@ const ProfilePage: React.FC = () => {
                                 <img
                                     src={auth.user?.image || 'https://randomuser.me/api/portraits/men/46.jpg'}
                                     alt="Profile"
-                                    className="h-20 w-20 rounded-full object-cover ring-4 ring-indigo-50"
+                                    className="h-20 w-20 rounded-full object-cover ring-4 ring-pink-50"
                                 />
                                 <div>
                                     <h1 className="text-3xl font-bold text-gray-900">
@@ -92,7 +92,7 @@ const ProfilePage: React.FC = () => {
                                 <button
                                     onClick={() => setActiveTab('profile')}
                                     className={`py-4 px-6 text-sm font-medium ${activeTab === 'profile'
-                                        ? 'border-b-2 border-indigo-500 text-indigo-600'
+                                        ? 'border-b-2 border-pink-500 text-pink-600'
                                         : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                         }`}
                                 >
@@ -101,7 +101,7 @@ const ProfilePage: React.FC = () => {
                                 <button
                                     onClick={() => setActiveTab('orders')}
                                     className={`py-4 px-6 text-sm font-medium ${activeTab === 'orders'
-                                        ? 'border-b-2 border-indigo-500 text-indigo-600'
+                                        ? 'border-b-2 border-pink-500 text-pink-600'
                                         : 'text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                         }`}
                                 >
@@ -132,7 +132,7 @@ const ProfilePage: React.FC = () => {
                                                     disabled={!isEditing}
                                                     value={formData.firstName}
                                                     onChange={handleChange}
-                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
+                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
                                                 />
                                             </div>
 
@@ -147,7 +147,7 @@ const ProfilePage: React.FC = () => {
                                                     disabled={!isEditing}
                                                     value={formData.lastName}
                                                     onChange={handleChange}
-                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
+                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
                                                 />
                                             </div>
 
@@ -161,7 +161,7 @@ const ProfilePage: React.FC = () => {
                                                     id="email"
                                                     disabled={true}
                                                     value={formData.email}
-                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
+                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
                                                 />
                                                 <p className="mt-1 text-xs text-gray-500">Email cannot be changed</p>
                                             </div>
@@ -177,7 +177,7 @@ const ProfilePage: React.FC = () => {
                                                     disabled={!isEditing}
                                                     value={formData.phone}
                                                     onChange={handleChange}
-                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
+                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
                                                 />
                                             </div>
 
@@ -192,7 +192,7 @@ const ProfilePage: React.FC = () => {
                                                     disabled={!isEditing}
                                                     value={formData.birthDate}
                                                     onChange={handleChange}
-                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
+                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
                                                 />
                                             </div>
 
@@ -204,7 +204,7 @@ const ProfilePage: React.FC = () => {
                                                     type="text"
                                                     disabled={true}
                                                     value={auth.user?.username || ''}
-                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
+                                                    className="mt-1 block w-full !border border-gray-300 rounded-sm shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm disabled:bg-gray-50 disabled:text-gray-500 px-2 py-2"
                                                 />
                                                 <p className="mt-1 text-xs text-gray-500">Username cannot be changed</p>
                                             </div>
@@ -216,14 +216,14 @@ const ProfilePage: React.FC = () => {
                                                     <button
                                                         type="submit"
                                                         disabled={auth.isLoading}
-                                                        className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                                                        className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50"
                                                     >
                                                         {auth.isLoading ? 'Saving...' : 'Save Changes'}
                                                     </button>
                                                     <button
                                                         type="button"
                                                         onClick={handleCancel}
-                                                        className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                                        className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                                                     >
                                                         Cancel
                                                     </button>
@@ -232,7 +232,7 @@ const ProfilePage: React.FC = () => {
                                                 <button
                                                     type="button"
                                                     onClick={() => setIsEditing(true)}
-                                                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                                        className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                                                 >
                                                     Edit Profile
                                                 </button>
@@ -278,7 +278,7 @@ const ProfilePage: React.FC = () => {
                                             </div>
                                             <button
                                                 onClick={() => fetchOrders({ userId: auth.user?.id })}
-                                                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                                                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-sm text-white bg-pink-600 hover:bg-pink-700"
                                             >
                                                 Retry
                                             </button>
@@ -303,7 +303,7 @@ const ProfilePage: React.FC = () => {
                                             <div className="mt-6">
                                                 <Link
                                                     to="/products"
-                                                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                                                            className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-sm text-white bg-pink-600 hover:bg-pink-700"
                                                 >
                                                     Browse Products
                                                 </Link>
@@ -331,7 +331,7 @@ const ProfilePage: React.FC = () => {
                                                         </div>
                                                         <div className="mt-3 sm:mt-0 flex flex-col items-start sm:items-end space-y-2">
                                                             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${order.status === 'delivered' ? 'bg-green-100 text-green-800' :
-                                                                order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
+                                                                order.status === 'shipped' ? 'bg-pink-100 text-pink-800' :
                                                                     order.status === 'confirmed' ? 'bg-yellow-100 text-yellow-800' :
                                                                         order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
                                                                             'bg-gray-100 text-gray-800'

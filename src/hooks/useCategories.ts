@@ -89,7 +89,7 @@ export const useCategories = (): CategoriesState & CategoriesActions => {
         }
     }, []);
 
-    const createCategory = useCallback(async (categoryData: Partial<Category>): Promise<Category> => {
+    const createCategory = useCallback(async (categoryData: Partial<Category> | FormData): Promise<Category> => {
         try {
             setLoading(true);
             const response = await categoriesApi.createCategory(categoryData);
@@ -111,7 +111,7 @@ export const useCategories = (): CategoriesState & CategoriesActions => {
         }
     }, []);
 
-    const updateCategory = useCallback(async (id: number, categoryData: Partial<Category>): Promise<Category> => {
+    const updateCategory = useCallback(async (id: number, categoryData: Partial<Category> | FormData): Promise<Category> => {
         try {
             setLoading(true);
             const response = await categoriesApi.updateCategory(id, categoryData);

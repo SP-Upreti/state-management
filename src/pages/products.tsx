@@ -69,7 +69,7 @@ export default function Products() {
                                 clearError();
                                 fetchProducts({ page: currentPage, limit });
                             }}
-                            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                            className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
                         >
                             Retry
                         </button>
@@ -84,7 +84,7 @@ export default function Products() {
         <>
             <Navbar />
             <Filtre>
-                <div className="mb-4 flex flex-wrap gap-4 items-center justify-between">
+                <div className="mb-4 pl-4  flex flex-wrap gap-4 items-center justify-between">
 
                     {/* Sort Filter */}
                     <select
@@ -93,7 +93,7 @@ export default function Products() {
                             const [newSortBy, newOrder] = e.target.value.split('-') as [string, 'asc' | 'desc'];
                             handleSortChange(newSortBy, newOrder);
                         }}
-                        className="border border-gray-300 rounded-md px-3 py-1 text-sm"
+                        className="border border-gray-300 rounded-sm px-3 py-1 text-sm"
                     >
                         <option value="createdAt-desc">Newest First</option>
                         <option value="createdAt-asc">Oldest First</option>
@@ -105,27 +105,27 @@ export default function Products() {
                 </div>
 
                 {searchQuery && (
-                    <div className="mb-4 text-gray-600">
+                    <div className="mb-4 pl-4 text-gray-600">
                         Search results for: <span className="font-medium">"{searchQuery}"</span>
                     </div>
                 )}
 
                 {pagination && (
-                    <div className="mb-4 text-gray-600">
+                    <div className="mb-4 pl-4 text-gray-600">
                         Showing {((currentPage - 1) * limit) + 1} to {Math.min(currentPage * limit, pagination.total)} of {pagination.total} products
                     </div>
                 )}
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1 w-full" id="productList">
+                <div className="grid grid-cols-2 pl-4 sm:grid-cols-3 lg:grid-cols-4 gap-1 w-full" id="productList">
                     {isLoading ? (
                         Array.from({ length: limit }).map((_, key) => (
                             <div key={key} className="flex flex-col bg-neutral-300 w-full animate-pulse rounded-xl p-4 gap-4">
-                                <div className="bg-neutral-400/50 w-full animate-pulse rounded-md h-40 sm:h-60"></div>
+                                <div className="bg-neutral-400/50 w-full animate-pulse rounded-sm h-40 sm:h-60"></div>
                                 <div className="flex flex-col gap-2">
-                                    <div className="bg-neutral-400/50 w-full h-4 animate-pulse rounded-md"></div>
-                                    <div className="bg-neutral-400/50 w-4/5 h-4 animate-pulse rounded-md"></div>
-                                    <div className="bg-neutral-400/50 w-full h-4 animate-pulse rounded-md"></div>
-                                    <div className="bg-neutral-400/50 w-2/4 h-4 animate-pulse rounded-md"></div>
+                                    <div className="bg-neutral-400/50 w-full h-4 animate-pulse rounded-sm"></div>
+                                    <div className="bg-neutral-400/50 w-4/5 h-4 animate-pulse rounded-sm"></div>
+                                    <div className="bg-neutral-400/50 w-full h-4 animate-pulse rounded-sm"></div>
+                                    <div className="bg-neutral-400/50 w-2/4 h-4 animate-pulse rounded-sm"></div>
                                 </div>
                             </div>
                         ))

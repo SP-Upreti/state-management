@@ -177,7 +177,7 @@ const ProductFormModal = ({ isOpen, onClose, product }: ProductFormModalProps) =
                                                 value={formData.title}
                                                 onChange={handleInputChange}
                                                 required
-                                                className={`mt-1 block w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${formErrors.title ? 'border-red-300' : 'border-gray-300'
+                                                className={`mt-1 block w-full border rounded-sm shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm ${formErrors.title ? 'border-red-300' : 'border-gray-300'
                                                     }`}
                                                 placeholder="Enter product title"
                                             />
@@ -196,7 +196,7 @@ const ProductFormModal = ({ isOpen, onClose, product }: ProductFormModalProps) =
                                                 onChange={handleInputChange}
                                                 required
                                                 rows={3}
-                                                className={`mt-1 block w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${formErrors.description ? 'border-red-300' : 'border-gray-300'
+                                                className={`mt-1 block w-full border rounded-sm shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm ${formErrors.description ? 'border-red-300' : 'border-gray-300'
                                                     }`}
                                                 placeholder="Enter product description"
                                             />
@@ -215,7 +215,7 @@ const ProductFormModal = ({ isOpen, onClose, product }: ProductFormModalProps) =
                                                     value={formData.category}
                                                     onChange={handleInputChange}
                                                     required
-                                                    className={`mt-1 block w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${formErrors.category ? 'border-red-300' : 'border-gray-300'
+                                                    className={`mt-1 block w-full border rounded-sm shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm ${formErrors.category ? 'border-red-300' : 'border-gray-300'
                                                         }`}
                                                 >
                                                     <option value="">Select Category</option>
@@ -239,7 +239,7 @@ const ProductFormModal = ({ isOpen, onClose, product }: ProductFormModalProps) =
                                                     name="brand"
                                                     value={formData.brand}
                                                     onChange={handleInputChange}
-                                                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                    className="mt-1 block w-full border-gray-300 rounded-sm shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
                                                     placeholder="Enter brand name"
                                                 />
                                             </div>
@@ -258,7 +258,7 @@ const ProductFormModal = ({ isOpen, onClose, product }: ProductFormModalProps) =
                                                     step="0.01"
                                                     min="0"
                                                     required
-                                                    className={`mt-1 block w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${formErrors.price ? 'border-red-300' : 'border-gray-300'
+                                                    className={`mt-1 block w-full border rounded-sm shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm ${formErrors.price ? 'border-red-300' : 'border-gray-300'
                                                         }`}
                                                     placeholder="0.00"
                                                 />
@@ -278,7 +278,7 @@ const ProductFormModal = ({ isOpen, onClose, product }: ProductFormModalProps) =
                                                     onChange={handleInputChange}
                                                     min="0"
                                                     max="100"
-                                                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                    className="mt-1 block w-full border-gray-300 rounded-sm shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
                                                     placeholder="0"
                                                 />
                                             </div>
@@ -294,7 +294,7 @@ const ProductFormModal = ({ isOpen, onClose, product }: ProductFormModalProps) =
                                                     onChange={handleInputChange}
                                                     min="0"
                                                     required
-                                                    className={`mt-1 block w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${formErrors.stock ? 'border-red-300' : 'border-gray-300'
+                                                    className={`mt-1 block w-full border rounded-sm shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm ${formErrors.stock ? 'border-red-300' : 'border-gray-300'
                                                         }`}
                                                     placeholder="0"
                                                 />
@@ -316,13 +316,13 @@ const ProductFormModal = ({ isOpen, onClose, product }: ProductFormModalProps) =
                                                             value={image}
                                                             onChange={(e) => handleImageChange(index, e.target.value)}
                                                             placeholder="https://example.com/image.jpg"
-                                                            className="flex-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                            className="flex-1 border-gray-300 rounded-sm shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
                                                         />
                                                         {formData.images.length > 1 && (
                                                             <button
                                                                 type="button"
                                                                 onClick={() => removeImageField(index)}
-                                                                className="px-3 py-2 border border-gray-300 rounded-md text-sm text-red-600 hover:bg-red-50 hover:border-red-300 transition-colors"
+                                                                className="px-3 py-2 border border-gray-300 rounded-sm text-sm text-red-600 hover:bg-red-50 hover:border-red-300 transition-colors"
                                                             >
                                                                 Remove
                                                             </button>
@@ -332,7 +332,7 @@ const ProductFormModal = ({ isOpen, onClose, product }: ProductFormModalProps) =
                                                 <button
                                                     type="button"
                                                     onClick={addImageField}
-                                                    className="text-sm text-indigo-600 hover:text-indigo-500 font-medium"
+                                                    className="text-sm text-pink-600 hover:text-pink-500 font-medium"
                                                 >
                                                     + Add another image
                                                 </button>
@@ -346,7 +346,7 @@ const ProductFormModal = ({ isOpen, onClose, product }: ProductFormModalProps) =
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                className="w-full inline-flex justify-center rounded-sm border border-transparent shadow-sm px-4 py-2 bg-pink-600 text-base font-medium text-white hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
                                 {loading ? (
                                     <span className="flex items-center">
@@ -363,7 +363,7 @@ const ProductFormModal = ({ isOpen, onClose, product }: ProductFormModalProps) =
                             <button
                                 type="button"
                                 onClick={onClose}
-                                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors"
+                                className="mt-3 w-full inline-flex justify-center rounded-sm border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors"
                             >
                                 Cancel
                             </button>

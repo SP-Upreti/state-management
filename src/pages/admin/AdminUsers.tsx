@@ -103,12 +103,12 @@ const AdminUsers = () => {
                         placeholder="Search users..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        className="rounded-sm border border-gray-300 px-3 py-2 text-sm focus:border-pink-500 focus:ring-pink-500"
                     />
                     <select
                         value={filterRole}
                         onChange={(e) => setFilterRole(e.target.value)}
-                        className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="inline-flex items-center justify-center rounded-sm border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
                     >
                         <option value="">All Roles</option>
                         <option value="admin">Admin</option>
@@ -118,14 +118,14 @@ const AdminUsers = () => {
             </div>
 
             {/* Users Table */}
-            <div className="bg-white shadow overflow-hidden sm:rounded-md">
+            <div className="bg-white shadow overflow-hidden sm:rounded-sm">
                 <div className="px-4 py-3 border-b border-gray-200">
                     <div className="flex items-center">
                         <input
                             type="checkbox"
                             checked={selectedUsers.length === users.length && users.length > 0}
                             onChange={handleSelectAll}
-                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                            className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded"
                         />
                         <span className="ml-2 text-sm text-gray-700">
                             {selectedUsers.length > 0 ? `${selectedUsers.length} selected` : 'Select all'}
@@ -155,7 +155,7 @@ const AdminUsers = () => {
                                     type="checkbox"
                                     checked={selectedUsers.includes(user.id)}
                                     onChange={() => handleSelectUser(user.id)}
-                                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                    className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded"
                                 />
                                 <div className="ml-4 flex items-center justify-between w-full">
                                     <div className="flex items-center">
@@ -192,7 +192,7 @@ const AdminUsers = () => {
                                             <select
                                                 value={user.role || 'user'}
                                                 onChange={(e) => handleRoleChange(user.id, e.target.value as 'user' | 'admin')}
-                                                className="text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                className="text-sm border-gray-300 rounded-sm focus:ring-pink-500 focus:border-pink-500"
                                                 disabled={updateRoleMutation.isPending}
                                             >
                                                 <option value="user">User</option>
@@ -202,7 +202,7 @@ const AdminUsers = () => {
                                         <div className="flex space-x-2">
                                             <button
                                                 onClick={() => handleToggleStatus(user.id)}
-                                                className="text-indigo-600 hover:text-indigo-900 text-sm font-medium"
+                                                className="text-pink-600 hover:text-pink-900 text-sm font-medium"
                                                 disabled={toggleStatusMutation.isPending}
                                             >
                                                 {user.isActive ? 'Deactivate' : 'Activate'}
@@ -252,14 +252,14 @@ const AdminUsers = () => {
                         <button
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-sm text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Previous
                         </button>
                         <button
                             onClick={() => handlePageChange(currentPage + 1)}
                             disabled={currentPage === totalPages}
-                            className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-sm text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Next
                         </button>
@@ -272,7 +272,7 @@ const AdminUsers = () => {
                             </p>
                         </div>
                         <div>
-                            <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                            <nav className="relative z-0 inline-flex rounded-sm shadow-sm -space-x-px">
                                 <button
                                     onClick={() => handlePageChange(currentPage - 1)}
                                     disabled={currentPage === 1}
@@ -287,7 +287,7 @@ const AdminUsers = () => {
                                             key={pageNum}
                                             onClick={() => handlePageChange(pageNum)}
                                             className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${currentPage === pageNum
-                                                ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                                                ? 'z-10 bg-pink-50 border-pink-500 text-pink-600'
                                                 : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
                                                 }`}
                                         >

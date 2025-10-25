@@ -13,6 +13,8 @@ import RegisterPage from './pages/register'
 import ProfilePage from './pages/profile'
 import AdminLayout from './components/admin/AdminLayout'
 import AdminDashboard from './pages/admin/AdminDashboard'
+import PoliciesPage from './pages/policies'
+import ContactPage from './pages/contact'
 import AdminProducts from './pages/admin/AdminProducts'
 import AdminProductDetails from './pages/admin/AdminProductDetails'
 import AdminUsers from './pages/admin/AdminUsers'
@@ -53,6 +55,11 @@ function App() {
             {/* Auth Routes */}
             <Route path='/login' element={<LoginPage />} />
             <Route path='/register' element={<RegisterPage />} />
+
+            {/* Info Routes */}
+            <Route path='/policies' element={<PoliciesPage />} />
+            <Route path='/contact' element={<ContactPage />} />
+            <Route path='/help' element={<ContactPage />} />
 
             {/* Admin Routes */}
             <Route path='/admin' element={

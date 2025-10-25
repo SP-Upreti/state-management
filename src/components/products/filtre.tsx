@@ -45,10 +45,10 @@ export default function Filtre({ children }: { children: ReactNode }) {
                             <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-600 w-full">Brand</label>
                             <div className="relative w-full mb-4">
                                 <input id="FROM"
-                                    className="h-10 border border-gray-300 text-gray-900 text-xs font-medium rounded-md block w-full py-2.5 px-4 appearance-none relative focus:outline-none bg-white" />
+                                    className="h-10 border border-gray-300 text-gray-900 text-xs font-medium rounded-sm block w-full py-2.5 px-4 appearance-none relative focus:outline-none bg-white" />
                             </div>
                             <button
-                                className="w-full py-2.5 flex items-center justify-center gap-2 rounded-md bg-indigo-600 text-white font-semibold text-xs shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-700 hover:shadow-indigo-200  ">
+                                className="w-full py-2.5 flex items-center justify-center gap-2 rounded-sm bg-pink-600 text-white font-semibold text-xs shadow-sm shadow-transparent transition-all duration-500 hover:bg-pink-700 hover:shadow-pink-200  ">
                                 <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -63,7 +63,7 @@ export default function Filtre({ children }: { children: ReactNode }) {
                             <div className="flex items-center justify-between w-full pb-3 border-b border-gray-200 mb-4">
                                 <p className="font-medium text-base leading-7 text-black ">Filter Plans</p>
                                 <p
-                                    className="font-medium text-xs text-gray-500 cursor-pointer transition-all duration-500 hover:text-indigo-600">
+                                    className="font-medium text-xs text-gray-500 cursor-pointer transition-all duration-500 hover:text-pink-600">
                                     RESET</p>
                             </div>
 
@@ -108,21 +108,21 @@ export default function Filtre({ children }: { children: ReactNode }) {
                             <p className="font-medium text-sm leading-6 text-black mb-3">Discount</p>
                             <div className="box flex flex-col gap-2">
                                 <div className="flex items-center">
-                                    <input id="checkbox-default-1" type="checkbox" value="" className="w-5 h-5 appearance-none border border-gray-300  rounded-md mr-2 hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100 checked:bg-[url('https://pagedone.io/asset/uploads/1689406942.svg')]" />
+                                    <input id="checkbox-default-1" type="checkbox" value="" className="w-5 h-5 appearance-none border border-gray-300  rounded-sm mr-2 hover:border-pink-500 hover:bg-pink-100 checked:bg-no-repeat checked:bg-center checked:border-pink-500 checked:bg-pink-100 checked:bg-[url('https://pagedone.io/asset/uploads/1689406942.svg')]" />
                                     <label htmlFor="checkbox-default-1" className="text-xs font-normal text-gray-600 leading-4 cursor-pointer">20% or more</label>
                                 </div>
                                 <div className="flex items-center">
-                                    <input id="checkbox-default-2" type="checkbox" value="" className="w-5 h-5 appearance-none border border-gray-300  rounded-md mr-2 hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100 checked:bg-[url('https://pagedone.io/asset/uploads/1689406942.svg')]" />
+                                    <input id="checkbox-default-2" type="checkbox" value="" className="w-5 h-5 appearance-none border border-gray-300  rounded-sm mr-2 hover:border-pink-500 hover:bg-pink-100 checked:bg-no-repeat checked:bg-center checked:border-pink-500 checked:bg-pink-100 checked:bg-[url('https://pagedone.io/asset/uploads/1689406942.svg')]" />
                                     <label htmlFor="checkbox-default-2" className="text-xs font-normal text-gray-600 leading-4 cursor-pointer">30% or more</label>
                                 </div>
                                 <div className="flex items-center">
-                                    <input id="checkbox-default-3" type="checkbox" value="" className="w-5 h-5 appearance-none border border-gray-300  rounded-md mr-2 hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100 checked:bg-[url('https://pagedone.io/asset/uploads/1689406942.svg')]" />
+                                    <input id="checkbox-default-3" type="checkbox" value="" className="w-5 h-5 appearance-none border border-gray-300  rounded-sm mr-2 hover:border-pink-500 hover:bg-pink-100 checked:bg-no-repeat checked:bg-center checked:border-pink-500 checked:bg-pink-100 checked:bg-[url('https://pagedone.io/asset/uploads/1689406942.svg')]" />
                                     <label htmlFor="checkbox-default-3" className="text-xs font-normal text-gray-600 leading-4 cursor-pointer">50% or more</label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="col-span-12 md:col-span-10 px-4">
+                    <div className="col-span-12 md:col-span-10 ">
                         {children}
                     </div>
                 </div>

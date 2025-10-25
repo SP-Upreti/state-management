@@ -257,8 +257,37 @@ export const productsApi = {
         return api.get<ApiResponse<{ products: Product[] }>>(`/products?${queryParams.toString()}`);
     },
 
+    // Advanced BM25 Search
+    searchProducts: (params: {
+        q: string;
+        limit?: number;
+        includeScore?: boolean;
+    }) => {
+        const queryParams = new URLSearchParams();
+        queryParams.append('q', params.q);
+        if (params?.limit) queryParams.append('limit', params.limit.toString());
+        if (params?.includeScore) queryParams.append('includeScore', params.includeScore.toString());
+
+        return api.get<ApiResponse<{ products: Product[]; algorithm: string }>>(`/products/search?${queryParams.toString()}`);
+    },
+
+    // Get search suggestions (autocomplete)
+    getSearchSuggestions: (query: string, limit = 5) => {
+        const queryParams = new URLSearchParams();
+        if (query) queryParams.append('q', query);
+        if (limit) queryParams.append('limit', limit.toString());
+
+        return api.get<ApiResponse<{ suggestions: Array<{ text: string; score: number }> }>>(`/products/suggestions?${queryParams.toString()}`);
+    },
+
     getProduct: (id: number) =>
         api.get<ApiResponse<{ product: Product }>>(`/products/${id}`),
+
+    getRecentProducts: (limit = 10) =>
+        api.get<ApiResponse<{ products: Product[] }>>(`/products/recent?limit=${limit}`),
+
+    getPopularProducts: (limit = 10) =>
+        api.get<ApiResponse<{ products: Product[] }>>(`/products/popular?limit=${limit}`),
 
     createProduct: (productData: Partial<Product>) =>
         api.post<ApiResponse<{ product: Product }>>('/products', productData),
@@ -333,6 +362,7 @@ export interface Category {
     slug: string;
     description?: string;
     image?: string;
+    imageUrl?: string;
     isActive: boolean;
     sortOrder: number;
     productCount?: number;
@@ -351,11 +381,15 @@ export const categoriesApi = {
     getCategoryBySlug: (slug: string) =>
         api.get<ApiResponse<{ category: Category }>>(`/categories/slug/${slug}`),
 
-    createCategory: (categoryData: Partial<Category>) =>
-        api.post<ApiResponse<{ category: Category }>>('/categories', categoryData),
+    createCategory: (categoryData: Partial<Category> | FormData) => {
+        const headers = categoryData instanceof FormData ? { 'Content-Type': 'multipart/form-data' } : {};
+        return api.post<ApiResponse<{ category: Category }>>('/categories', categoryData, { headers });
+    },
 
-    updateCategory: (id: number, categoryData: Partial<Category>) =>
-        api.put<ApiResponse<{ category: Category }>>(`/categories/${id}`, categoryData),
+    updateCategory: (id: number, categoryData: Partial<Category> | FormData) => {
+        const headers = categoryData instanceof FormData ? { 'Content-Type': 'multipart/form-data' } : {};
+        return api.put<ApiResponse<{ category: Category }>>(`/categories/${id}`, categoryData, { headers });
+    },
 
     deleteCategory: (id: number) =>
         api.delete<ApiResponse>(`/categories/${id}`),

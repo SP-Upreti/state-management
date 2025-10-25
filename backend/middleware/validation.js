@@ -70,6 +70,7 @@ const categorySchema = Joi.object({
     name: Joi.string().min(2).max(100).required(),
     slug: Joi.string().pattern(/^[a-z0-9-]+$/).required(),
     description: Joi.string().optional(),
+    image: Joi.string().optional(),
     sortOrder: Joi.number().optional()
 });
 

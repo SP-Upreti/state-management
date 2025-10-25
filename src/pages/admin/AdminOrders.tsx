@@ -33,7 +33,7 @@ const AdminOrders = () => {
     const getStatusColor = (status: string) => {
         switch (status) {
             case 'pending': return 'bg-yellow-100 text-yellow-800';
-            case 'confirmed': return 'bg-blue-100 text-blue-800';
+            case 'confirmed': return 'bg-pink-100 text-pink-800';
             case 'shipped': return 'bg-purple-100 text-purple-800';
             case 'delivered': return 'bg-green-100 text-green-800';
             case 'cancelled': return 'bg-red-100 text-red-800';
@@ -83,7 +83,7 @@ const AdminOrders = () => {
                     <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
-                        className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="inline-flex items-center justify-center rounded-sm border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
                     >
                         <option value="">All Orders</option>
                         <option value="pending">Pending</option>
@@ -96,7 +96,7 @@ const AdminOrders = () => {
             </div>
 
             {/* Orders Table */}
-            <div className="bg-white shadow overflow-hidden sm:rounded-md">
+            <div className="bg-white shadow overflow-hidden sm:rounded-sm">
                 <ul className="divide-y divide-gray-200">
                     {orders.map((order) => (
                         <li key={order.id} className="px-6 py-4">
@@ -139,14 +139,14 @@ const AdminOrders = () => {
                                     <div className="flex flex-col space-y-1">
                                         <button
                                             onClick={() => setSelectedOrder(order)}
-                                            className="text-indigo-600 hover:text-indigo-900 text-sm font-medium"
+                                            className="text-pink-600 hover:text-pink-900 text-sm font-medium"
                                         >
                                             View Details
                                         </button>
                                         <select
                                             value={order.status}
                                             onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
-                                            className="text-xs border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500"
+                                            className="text-xs border-gray-300 rounded focus:ring-pink-500 focus:border-pink-500"
                                             disabled={updateStatusMutation.isPending}
                                         >
                                             <option value="pending">Pending</option>
@@ -192,14 +192,14 @@ const AdminOrders = () => {
                         <button
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-sm text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Previous
                         </button>
                         <button
                             onClick={() => handlePageChange(currentPage + 1)}
                             disabled={currentPage === totalPages}
-                            className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-sm text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Next
                         </button>
@@ -212,7 +212,7 @@ const AdminOrders = () => {
                             </p>
                         </div>
                         <div>
-                            <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                            <nav className="relative z-0 inline-flex rounded-sm shadow-sm -space-x-px">
                                 <button
                                     onClick={() => handlePageChange(currentPage - 1)}
                                     disabled={currentPage === 1}
@@ -227,7 +227,7 @@ const AdminOrders = () => {
                                             key={pageNum}
                                             onClick={() => handlePageChange(pageNum)}
                                             className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${currentPage === pageNum
-                                                ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                                                ? 'z-10 bg-pink-50 border-pink-500 text-pink-600'
                                                 : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
                                                 }`}
                                         >
@@ -336,7 +336,7 @@ const AdminOrders = () => {
                                                                     <img
                                                                         src={item.product?.thumbnail || '/placeholder.jpg'}
                                                                         alt={item.product?.title || 'Product'}
-                                                                        className="h-12 w-12 rounded-md object-cover"
+                                                                        className="h-12 w-12 rounded-sm object-cover"
                                                                     />
                                                                     <div className="flex-1">
                                                                         <h5 className="text-sm font-medium text-gray-900">
@@ -365,7 +365,7 @@ const AdminOrders = () => {
                                 <button
                                     type="button"
                                     onClick={() => setSelectedOrder(null)}
-                                    className="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
+                                    className="w-full inline-flex justify-center rounded-sm border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 sm:ml-3 sm:w-auto sm:text-sm"
                                 >
                                     Close
                                 </button>

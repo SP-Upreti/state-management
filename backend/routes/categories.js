@@ -2,8 +2,29 @@ const express = require('express');
 const { Category, Product } = require('../models');
 const { protect, authorize } = require('../middleware/auth');
 const { validate, categorySchema } = require('../middleware/validation');
+const upload = require('../middleware/upload');
 
 const router = express.Router();
+
+// Helper function to get full image URL
+const getFullImageUrl = (req, imagePath) => {
+    if (!imagePath) return null;
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+        return imagePath; // Already a full URL
+    }
+    const protocol = req.protocol;
+    const host = req.get('host');
+    return `${protocol}://${host}${imagePath}`;
+};
+
+// Helper function to format category data with full image URL
+const formatCategoryData = (req, category) => {
+    const categoryData = category.toJSON();
+    if (categoryData.image) {
+        categoryData.imageUrl = getFullImageUrl(req, categoryData.image);
+    }
+    return categoryData;
+};
 
 // @desc    Get all categories
 // @route   GET /api/categories
@@ -41,8 +62,9 @@ const getCategories = async (req, res, next) => {
                     }
                 });
 
+                const categoryData = formatCategoryData(req, category);
                 return {
-                    ...category.toJSON(),
+                    ...categoryData,
                     productCount
                 };
             })
@@ -95,7 +117,7 @@ const getCategory = async (req, res, next) => {
             }
         });
 
-        const categoryData = category.toJSON();
+        const categoryData = formatCategoryData(req, category);
         categoryData.productCount = productCount;
 
         res.status(200).json({
@@ -134,7 +156,7 @@ const getCategoryBySlug = async (req, res, next) => {
             }
         });
 
-        const categoryData = category.toJSON();
+        const categoryData = formatCategoryData(req, category);
         categoryData.productCount = productCount;
 
         res.status(200).json({
@@ -151,12 +173,21 @@ const getCategoryBySlug = async (req, res, next) => {
 // @access  Private/Admin
 const createCategory = async (req, res, next) => {
     try {
-        const category = await Category.create(req.body);
+        const categoryData = { ...req.body };
+
+        // If file was uploaded, add the file path
+        if (req.file) {
+            categoryData.image = `/uploads/categories/${req.file.filename}`;
+        }
+
+        const category = await Category.create(categoryData);
+
+        const formattedCategory = formatCategoryData(req, category);
 
         res.status(201).json({
             success: true,
             message: 'Category created successfully',
-            data: { category }
+            data: { category: formattedCategory }
         });
     } catch (error) {
         next(error);
@@ -177,12 +208,21 @@ const updateCategory = async (req, res, next) => {
             });
         }
 
-        const updatedCategory = await category.update(req.body);
+        const updateData = { ...req.body };
+
+        // If file was uploaded, add the file path
+        if (req.file) {
+            updateData.image = `/uploads/categories/${req.file.filename}`;
+        }
+
+        const updatedCategory = await category.update(updateData);
+
+        const formattedCategory = formatCategoryData(req, updatedCategory);
 
         res.status(200).json({
             success: true,
             message: 'Category updated successfully',
-            data: { category: updatedCategory }
+            data: { category: formattedCategory }
         });
     } catch (error) {
         next(error);
@@ -231,8 +271,8 @@ const deleteCategory = async (req, res, next) => {
 router.get('/slug/:slug', getCategoryBySlug);
 router.get('/:id', getCategory);
 router.get('/', getCategories);
-router.post('/', protect, authorize('admin'), validate(categorySchema), createCategory);
-router.put('/:id', protect, authorize('admin'), updateCategory);
+router.post('/', protect, authorize('admin'), upload.single('image'), validate(categorySchema), createCategory);
+router.put('/:id', protect, authorize('admin'), upload.single('image'), updateCategory);
 router.delete('/:id', protect, authorize('admin'), deleteCategory);
 
 module.exports = router;

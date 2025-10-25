@@ -47,8 +47,8 @@ const AdminAnalytics = () => {
                     <div className="p-5">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
-                                <div className="p-3 rounded-md bg-indigo-50">
-                                    <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="p-3 rounded-sm bg-pink-50">
+                                    <svg className="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                                     </svg>
                                 </div>
@@ -67,7 +67,7 @@ const AdminAnalytics = () => {
                     <div className="p-5">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
-                                <div className="p-3 rounded-md bg-green-50">
+                                <div className="p-3 rounded-sm bg-green-50">
                                     <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                     </svg>
@@ -87,7 +87,7 @@ const AdminAnalytics = () => {
                     <div className="p-5">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
-                                <div className="p-3 rounded-md bg-yellow-50">
+                                <div className="p-3 rounded-sm bg-yellow-50">
                                     <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                     </svg>
@@ -107,7 +107,7 @@ const AdminAnalytics = () => {
                     <div className="p-5">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
-                                <div className="p-3 rounded-md bg-purple-50">
+                                <div className="p-3 rounded-sm bg-purple-50">
                                     <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                     </svg>
@@ -137,7 +137,7 @@ const AdminAnalytics = () => {
                                     <div className="flex items-center space-x-3">
                                         <div className="w-32 bg-gray-200 rounded-full h-2">
                                             <div
-                                                className="bg-indigo-600 h-2 rounded-full"
+                                                className="bg-pink-600 h-2 rounded-full"
                                                 style={{ width: `${Math.min((item.sales / Math.max(...salesData.map(d => d.sales))) * 100, 100)}%` }}
                                             ></div>
                                         </div>
@@ -198,7 +198,7 @@ const AdminAnalytics = () => {
                                         <img
                                             src={product.thumbnail}
                                             alt={product.title}
-                                            className="h-12 w-12 rounded-md object-cover"
+                                            className="h-12 w-12 rounded-sm object-cover"
                                         />
                                         <div className="flex-1 min-w-0">
                                             <p className="text-sm font-medium text-gray-900 truncate">

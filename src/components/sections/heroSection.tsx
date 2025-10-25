@@ -22,11 +22,12 @@ function Slides() {
             modules={[Navigation, Pagination, Autoplay]}
             spaceBetween={50}
             slidesPerView={1}
-            navigation
+            // navigation
             autoplay={{ delay: 3000 }}
             pagination={{ clickable: true }}
             onSwiper={(swiper) => console.log(swiper)}
             onSlideChange={() => console.log('slide change')}
+            className='mt-2 rounded-sm'
         >
             {
                 Array.from({ length: 6 }, (_, idx) => {

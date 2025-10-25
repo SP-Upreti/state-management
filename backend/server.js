@@ -23,8 +23,10 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
-// Security middleware
-app.use(helmet());
+// Security middleware - Configure helmet to allow cross-origin resources
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 
 // Rate limiting
 const limiter = rateLimit({
@@ -90,8 +92,9 @@ const startServer = async () => {
         await sequelize.authenticate();
         console.log('✅ Database connected successfully');
 
-        // Sync database (create tables)
-        await sequelize.sync({ alter: true });
+        // Sync database (create tables if they don't exist)
+        // Note: Use migrations in production instead of sync
+        await sequelize.sync();
         console.log('✅ Database synchronized');
 
         // Start server

@@ -217,7 +217,7 @@ const Checkout = () => {
                     <h2 className="text-2xl font-bold text-gray-900 mb-4">Your cart is empty</h2>
                     <button
                         onClick={() => navigate('/products')}
-                        className="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700"
+                        className="bg-pink-600 text-white px-6 py-3 rounded-sm hover:bg-pink-700"
                     >
                         Continue Shopping
                     </button>
@@ -242,12 +242,12 @@ const Checkout = () => {
                             {steps.map((step, stepIdx) => (
                                 <li key={step.id} className={`${stepIdx !== steps.length - 1 ? 'pr-8 sm:pr-20' : ''} relative`}>
                                     <div className="flex items-center">
-                                        <div className={`relative flex h-8 w-8 items-center justify-center rounded-full ${step.id <= currentStep ? 'bg-indigo-600' : 'bg-gray-300'
+                                        <div className={`relative flex h-8 w-8 items-center justify-center rounded-full ${step.id <= currentStep ? 'bg-pink-600' : 'bg-gray-300'
                                             }`}>
                                             <span className="text-sm font-medium text-white">{step.id}</span>
                                         </div>
                                         <div className="ml-4 min-w-0 flex flex-col">
-                                            <span className={`text-sm font-medium ${step.id <= currentStep ? 'text-indigo-600' : 'text-gray-500'
+                                            <span className={`text-sm font-medium ${step.id <= currentStep ? 'text-pink-600' : 'text-gray-500'
                                                 }`}>
                                                 {step.title}
                                             </span>
@@ -280,7 +280,7 @@ const Checkout = () => {
                                             name="firstName"
                                             value={shippingInfo.firstName}
                                             onChange={handleShippingInputChange}
-                                            className={`mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${errors.firstName ? 'border-red-300' : 'border-gray-300'
+                                            className={`mt-1 block w-full border rounded-sm shadow-sm py-2 px-3 focus:outline-none focus:ring-pink-500 focus:border-pink-500 ${errors.firstName ? 'border-red-300' : 'border-gray-300'
                                                 }`}
                                         />
                                         {errors.firstName && <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>}
@@ -295,7 +295,7 @@ const Checkout = () => {
                                             name="lastName"
                                             value={shippingInfo.lastName}
                                             onChange={handleShippingInputChange}
-                                            className={`mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${errors.lastName ? 'border-red-300' : 'border-gray-300'
+                                            className={`mt-1 block w-full border rounded-sm shadow-sm py-2 px-3 focus:outline-none focus:ring-pink-500 focus:border-pink-500 ${errors.lastName ? 'border-red-300' : 'border-gray-300'
                                                 }`}
                                         />
                                         {errors.lastName && <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>}
@@ -310,7 +310,7 @@ const Checkout = () => {
                                             name="email"
                                             value={shippingInfo.email}
                                             onChange={handleShippingInputChange}
-                                            className={`mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${errors.email ? 'border-red-300' : 'border-gray-300'
+                                            className={`mt-1 block w-full border rounded-sm shadow-sm py-2 px-3 focus:outline-none focus:ring-pink-500 focus:border-pink-500 ${errors.email ? 'border-red-300' : 'border-gray-300'
                                                 }`}
                                         />
                                         {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
@@ -325,7 +325,7 @@ const Checkout = () => {
                                             name="phone"
                                             value={shippingInfo.phone}
                                             onChange={handleShippingInputChange}
-                                            className={`mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${errors.phone ? 'border-red-300' : 'border-gray-300'
+                                            className={`mt-1 block w-full border rounded-sm shadow-sm py-2 px-3 focus:outline-none focus:ring-pink-500 focus:border-pink-500 ${errors.phone ? 'border-red-300' : 'border-gray-300'
                                                 }`}
                                         />
                                         {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone}</p>}
@@ -340,7 +340,7 @@ const Checkout = () => {
                                             name="address"
                                             value={shippingInfo.address}
                                             onChange={handleShippingInputChange}
-                                            className={`mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${errors.address ? 'border-red-300' : 'border-gray-300'
+                                            className={`mt-1 block w-full border rounded-sm shadow-sm py-2 px-3 focus:outline-none focus:ring-pink-500 focus:border-pink-500 ${errors.address ? 'border-red-300' : 'border-gray-300'
                                                 }`}
                                         />
                                         {errors.address && <p className="mt-1 text-sm text-red-600">{errors.address}</p>}
@@ -355,7 +355,7 @@ const Checkout = () => {
                                             name="city"
                                             value={shippingInfo.city}
                                             onChange={handleShippingInputChange}
-                                            className={`mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${errors.city ? 'border-red-300' : 'border-gray-300'
+                                            className={`mt-1 block w-full border rounded-sm shadow-sm py-2 px-3 focus:outline-none focus:ring-pink-500 focus:border-pink-500 ${errors.city ? 'border-red-300' : 'border-gray-300'
                                                 }`}
                                         />
                                         {errors.city && <p className="mt-1 text-sm text-red-600">{errors.city}</p>}
@@ -370,7 +370,7 @@ const Checkout = () => {
                                             name="state"
                                             value={shippingInfo.state}
                                             onChange={handleShippingInputChange}
-                                            className={`mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${errors.state ? 'border-red-300' : 'border-gray-300'
+                                            className={`mt-1 block w-full border rounded-sm shadow-sm py-2 px-3 focus:outline-none focus:ring-pink-500 focus:border-pink-500 ${errors.state ? 'border-red-300' : 'border-gray-300'
                                                 }`}
                                         />
                                         {errors.state && <p className="mt-1 text-sm text-red-600">{errors.state}</p>}
@@ -385,7 +385,7 @@ const Checkout = () => {
                                             name="zipCode"
                                             value={shippingInfo.zipCode}
                                             onChange={handleShippingInputChange}
-                                            className={`mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${errors.zipCode ? 'border-red-300' : 'border-gray-300'
+                                            className={`mt-1 block w-full border rounded-sm shadow-sm py-2 px-3 focus:outline-none focus:ring-pink-500 focus:border-pink-500 ${errors.zipCode ? 'border-red-300' : 'border-gray-300'
                                                 }`}
                                         />
                                         {errors.zipCode && <p className="mt-1 text-sm text-red-600">{errors.zipCode}</p>}
@@ -399,7 +399,7 @@ const Checkout = () => {
                                             name="country"
                                             value={shippingInfo.country}
                                             onChange={handleShippingInputChange}
-                                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                            className="mt-1 block w-full border border-gray-300 rounded-sm shadow-sm py-2 px-3 focus:outline-none focus:ring-pink-500 focus:border-pink-500"
                                         >
                                             <option value="United States">United States</option>
                                             <option value="Canada">Canada</option>
@@ -430,7 +430,7 @@ const Checkout = () => {
                                                 value="card"
                                                 checked={paymentMethod === 'card'}
                                                 onChange={(e) => setPaymentMethod(e.target.value)}
-                                                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                                                className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300"
                                             />
                                             <label htmlFor="card" className="ml-3 block text-sm font-medium text-gray-700">
                                                 Credit / Debit Card
@@ -444,7 +444,7 @@ const Checkout = () => {
                                                 value="paypal"
                                                 checked={paymentMethod === 'paypal'}
                                                 onChange={(e) => setPaymentMethod(e.target.value)}
-                                                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                                                className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300"
                                             />
                                             <label htmlFor="paypal" className="ml-3 block text-sm font-medium text-gray-700">
                                                 PayPal
@@ -465,7 +465,7 @@ const Checkout = () => {
                                                 name="cardholderName"
                                                 value={paymentInfo.cardholderName}
                                                 onChange={handlePaymentInputChange}
-                                                className={`mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${errors.cardholderName ? 'border-red-300' : 'border-gray-300'
+                                                className={`mt-1 block w-full border rounded-sm shadow-sm py-2 px-3 focus:outline-none focus:ring-pink-500 focus:border-pink-500 ${errors.cardholderName ? 'border-red-300' : 'border-gray-300'
                                                     }`}
                                             />
                                             {errors.cardholderName && <p className="mt-1 text-sm text-red-600">{errors.cardholderName}</p>}
@@ -482,7 +482,7 @@ const Checkout = () => {
                                                 onChange={handlePaymentInputChange}
                                                 placeholder="1234 5678 9012 3456"
                                                 maxLength={19}
-                                                className={`mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${errors.cardNumber ? 'border-red-300' : 'border-gray-300'
+                                                className={`mt-1 block w-full border rounded-sm shadow-sm py-2 px-3 focus:outline-none focus:ring-pink-500 focus:border-pink-500 ${errors.cardNumber ? 'border-red-300' : 'border-gray-300'
                                                     }`}
                                             />
                                             {errors.cardNumber && <p className="mt-1 text-sm text-red-600">{errors.cardNumber}</p>}
@@ -499,7 +499,7 @@ const Checkout = () => {
                                                 onChange={handlePaymentInputChange}
                                                 placeholder="MM/YY"
                                                 maxLength={5}
-                                                className={`mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${errors.expiryDate ? 'border-red-300' : 'border-gray-300'
+                                                className={`mt-1 block w-full border rounded-sm shadow-sm py-2 px-3 focus:outline-none focus:ring-pink-500 focus:border-pink-500 ${errors.expiryDate ? 'border-red-300' : 'border-gray-300'
                                                     }`}
                                             />
                                             {errors.expiryDate && <p className="mt-1 text-sm text-red-600">{errors.expiryDate}</p>}
@@ -516,7 +516,7 @@ const Checkout = () => {
                                                 onChange={handlePaymentInputChange}
                                                 placeholder="123"
                                                 maxLength={4}
-                                                className={`mt-1 block w-full border rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${errors.cvv ? 'border-red-300' : 'border-gray-300'
+                                                className={`mt-1 block w-full border rounded-sm shadow-sm py-2 px-3 focus:outline-none focus:ring-pink-500 focus:border-pink-500 ${errors.cvv ? 'border-red-300' : 'border-gray-300'
                                                     }`}
                                             />
                                             {errors.cvv && <p className="mt-1 text-sm text-red-600">{errors.cvv}</p>}
@@ -574,7 +574,7 @@ const Checkout = () => {
                         <div className="mt-6 flex justify-between">
                             {errors.submit && (
                                 <div className="flex-1 mr-4">
-                                    <div className="bg-red-50 border border-red-200 rounded-md p-3">
+                                    <div className="bg-red-50 border border-red-200 rounded-sm p-3">
                                         <p className="text-sm text-red-700">{errors.submit}</p>
                                     </div>
                                 </div>
@@ -582,7 +582,7 @@ const Checkout = () => {
                             <button
                                 onClick={handlePrevStep}
                                 disabled={currentStep === 1}
-                                className={`px-4 py-2 text-sm font-medium rounded-md ${currentStep === 1
+                                className={`px-4 py-2 text-sm font-medium rounded-sm ${currentStep === 1
                                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                     : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
                                     }`}
@@ -593,7 +593,7 @@ const Checkout = () => {
                             {currentStep < 3 ? (
                                 <button
                                     onClick={handleNextStep}
-                                    className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700"
+                                    className="px-4 py-2 bg-pink-600 text-white text-sm font-medium rounded-sm hover:bg-pink-700"
                                 >
                                     Next
                                 </button>
@@ -601,7 +601,7 @@ const Checkout = () => {
                                 <button
                                     onClick={handlePlaceOrder}
                                     disabled={isProcessing}
-                                    className="px-6 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                                        className="px-6 py-2 bg-green-600 text-white text-sm font-medium rounded-sm hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
                                 >
                                     {isProcessing && <LoadingSpinner size="sm" />}
                                     <span>{isProcessing ? 'Processing...' : 'Place Order'}</span>
@@ -688,8 +688,8 @@ const Checkout = () => {
                             </div>
 
                             {totalAmount < 100 && (
-                                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                                    <p className="text-sm text-blue-700">
+                                <div className="mt-4 p-3 bg-pink-50 border border-pink-200 rounded-lg">
+                                    <p className="text-sm text-pink-700">
                                         Add ${(100 - totalAmount).toFixed(2)} more to get free shipping!
                                     </p>
                                 </div>

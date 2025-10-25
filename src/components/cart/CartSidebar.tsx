@@ -99,7 +99,7 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
                     </h2>
                     <button
                         onClick={onClose}
-                        className="p-2 hover:bg-gray-100 rounded-md"
+                        className="p-2 hover:bg-gray-100 rounded-sm"
                     >
                         <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -110,7 +110,7 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
                 {/* Loading State */}
                 {cart.isLoading && (
                     <div className="flex items-center justify-center p-4">
-                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600"></div>
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-pink-600"></div>
                         <span className="ml-2 text-sm text-gray-600">Loading cart...</span>
                     </div>
                 )}
@@ -138,7 +138,7 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
                             <p className="mt-4 text-gray-500">Your cart is empty</p>
                             <button
                                 onClick={handleContinueShopping}
-                                className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+                                className="mt-4 bg-pink-600 text-white px-4 py-2 rounded-sm hover:bg-pink-700"
                             >
                                 Start Shopping
                             </button>
@@ -155,14 +155,14 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
                                         <img
                                             src={item.product.thumbnail}
                                             alt={item.product.title}
-                                            className="h-16 w-16 rounded-md object-cover"
+                                            className="h-16 w-16 rounded-sm object-cover"
                                         />
                                         <div className="flex-1 min-w-0">
                                             <h4 className="text-sm font-medium text-gray-900 truncate">
                                                 {item.product.title}
                                             </h4>
                                             <p className="text-sm text-gray-500">{item.product.brand}</p>
-                                            <p className="text-xs text-indigo-600">{item.product.category?.name}</p>
+                                            <p className="text-xs text-pink-600">{item.product.category?.name}</p>
                                             <div className="flex items-center space-x-2 mt-2">
                                                 <button
                                                     onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
@@ -206,7 +206,7 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
                             {cart.items.length > 1 && (
                                 <button
                                     onClick={handleClearCart}
-                                    className="w-full text-red-600 text-sm hover:text-red-800 mt-4 py-2 border border-red-200 rounded-md hover:bg-red-50"
+                                        className="w-full text-red-600 text-sm hover:text-red-800 mt-4 py-2 border border-red-200 rounded-sm hover:bg-red-50"
                                 >
                                     Clear Cart
                                 </button>
@@ -237,13 +237,13 @@ const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
                         <button
                             onClick={handleCheckout}
                             disabled={cart.isLoading || auth.isLoading}
-                            className="w-full bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-pink-600 text-white py-3 px-4 rounded-sm hover:bg-pink-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {auth.isLoading ? 'Loading...' : 'Checkout'}
                         </button>
                         <button
                             onClick={handleContinueShopping}
-                            className="w-full bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300"
+                            className="w-full bg-gray-200 text-gray-800 py-2 px-4 rounded-sm hover:bg-gray-300"
                         >
                             Continue Shopping
                         </button>

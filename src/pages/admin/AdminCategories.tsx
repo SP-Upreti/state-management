@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useCategories } from '../../hooks/useCategories';
-import { useProducts } from '../../hooks/useProducts';
+import { Category } from '../../utils/api';
 
 const AdminCategories = () => {
     const {
@@ -9,32 +9,25 @@ const AdminCategories = () => {
         error,
         fetchCategories,
         createCategory,
+        updateCategory,
+        deleteCategory,
         clearError
     } = useCategories();
 
-    const {
-        products,
-        isLoading: productsLoading,
-        fetchProducts
-    } = useProducts();
-
-    const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [newCategory, setNewCategory] = useState({
         name: '',
         slug: '',
-        description: ''
+        description: '',
     });
-    const [showAddForm, setShowAddForm] = useState(false);
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string>('');
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+    const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
 
     useEffect(() => {
         fetchCategories(false);
     }, [fetchCategories]);
-
-    const handleCategorySelect = async (categorySlug: string) => {
-        setSelectedCategory(categorySlug);
-        // Fetch products by category
-        fetchProducts({ category: categorySlug });
-    };
 
     const generateSlug = (name: string) => {
         return name
@@ -53,30 +46,89 @@ const AdminCategories = () => {
         }));
     };
 
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setImageFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const resetForm = () => {
+        setNewCategory({ name: '', slug: '', description: '' });
+        setImageFile(null);
+        setImagePreview('');
+        setEditingCategory(null);
+    };
+
     const handleAddCategory = async (e: React.FormEvent) => {
         e.preventDefault();
         if (newCategory.name.trim()) {
             try {
-                await createCategory({
-                    name: newCategory.name.trim(),
-                    slug: newCategory.slug,
-                    description: newCategory.description.trim() || undefined
-                });
-                setNewCategory({ name: '', slug: '', description: '' });
-                setShowAddForm(false);
+                const formData = new FormData();
+                formData.append('name', newCategory.name.trim());
+                formData.append('slug', newCategory.slug);
+                if (newCategory.description.trim()) {
+                    formData.append('description', newCategory.description.trim());
+                }
+                if (imageFile) {
+                    formData.append('image', imageFile);
+                }
+
+                await createCategory(formData as any);
+                resetForm();
+                setShowAddModal(false);
             } catch (error) {
                 console.error('Failed to create category:', error);
             }
         }
     };
 
-    const getCategoryStats = () => {
-        // This would typically come from the backend
-        return {
-            productCount: Math.floor(Math.random() * 50) + 1,
-            revenue: Math.floor(Math.random() * 10000) + 1000,
-            popularity: Math.floor(Math.random() * 100) + 1
-        };
+    const handleEditCategory = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!editingCategory || !newCategory.name.trim()) return;
+
+        try {
+            const formData = new FormData();
+            formData.append('name', newCategory.name.trim());
+            formData.append('slug', newCategory.slug);
+            if (newCategory.description.trim()) {
+                formData.append('description', newCategory.description.trim());
+            }
+            if (imageFile) {
+                formData.append('image', imageFile);
+            }
+
+            await updateCategory(editingCategory.id, formData as any);
+            resetForm();
+            setShowAddModal(false);
+        } catch (error) {
+            console.error('Failed to update category:', error);
+        }
+    };
+
+    const openEditModal = (category: Category) => {
+        setEditingCategory(category);
+        setNewCategory({
+            name: category.name,
+            slug: category.slug,
+            description: category.description || ''
+        });
+        setImagePreview(category.imageUrl || category.image || '');
+        setShowAddModal(true);
+    };
+
+    const handleDeleteCategory = async (id: number) => {
+        try {
+            await deleteCategory(id);
+            setDeleteConfirm(null);
+        } catch (error) {
+            console.error('Failed to delete category:', error);
+        }
     };
 
     return (
@@ -92,208 +144,265 @@ const AdminCategories = () => {
                 <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                     <button
                         type="button"
-                        onClick={() => setShowAddForm(true)}
-                        className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+                        onClick={() => {
+                            resetForm();
+                            setShowAddModal(true);
+                        }}
+                        className="inline-flex items-center justify-center rounded-sm border border-transparent bg-pink-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 sm:w-auto"
                     >
                         Add Category
                     </button>
                 </div>
             </div>
 
-            {/* Add Category Form */}
-            {showAddForm && (
-                <div className="bg-white shadow rounded-lg p-6">
-                    {error && (
-                        <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                            {error}
-                        </div>
-                    )}
-                    <form onSubmit={handleAddCategory} className="space-y-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Category Name
-                            </label>
-                            <input
-                                type="text"
-                                value={newCategory.name}
-                                onChange={(e) => handleNameChange(e.target.value)}
-                                placeholder="Enter category name"
-                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Slug
-                            </label>
-                            <input
-                                type="text"
-                                value={newCategory.slug}
-                                onChange={(e) => setNewCategory(prev => ({ ...prev, slug: e.target.value }))}
-                                placeholder="category-slug"
-                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Description (Optional)
-                            </label>
-                            <textarea
-                                value={newCategory.description}
-                                onChange={(e) => setNewCategory(prev => ({ ...prev, description: e.target.value }))}
-                                placeholder="Enter category description"
-                                rows={3}
-                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            />
-                        </div>
-                        <div className="flex gap-4">
-                            <button
-                                type="submit"
-                                disabled={isLoading}
-                                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {isLoading ? 'Adding...' : 'Add'}
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setShowAddForm(false);
-                                    setNewCategory({ name: '', slug: '', description: '' });
-                                    clearError();
-                                }}
-                                className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
+            {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                    {error}
                 </div>
             )}
 
-            {/* Categories Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {categories.map((category) => {
-                    const stats = getCategoryStats();
-                    return (
-                        <div
-                            key={category.slug}
-                            className={`bg-white overflow-hidden shadow rounded-lg cursor-pointer transition-all duration-200 hover:shadow-lg ${selectedCategory === category.slug ? 'ring-2 ring-indigo-500' : ''
-                                }`}
-                            onClick={() => handleCategorySelect(category.slug)}
-                        >
-                            <div className="p-5">
-                                <div className="flex items-center">
-                                    <div className="flex-shrink-0">
-                                        <div className="h-12 w-12 bg-indigo-100 rounded-lg flex items-center justify-center">
-                                            <svg className="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                            </svg>
+            {/* Categories Table */}
+            <div className="bg-white shadow rounded-lg overflow-hidden">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                        <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Category
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Slug
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Description
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Products
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                        {categories.map((category) => (
+                            <tr key={category.id} className="hover:bg-gray-50">
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="flex items-center">
+                                        {category.imageUrl ? (
+                                            <img
+                                                src={category.imageUrl}
+                                                alt={category.name}
+                                                className="h-10 w-10 rounded-lg object-cover"
+                                                onError={(e) => {
+                                                    console.error('Image failed to load:', category.imageUrl);
+                                                    e.currentTarget.style.display = 'none';
+                                                }}
+                                            />
+                                        ) : (
+                                            <div className="h-10 w-10 bg-pink-100 rounded-lg flex items-center justify-center">
+                                                <svg className="h-6 w-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                                </svg>
+                                            </div>
+                                        )}
+                                        <div className="ml-4">
+                                            <div className="text-sm font-medium text-gray-900">{category.name}</div>
                                         </div>
                                     </div>
-                                    <div className="ml-5 w-0 flex-1">
-                                        <dl>
-                                            <dt className="text-sm font-medium text-gray-500 truncate">
-                                                {category.name}
-                                            </dt>
-                                            <dd className="text-lg font-medium text-gray-900">
-                                                {stats.productCount} products
-                                            </dd>
-                                        </dl>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="text-sm text-gray-500">{category.slug}</div>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <div className="text-sm text-gray-500 max-w-xs truncate">
+                                        {category.description || '-'}
                                     </div>
-                                </div>
-                                <div className="mt-4">
-                                    <div className="flex items-center justify-between text-sm text-gray-500">
-                                        <span>Revenue: ${stats.revenue.toLocaleString()}</span>
-                                        <span>Pop: {stats.popularity}%</span>
-                                    </div>
-                                    <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
-                                        <div
-                                            className="bg-indigo-600 h-2 rounded-full"
-                                            style={{ width: `${stats.popularity}%` }}
-                                        ></div>
-                                    </div>
-                                </div>
-                            </div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="text-sm text-gray-900">{category.productCount || 0}</div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${category.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                        {category.isActive ? 'Active' : 'Inactive'}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <button
+                                        onClick={() => openEditModal(category)}
+                                        className="text-pink-600 hover:text-pink-900"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => setDeleteConfirm(category.id)}
+                                        className="text-red-600 hover:text-red-900 ml-4"
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
+                {categories.length === 0 && !isLoading && (
+                    <div className="text-center py-12">
+                        <svg
+                            className="mx-auto h-12 w-12 text-gray-400"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                            />
+                        </svg>
+                        <h3 className="mt-2 text-sm font-medium text-gray-900">No categories</h3>
+                        <p className="mt-1 text-sm text-gray-500">
+                            Get started by creating a new category.
+                        </p>
+                        <div className="mt-6">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    resetForm();
+                                    setShowAddModal(true);
+                                }}
+                                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+                            >
+                                Add Category
+                            </button>
                         </div>
-                    );
-                })}
+                    </div>
+                )}
             </div>
 
-            {categories.length === 0 && (
-                <div className="text-center py-12">
-                    <svg
-                        className="mx-auto h-12 w-12 text-gray-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                        />
-                    </svg>
-                    <h3 className="mt-2 text-sm font-medium text-gray-900">No categories</h3>
-                    <p className="mt-1 text-sm text-gray-500">
-                        Get started by creating a new category.
-                    </p>
-                    <div className="mt-6">
-                        <button
-                            type="button"
-                            onClick={() => setShowAddForm(true)}
-                            className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            Add Category
-                        </button>
+            {/* Add/Edit Category Modal */}
+            {showAddModal && (
+                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+                        <div className="px-6 py-4 border-b border-gray-200">
+                            <h3 className="text-lg font-medium text-gray-900">
+                                {editingCategory ? 'Edit Category' : 'Add New Category'}
+                            </h3>
+                        </div>
+                        <form onSubmit={editingCategory ? handleEditCategory : handleAddCategory} className="p-6 space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Category Name *
+                                </label>
+                                <input
+                                    type="text"
+                                    value={newCategory.name}
+                                    onChange={(e) => handleNameChange(e.target.value)}
+                                    placeholder="Enter category name"
+                                    className="block w-full rounded-sm border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm px-3 py-2 border"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Slug *
+                                </label>
+                                <input
+                                    type="text"
+                                    value={newCategory.slug}
+                                    onChange={(e) => setNewCategory(prev => ({ ...prev, slug: e.target.value }))}
+                                    placeholder="category-slug"
+                                    className="block w-full rounded-sm border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm px-3 py-2 border"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Category Image
+                                </label>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-sm file:border-0 file:text-sm file:font-medium file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100"
+                                />
+                                {imagePreview && (
+                                    <div className="mt-2">
+                                        <img
+                                            src={imagePreview}
+                                            alt="Preview"
+                                            className="h-20 w-20 object-cover rounded-lg"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Description
+                                </label>
+                                <textarea
+                                    value={newCategory.description}
+                                    onChange={(e) => setNewCategory(prev => ({ ...prev, description: e.target.value }))}
+                                    placeholder="Enter category description"
+                                    rows={3}
+                                    className="block w-full rounded-sm border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm px-3 py-2 border"
+                                />
+                            </div>
+                            <div className="flex gap-3 pt-4">
+                                <button
+                                    type="submit"
+                                    disabled={isLoading}
+                                    className="flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-sm shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {isLoading ? (editingCategory ? 'Updating...' : 'Adding...') : (editingCategory ? 'Update Category' : 'Add Category')}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setShowAddModal(false);
+                                        resetForm();
+                                        clearError();
+                                    }}
+                                    className="flex-1 inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}
 
-            {/* Category Products */}
-            {selectedCategory && (
-                <div className="bg-white shadow rounded-lg">
-                    <div className="px-4 py-5 sm:p-6">
-                        <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-                            Products in "{selectedCategory.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}"
-                        </h3>
-
-                        {productsLoading ? (
-                            <div className="flex items-center justify-center h-32">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-                            </div>
-                        ) : products.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {products.slice(0, 6).map((product) => (
-                                    <div key={product.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                                        <img
-                                            src={product.thumbnail}
-                                            alt={product.title}
-                                            className="w-full h-32 object-cover rounded-md mb-3"
-                                        />
-                                        <h4 className="font-medium text-gray-900 truncate">{product.title}</h4>
-                                        <p className="text-sm text-gray-500 truncate">{product.description}</p>
-                                        <div className="mt-2 flex items-center justify-between">
-                                            <span className="text-lg font-bold text-gray-900">${product.price}</span>
-                                            <span className="text-sm text-gray-500">Stock: {product.stock}</span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <p className="text-center text-gray-500 py-8">
-                                No products found in this category.
+            {/* Delete Confirmation Modal */}
+            {deleteConfirm !== null && (
+                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+                        <div className="px-6 py-4">
+                            <h3 className="text-lg font-medium text-gray-900">Delete Category</h3>
+                            <p className="mt-2 text-sm text-gray-500">
+                                Are you sure you want to delete this category? This action cannot be undone.
                             </p>
-                        )}
-
-                        {products.length > 6 && (
-                            <div className="mt-4 text-center">
-                                <button className="text-indigo-600 hover:text-indigo-500 text-sm font-medium">
-                                    View all {products.length} products →
-                                </button>
-                            </div>
-                        )}
+                        </div>
+                        <div className="px-6 py-4 bg-gray-50 flex gap-3 justify-end">
+                            <button
+                                type="button"
+                                onClick={() => setDeleteConfirm(null)}
+                                className="px-4 py-2 border border-gray-300 text-sm font-medium rounded-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => handleDeleteCategory(deleteConfirm)}
+                                disabled={isLoading}
+                                className="px-4 py-2 border border-transparent text-sm font-medium rounded-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isLoading ? 'Deleting...' : 'Delete'}
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

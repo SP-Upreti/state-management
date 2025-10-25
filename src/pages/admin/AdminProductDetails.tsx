@@ -49,7 +49,7 @@ const AdminProductDetails = () => {
                 <div className="sm:flex-auto">
                     <button
                         onClick={() => navigate('/admin/products')}
-                        className="mb-4 text-indigo-600 hover:text-indigo-500 text-sm font-medium"
+                        className="mb-4 text-pink-600 hover:text-pink-500 text-sm font-medium"
                     >
                         ← Back to Products
                     </button>
@@ -61,14 +61,14 @@ const AdminProductDetails = () => {
                 <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none space-x-3">
                     <button
                         type="button"
-                        className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="inline-flex items-center justify-center rounded-sm border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
                     >
                         Edit Product
                     </button>
                     <button
                         type="button"
                         onClick={handleDelete}
-                        className="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        className="inline-flex items-center justify-center rounded-sm border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                     >
                         Delete Product
                     </button>
@@ -171,7 +171,7 @@ const AdminProductDetails = () => {
                                             {currentProduct.tags.map((tag: string, index: number) => (
                                                 <span
                                                     key={index}
-                                                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                                                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-pink-100 text-pink-800"
                                                 >
                                                     {tag}
                                                 </span>

@@ -81,51 +81,43 @@ const AdminProducts = () => {
                         Manage your product inventory ({totalProducts} total products)
                     </p>
                 </div>
-                <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                    <button
-                        type="button"
-                        onClick={() => setShowAddModal(true)}
-                        className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
-                    >
-                        Add Product
-                    </button>
-                </div>
-            </div>
-
-            {/* Search */}
-            <div className="bg-white shadow rounded-lg">
-                <div className="p-6">
-                    <form onSubmit={handleSearch} className="flex gap-4">
+                <div className="flex gap-4">
+                    {/* Search */}
+                    <div className="max-w-xs  ">
+                        <div className="">
+                            <form onSubmit={handleSearch} className="flex ">
                         <div className="flex-1">
                             <input
                                 type="text"
                                 placeholder="Search products..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        className="block w-full rounded-sm border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 p-2"
                             />
                         </div>
                         <button
                             type="submit"
-                            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-sm shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                         >
                             Search
                         </button>
-                        {searchQuery && (
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setSearchQuery('');
-                                    setCurrentPage(1);
-                                }}
-                                className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            >
-                                Clear
-                            </button>
-                        )}
-                    </form>
+
+                            </form>
+                        </div>
+                    </div>
+                    <div className="mt-4 sm:mt-0  sm:flex-none">
+                        <button
+                            type="button"
+                            onClick={() => setShowAddModal(true)}
+                            className="inline-flex items-center justify-center rounded-sm text-pink-500 border  border-pink-600 px-4 py-2 text-sm font-medium  shadow-sm hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 sm:w-auto"
+                        >
+                            Add Product
+                        </button>
+                    </div>
                 </div>
             </div>
+
+
 
             {/* Products Table */}
             <div className="bg-white shadow overflow-hidden sm:rounded-lg">
@@ -205,7 +197,7 @@ const AdminProducts = () => {
                                         <div className="flex items-center justify-end space-x-2">
                                             <Link
                                                 to={`/admin/products/${product.id}`}
-                                                className="text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-2 py-1 rounded text-xs"
+                                                className="text-pink-600 hover:text-pink-900 bg-pink-50 hover:bg-pink-100 px-2 py-1 rounded text-xs"
                                             >
                                                 View
                                             </Link>
@@ -252,7 +244,7 @@ const AdminProducts = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowAddModal(true)}
-                                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                             >
                                 Add Product
                             </button>
@@ -268,14 +260,14 @@ const AdminProducts = () => {
                         <button
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-sm text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Previous
                         </button>
                         <button
                             onClick={() => handlePageChange(currentPage + 1)}
                             disabled={currentPage === totalPages}
-                            className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-sm text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Next
                         </button>
@@ -288,7 +280,7 @@ const AdminProducts = () => {
                             </p>
                         </div>
                         <div>
-                            <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                            <nav className="relative z-0 inline-flex rounded-sm shadow-sm -space-x-px">
                                 <button
                                     onClick={() => handlePageChange(currentPage - 1)}
                                     disabled={currentPage === 1}
@@ -303,7 +295,7 @@ const AdminProducts = () => {
                                             key={pageNum}
                                             onClick={() => handlePageChange(pageNum)}
                                             className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${currentPage === pageNum
-                                                ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                                                ? 'z-10 bg-pink-50 border-pink-500 text-pink-600'
                                                 : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
                                                 }`}
                                         >

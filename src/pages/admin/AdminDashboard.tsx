@@ -18,11 +18,11 @@ const AdminDashboard = () => {
             title: 'Total Products',
             value: stats?.overview.totalProducts?.toLocaleString() || '0',
             icon: (
-                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                 </svg>
             ),
-            bgColor: 'bg-blue-50',
+            bgColor: 'bg-pink-50',
             change: '+12%',
             changeType: 'increase'
         },
@@ -82,7 +82,7 @@ const AdminDashboard = () => {
                     </div>
                     <button
                         onClick={() => window.location.reload()}
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                        className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-sm text-sm font-medium transition-colors"
                     >
                         Refresh Page
                     </button>
@@ -108,7 +108,7 @@ const AdminDashboard = () => {
                         <div className="p-5">
                             <div className="flex items-center">
                                 <div className="flex-shrink-0">
-                                    <div className={`p-3 rounded-md ${stat.bgColor}`}>
+                                    <div className={`p-3 rounded-sm ${stat.bgColor}`}>
                                         {stat.icon}
                                     </div>
                                 </div>
@@ -181,40 +181,17 @@ const AdminDashboard = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* Quick Actions */}
-                <div className="bg-white shadow rounded-lg">
-                    <div className="px-4 py-5 sm:p-6">
-                        <h3 className="text-lg leading-6 font-medium text-gray-900">Quick Actions</h3>
-                        <div className="mt-5 space-y-3">
-                            <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                                Add New Product
-                            </button>
-                            <button className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                                View All Orders
-                            </button>
-                            <button className="w-full bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                                Manage Users
-                            </button>
-                            <button className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                                View Analytics
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Recent Activity */}
+                {/* Recent Activity */}
             <div className="bg-white shadow rounded-lg">
                 <div className="px-4 py-5 sm:p-6">
                     <h3 className="text-lg leading-6 font-medium text-gray-900">Recent Activity</h3>
                     <div className="mt-5">
                         <div className="flow-root">
-                            <ul className="-mb-8">
-                                <li className="relative pb-8">
+                                <ul className=" space-y-2">
+                                    <li className="relative ">
                                     <div className="relative flex space-x-3">
                                         <div>
-                                            <span className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center ring-8 ring-white">
+                                                <span className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center ">
                                                 <svg className="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                 </svg>
@@ -232,12 +209,12 @@ const AdminDashboard = () => {
                                         </div>
                                     </div>
                                 </li>
-                                <li className="relative pb-8">
+                                    <li className="relative">
                                     <div className="relative flex space-x-3">
                                         <div>
-                                            <span className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center ring-8 ring-white">
+                                                <span className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center ">
                                                 <svg className="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                 </svg>
                                             </span>
                                         </div>
@@ -252,33 +229,16 @@ const AdminDashboard = () => {
                                             </div>
                                         </div>
                                     </div>
-                                </li>
-                                <li className="relative">
-                                    <div className="relative flex space-x-3">
-                                        <div>
-                                            <span className="h-8 w-8 rounded-full bg-yellow-500 flex items-center justify-center ring-8 ring-white">
-                                                <svg className="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                                            <div>
-                                                <p className="text-sm text-gray-500">
-                                                    Low stock alert for <span className="font-medium text-gray-900">"Gaming Laptop"</span>
-                                                </p>
-                                            </div>
-                                            <div className="text-right text-sm whitespace-nowrap text-gray-500">
-                                                6 hours ago
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                    </li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
+
+            </div>
+
+
         </div>
     );
 };

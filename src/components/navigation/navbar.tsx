@@ -40,7 +40,7 @@ const ProfileDropDown = (props: PropsTypes) => {
     return (
         <div className={`relative ${props.class}`}>
             <div className="flex items-center space-x-4">
-                <button ref={profileRef} className="w-10 h-10 outline-none rounded-full ring-offset-2 ring-gray-200 ring-2 lg:focus:ring-indigo-600"
+                <button ref={profileRef} className="w-10 h-10 outline-none rounded-full ring-offset-2 ring-gray-200 ring-2 lg:focus:ring-pink-600"
                     onClick={() => setState(!state)}
                 >
                     <img
@@ -58,7 +58,7 @@ const ProfileDropDown = (props: PropsTypes) => {
                     </span>
                 </div>
             </div>
-            <ul className={`bg-white top-12 right-0 mt-5 space-y-5 lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-0 ${state ? '' : 'lg:hidden'}`}>
+            <ul className={`bg-white top-12 right-0 mt-5 space-y-5 lg:absolute lg:border lg:rounded-sm lg:text-sm lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-0 ${state ? '' : 'lg:hidden'}`}>
                 {
                     navigation.map((item, idx) => (
                         <li key={idx}>
@@ -101,10 +101,8 @@ export default function Navbar() {
     // Main navigation with category filters
     const navigation = [
         { title: "Home", path: "/" },
-        { title: "Fashion", path: "/products?category=fashion" },
-        { title: "Grocery", path: "/products?category=grocery" },
-        { title: "Accessories", path: "/products?category=accessories" },
-        { title: "All Products", path: "/products" },
+        { title: "Contact", path: "/help" },
+        { title: "Policies", path: "/policies" },
     ]
 
     // Only show admin link for admin users
@@ -121,7 +119,7 @@ export default function Navbar() {
                     <div className="flex-none lg:flex-initial">
                         <Link to="/">
                             <img
-                                src="/logo.svg"
+                                src="/logo.png"
                                 width={120}
                                 height={50}
                                 alt="Ecommerce Logo"
@@ -146,7 +144,7 @@ export default function Navbar() {
                             />
                         </div>
                         <div className="flex-1 flex items-center justify-end space-x-2 sm:space-x-6">
-                            <form onSubmit={handleSubmit} className="flex items-center space-x-2 border rounded-md p-2">
+                            <form onSubmit={handleSubmit} className="flex items-center space-x-2 border w-full overflow-hidden max-w-[250px] rounded-sm p-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-none text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
@@ -165,7 +163,7 @@ export default function Navbar() {
                                 onClick={handleCartToggle}
                                 className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 32 32"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}><path d="M6 6h24l-3 13H9m18 4H10L5 2H2"></path><circle cx={25} cy={27} r={2}></circle><circle cx={12} cy={27} r={2}></circle></g></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} className="size-6" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}><path d="M6 6h24l-3 13H9m18 4H10L5 2H2"></path><circle cx={25} cy={27} r={2}></circle><circle cx={12} cy={27} r={2}></circle></g></svg>
                                 {cart.totals.totalQuantity > 0 && (
                                     <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                                         {cart.totals.totalQuantity > 99 ? '99+' : cart.totals.totalQuantity}
@@ -177,7 +175,7 @@ export default function Navbar() {
                             {auth.isAuthenticated ? (
                                 <ProfileDropDown class="hidden lg:block" />
                             ) : (
-                                <div className="hidden lg:flex items-center space-x-2">
+                                    <div className="hidden lg:flex items-center border shrink-0 text-sm">
                                     <Link
                                         to="/login"
                                         className="text-gray-600 hover:text-gray-900 px-3 py-2"
@@ -186,7 +184,7 @@ export default function Navbar() {
                                     </Link>
                                     <Link
                                         to="/register"
-                                        className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+                                            className="bg-pink-600 text-white px-4 py-2  hover:bg-pink-700"
                                     >
                                         Sign Up
                                     </Link>

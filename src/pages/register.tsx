@@ -49,7 +49,7 @@ const RegisterPage: React.FC = () => {
             <div className="max-w-lg bg-white border rounded-xl p-6 py-12 w-full space-y-8">
                 <div>
                     <Link to="/" className="flex text-3xl text-purple-800 italic font-serif justify-center">
-                        SwiftKart
+                        <img src="/logo.png" alt="" width={150} />
                     </Link>
                     <h2 className=" text-center text-3xl font-semibold text-gray-900">
                         Create your account
@@ -74,7 +74,7 @@ const RegisterPage: React.FC = () => {
                                     name="firstName"
                                     type="text"
                                     required
-                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
                                     placeholder="First Name"
                                     value={formData.firstName}
                                     onChange={handleChange}
@@ -89,7 +89,7 @@ const RegisterPage: React.FC = () => {
                                     name="lastName"
                                     type="text"
                                     required
-                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
                                     placeholder="Last Name"
                                     value={formData.lastName}
                                     onChange={handleChange}
@@ -107,7 +107,7 @@ const RegisterPage: React.FC = () => {
                                     name="username"
                                     type="text"
                                     required
-                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
                                     placeholder="Username"
                                     value={formData.username}
                                     onChange={handleChange}
@@ -124,7 +124,7 @@ const RegisterPage: React.FC = () => {
                                     type="email"
                                     autoComplete="email"
                                     required
-                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
                                     placeholder="Email address"
                                     value={formData.email}
                                     onChange={handleChange}
@@ -139,7 +139,7 @@ const RegisterPage: React.FC = () => {
                                     id="phone"
                                     name="phone"
                                     type="tel"
-                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
                                     placeholder="Phone Number (optional)"
                                     value={formData.phone}
                                     onChange={handleChange}
@@ -154,7 +154,7 @@ const RegisterPage: React.FC = () => {
                                     id="birthDate"
                                     name="birthDate"
                                     type="date"
-                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
                                     value={formData.birthDate}
                                     onChange={handleChange}
                                 />
@@ -172,7 +172,7 @@ const RegisterPage: React.FC = () => {
                                 type="password"
                                 autoComplete="new-password"
                                 required
-                                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
                                 placeholder="Password"
                                 value={formData.password}
                                 onChange={handleChange}
@@ -189,7 +189,7 @@ const RegisterPage: React.FC = () => {
                                 type="password"
                                 autoComplete="new-password"
                                 required
-                                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
                                 placeholder="Confirm Password"
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
@@ -201,7 +201,7 @@ const RegisterPage: React.FC = () => {
                         <button
                             type="submit"
                             disabled={auth.isLoading}
-                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {auth.isLoading ? 'Creating account...' : 'Create account'}
                         </button>
@@ -210,7 +210,7 @@ const RegisterPage: React.FC = () => {
 
                 <p className="mt-2 text-center text-sm text-gray-600">
                     Or{' '}
-                    <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
+                    <Link to="/login" className="font-medium text-pink-600 hover:text-pink-500">
                         sign in to your existing account
                     </Link>
                 </p>
