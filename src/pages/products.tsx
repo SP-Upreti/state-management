@@ -19,10 +19,10 @@ export default function Products() {
         clearError
     } = useProducts();
 
-    const { categories, fetchCategories } = useCategories();
+    const { fetchCategories } = useCategories();
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [selectedCategory, setSelectedCategory] = useState<string>('');
+    const [selectedCategory] = useState<string>('');
     const [sortBy, setSortBy] = useState<string>('createdAt');
     const [order, setOrder] = useState<'asc' | 'desc'>('desc');
 
@@ -44,10 +44,7 @@ export default function Products() {
         fetchCategories();
     }, [fetchCategories]);
 
-    const handleCategoryChange = (category: string) => {
-        setSelectedCategory(category);
-        setCurrentPage(1);
-    };
+
 
     const handleSortChange = (newSortBy: string, newOrder: 'asc' | 'desc' = 'desc') => {
         setSortBy(newSortBy);

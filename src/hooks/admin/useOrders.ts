@@ -23,7 +23,7 @@ export const useOrder = (id: number) => {
     return useQuery({
         queryKey: ['admin', 'order', id],
         queryFn: () => ordersApi.getOrder(id),
-        select: (response) => response.data.data.order,
+        select: (response) => response.data.data.orders[0],
         enabled: !!id,
     });
 };

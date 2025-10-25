@@ -69,7 +69,7 @@ export default function PopularProducts() {
                                 </div>
                             ))
                         ) : products.length > 0 ? (
-                            products.map((product, index) => (
+                            products.map((product) => (
                                 <div key={product.id} className="relative">
                                    
                                     <ProductCard

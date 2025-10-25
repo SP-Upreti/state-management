@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Image from "./Image"
 import { useAppContext } from "../../contexts/AppContext";
 import { Link } from "react-router-dom";
@@ -24,12 +23,10 @@ export default function ProductCard({
   price,
   thumbnail,
   brand,
-  category,
-  rating,
+
   stock
 }: ProductsInterface) {
   const { cart } = useAppContext();
-  const [isAdding, setIsAdding] = useState(false);
 
   // Ensure price is a number and handle potential undefined/null values
   const safePrice = typeof price === 'number' ? price : parseFloat(price) || 0;
@@ -39,21 +36,7 @@ export default function ProductCard({
   // Ensure images array is valid
   const imageUrl = Array.isArray(images) && images.length > 0 ? images[0] : thumbnail;
 
-  const handleAddToCart = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
 
-    if (isAdding || !stock || stock <= 0) return;
-
-    try {
-      setIsAdding(true);
-      await cart.addToCart(id, 1);
-    } catch (error) {
-      console.error('Failed to add to cart:', error);
-    } finally {
-      setIsAdding(false);
-    }
-  };
 
   const isOutOfStock = !stock || stock <= 0;
 
@@ -108,7 +91,6 @@ export function DefaultCard({
   stock
 }: ProductsInterface) {
   const { cart } = useAppContext();
-  const [isAdding, setIsAdding] = useState(false);
 
   // Ensure price is a number and handle potential undefined/null values
   const safePrice = typeof price === 'number' ? price : parseFloat(price) || 0;
@@ -118,21 +100,6 @@ export function DefaultCard({
   // Ensure images array is valid
   const imageUrl = Array.isArray(images) && images.length > 0 ? images[0] : thumbnail;
 
-  const handleAddToCart = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (isAdding || !stock || stock <= 0) return;
-
-    try {
-      setIsAdding(true);
-      await cart.addToCart(id, 1);
-    } catch (error) {
-      console.error('Failed to add to cart:', error);
-    } finally {
-      setIsAdding(false);
-    }
-  };
 
   const isOutOfStock = !stock || stock <= 0;
 
