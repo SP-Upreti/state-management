@@ -1,20 +1,3 @@
-/**
- * BM25 (Best Matching 25) Algorithm Implementation
- * A probabilistic ranking function used for information retrieval and search
- * 
- * BM25 Formula:
- * score(D,Q) = Σ IDF(qi) * (f(qi,D) * (k1 + 1)) / (f(qi,D) + k1 * (1 - b + b * |D| / avgdl))
- * 
- * Where:
- * - D is a document
- * - Q is a query containing keywords q1, ..., qn
- * - f(qi, D) is qi's term frequency in document D
- * - |D| is the length of document D in words
- * - avgdl is the average document length in the collection
- * - k1 and b are free parameters (typically k1=1.2 to 2.0, b=0.75)
- * - IDF(qi) is the Inverse Document Frequency weight of query term qi
- */
-
 class BM25 {
     constructor(documents, options = {}) {
         // BM25 parameters
@@ -42,9 +25,6 @@ class BM25 {
         this.idf = this.calculateIDF();
     }
 
-    /**
-     * Tokenize text into terms (words)
-     */
     tokenize(text) {
         if (!text) return [];
         

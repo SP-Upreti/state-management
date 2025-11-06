@@ -7,6 +7,7 @@ import Image from "../utils/Image"
 import RecommendedProducts from './RecommendedProducts';
 
 export default function Details() {
+    
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const { currentProduct, isLoading, error, fetchProduct, clearError } = useProducts();
