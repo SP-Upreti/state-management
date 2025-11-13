@@ -56,13 +56,22 @@ const productSchema = Joi.object({
     brand: Joi.string().max(100).optional(),
     sku: Joi.string().max(50).optional(),
     categoryId: Joi.number().required(),
+    thumbnail: Joi.string().uri().optional(),
+    images: Joi.alternatives().try(
+        Joi.array().items(Joi.string().uri()),
+        Joi.string()
+    ).optional(),
     weight: Joi.number().optional(),
     dimensions: Joi.object().optional(),
     warrantyInformation: Joi.string().optional(),
     shippingInformation: Joi.string().optional(),
     returnPolicy: Joi.string().optional(),
     minimumOrderQuantity: Joi.number().min(1).optional(),
-    tags: Joi.array().items(Joi.string()).optional()
+    tags: Joi.alternatives().try(
+        Joi.array().items(Joi.string()),
+        Joi.string()
+    ).optional(),
+    createdBy: Joi.number().optional()
 });
 
 // Category validation schemas

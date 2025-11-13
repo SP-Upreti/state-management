@@ -186,7 +186,7 @@ const Checkout = () => {
                     country: shippingInfo.country,
                     phone: shippingInfo.phone
                 },
-                paymentMethod: (paymentMethod === 'card' ? 'card' : 'paypal') as 'card' | 'paypal' | 'cash_on_delivery',
+                paymentMethod: (paymentMethod === 'card' ? 'card' : paymentMethod === 'cod' ? 'cash_on_delivery' : 'paypal') as 'card' | 'paypal' | 'cash_on_delivery',
                 paymentId: paymentMethod === 'card' ? `CARD_${Date.now()}` : undefined
             };
 
@@ -198,8 +198,13 @@ const Checkout = () => {
                 state: {
                     orderId: order.id,
                     orderTotal: finalTotal,
-                    shippingAddress: `${shippingInfo.firstName} ${shippingInfo.lastName}, ${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.state} ${shippingInfo.zipCode}, ${shippingInfo.country}`,
-                    items: items.length
+                    subtotal: totalAmount,
+                    shipping: shippingCost,
+                    tax: tax,
+                    shippingInfo: shippingInfo,
+                    paymentMethod: paymentMethod,
+                    items: items,
+                    orderDate: new Date().toISOString()
                 }
             });
         } catch (error) {
@@ -433,21 +438,21 @@ const Checkout = () => {
                                                 className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300"
                                             />
                                             <label htmlFor="card" className="ml-3 block text-sm font-medium text-gray-700">
-                                                Credit / Debit Card
+                                                Debit Card / Credit Card
                                             </label>
                                         </div>
                                         <div className="flex items-center">
                                             <input
-                                                id="paypal"
+                                                id="cod"
                                                 name="payment-method"
                                                 type="radio"
-                                                value="paypal"
-                                                checked={paymentMethod === 'paypal'}
+                                                value="cod"
+                                                checked={paymentMethod === 'cod'}
                                                 onChange={(e) => setPaymentMethod(e.target.value)}
                                                 className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300"
                                             />
-                                            <label htmlFor="paypal" className="ml-3 block text-sm font-medium text-gray-700">
-                                                PayPal
+                                            <label htmlFor="cod" className="ml-3 block text-sm font-medium text-gray-700">
+                                                Cash on Delivery
                                             </label>
                                         </div>
                                     </div>
@@ -524,11 +529,19 @@ const Checkout = () => {
                                     </div>
                                 )}
 
-                                {paymentMethod === 'paypal' && (
-                                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
-                                        <p className="text-sm text-gray-600">
-                                            You will be redirected to PayPal to complete your payment.
-                                        </p>
+                                {paymentMethod === 'cod' && (
+                                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                                        <div className="flex items-start">
+                                            <svg className="h-5 w-5 text-green-600 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <div>
+                                                <h4 className="text-sm font-medium text-green-900 mb-1">Cash on Delivery</h4>
+                                                <p className="text-sm text-green-700">
+                                                    Pay with cash when your order is delivered to your doorstep. Please keep the exact amount ready.
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 )}
                             </div>
@@ -562,7 +575,7 @@ const Checkout = () => {
                                             {paymentMethod === 'card' ? (
                                                 <>Card ending in {paymentInfo.cardNumber.slice(-4)}</>
                                             ) : (
-                                                'PayPal'
+                                                'Cash on Delivery'
                                             )}
                                         </p>
                                     </div>
